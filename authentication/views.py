@@ -2,6 +2,7 @@ from rest_framework import generics
 
 from authentication.models import Role, User
 from authentication.serializers import RoleSerializer, UserSerializer
+from authentication.services import UserAPIService
 
 
 class RoleAPIView(generics.ListAPIView):
@@ -23,6 +24,11 @@ class UserAPIView(generics.ListCreateAPIView):
 
     queryset = User.objects.all().order_by('id')
     serializer_class = UserSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer_class()(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return UserAPIService.create(serializer)
 
 
 class UserAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
