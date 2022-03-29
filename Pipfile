@@ -4,6 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+django = "==3.2.12"
+python-decouple = "*"
+psycopg2 = "*"
+gunicorn = "*"
+whitenoise = "*"
+boto3 = "*"
+django-extensions = "*"
+djangorestframework = "*"
+djangorestframework-simplejwt = "*"
+drf-spectacular = "*"
 
 [dev-packages]
 flake8 = "*"
