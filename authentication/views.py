@@ -5,28 +5,28 @@ from authentication.serializers import RoleSerializer, UserSerializer
 
 
 class RoleAPIView(generics.ListAPIView):
-    """View to list and create Roles"""
+    """View to list Roles."""
 
     queryset = Role.objects.all().order_by('id')
     serializer_class = RoleSerializer
 
 
 class RoleAPIDetailView(generics.RetrieveAPIView):
-    """View to retrieve, update and delete Roles"""
+    """View to retrieve Roles."""
 
     queryset = Role.objects.all().order_by('id')
     serializer_class = RoleSerializer
 
 
 class UserAPIView(generics.ListCreateAPIView):
-    """View to list and create Users"""
+    """View to list and create Users."""
 
     queryset = User.objects.all().order_by('id')
     serializer_class = UserSerializer
 
 
 class UserAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """View to retrieve, update and delete Users"""
+    """View to retrieve, update and delete Users."""
 
     queryset = User.objects.all().order_by('id')
     serializer_class = UserSerializer
