@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "aeefb5f2ed6aedc232fe33773a432ef8d1ba9750a02600f7c24634bb339d8e25"
+            "sha256": "327c7cfeb375a84bb363d0a0535abe86d1555589766d6dc4d98eb7df71f38f1c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -127,6 +127,10 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==4.4.0"
+        },
+        "portal": {
+            "editable": true,
+            "path": "."
         },
         "psycopg2": {
             "hashes": [

@@ -15,6 +15,7 @@ djangorestframework = "*"
 djangorestframework-simplejwt = "*"
 drf-spectacular = "*"
 dj-database-url = "*"
+portal = {editable = true, path = "."}
 
 [dev-packages]
 flake8 = "*"
