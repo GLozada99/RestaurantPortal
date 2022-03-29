@@ -3,6 +3,9 @@ from django.db import transaction
 from psycopg2 import OperationalError
 
 from authentication.models import Role
+from portal.settings import (BRANCH_MANAGER_LEVEL, CLIENT_LEVEL,
+                             EMPLOYEE_LEVEL,
+                             PORTAL_MANAGER_LEVEL, RESTAURANT_MANAGER_LEVEL,)
 
 
 class Command(BaseCommand):
@@ -40,11 +43,13 @@ class Command(BaseCommand):
             self.print_error('Roles already exist')
         else:
             roles = [
-                Role(name='Portal Manager', level=0),
-                Role(name='Restaurant Manager', level=1),
-                Role(name='Branch Manager', level=2),
-                Role(name='Employee', level=3),
-                Role(name='Client', level=4)
+                Role(name='Portal Manager',
+                     level=PORTAL_MANAGER_LEVEL),
+                Role(name='Restaurant Manager',
+                     level=RESTAURANT_MANAGER_LEVEL),
+                Role(name='Branch Manager', level=BRANCH_MANAGER_LEVEL),
+                Role(name='Employee', level=EMPLOYEE_LEVEL),
+                Role(name='Client', level=CLIENT_LEVEL)
             ]
             self.add_to_db(Role, roles)
             self.print_success()
