@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 import dj_database_url
@@ -42,6 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+
+    'authentication',
 ]
 
 MIDDLEWARE = [
@@ -85,6 +89,8 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+
+AUTH_USER_MODEL = 'authentication.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -155,3 +161,30 @@ LOGGING = {
         }
     },
 }
+
+
+# Rest Framwork configuration
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+
+# Simple JWT configuration
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=env_handler.EXPIRATION_DELTA),
+    'SIGNING_KEY': SECRET_KEY,
+    'AUTH_HEADER_TYPES': (env_handler.AUTH_HEADER_PREFIX,),
+}
+
+
+# User Role Levels
+
+PORTAL_MANAGER_LEVEL = 0
+RESTAURANT_MANAGER_LEVEL = 1
+BRANCH_MANAGER_LEVEL = 2
+EMPLOYEE_LEVEL = 3
+CLIENT_LEVEL = 4
