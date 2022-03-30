@@ -48,3 +48,13 @@ class ClientAPITestCase(APITestCase):
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_client_without_auth(self):
+        """Test the creation of a category without auth."""
+        url = reverse('clients:client-list')
+        response = self.client.post(
+            url,
+            {'username': 'TestPortalManager', 'password': 'TestPassword'},
+            format='json',
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
