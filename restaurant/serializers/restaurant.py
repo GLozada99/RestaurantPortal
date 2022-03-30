@@ -17,7 +17,6 @@ class RestaurantSerializer(serializers.ModelSerializer):
             'food_type',
             'active_branches',
             'active_administrators',
-            'is_active',
             'delivery_types'
         )
 
