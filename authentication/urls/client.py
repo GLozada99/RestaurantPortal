@@ -1,6 +1,6 @@
 from django.urls import path
 
-from authentication.views import ClientAPIDetailView, ClientAPIView
+from authentication.views.client import ClientAPIDetailView, ClientAPIView
 
 app_name = 'authentication'
 urlpatterns = [

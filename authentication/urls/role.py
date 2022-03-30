@@ -1,6 +1,6 @@
 from django.urls import path
 
-from authentication.views import RoleAPIDetailView, RoleAPIView
+from authentication.views.role import RoleAPIDetailView, RoleAPIView
 
 app_name = 'authentication'
 urlpatterns = [
