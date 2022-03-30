@@ -8,7 +8,7 @@ from portal.test_helpers import get_portal_manager_token
 
 class RoleAPITestCase(APITestCase):
     def setUp(self) -> None:
-        call_command('populatedb')
+        call_command('createroles')
 
     @get_portal_manager_token
     def test_get_roles(self, token):

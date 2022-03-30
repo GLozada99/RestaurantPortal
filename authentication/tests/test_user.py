@@ -8,7 +8,7 @@ from portal.test_helpers import get_portal_manager_token
 
 class PortalManagerAPITestCase(APITestCase):
     def setUp(self) -> None:
-        call_command('populatedb')
+        call_command('createroles')
 
     @get_portal_manager_token
     def test_create_portal_manager(self, token):
@@ -35,7 +35,7 @@ class PortalManagerAPITestCase(APITestCase):
 
 class ClientAPITestCase(APITestCase):
     def setUp(self) -> None:
-        call_command('populatedb')
+        call_command('createroles')
 
     @get_portal_manager_token
     def test_create_client(self, token):
