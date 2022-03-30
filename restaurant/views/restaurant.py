@@ -8,7 +8,7 @@ from restaurant.serializers.restaurant import (
 )
 
 
-class RestaurantAPIView(generics.ListAPIView):
+class RestaurantAPIView(generics.ListCreateAPIView):
     """View to list and create Restaurants."""
 
     queryset = Restaurant.objects.all().order_by('id')
