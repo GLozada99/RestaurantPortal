@@ -20,7 +20,7 @@ class Restaurant(models.Model):
     food_type = models.ForeignKey(FoodType, on_delete=models.PROTECT)
     active_branches = models.IntegerField()
     active_administrators = models.IntegerField()
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(default=True)
     delivery_types = models.ManyToManyField(DeliveryType)
 
     def __str__(self):
