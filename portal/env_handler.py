@@ -1,7 +1,7 @@
 from decouple import config, UndefinedValueError
 
 
-class EnvHandler():
+class EnvHandler:
     """Class to handle environment variables."""
 
     SECRET_KEY = config('SECRET_KEY')
@@ -10,6 +10,7 @@ class EnvHandler():
     EXPIRATION_DELTA = config('EXPIRATION_DELTA', default=15, cast=int)
     AUTH_HEADER_PREFIX = config('AUTH_HEADER_PREFIX', default='Bearer')
     LOGS_FILE = config('LOGS_FILE', default='app') + '.log'
+    DJANGO_SETTINGS_MODULE = config('DJANGO_SETTINGS_MODULE')
 
     def __init__(self):
         try:
