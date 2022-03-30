@@ -2,7 +2,7 @@ from rest_framework import generics
 
 from authentication.permissions import IsPortalManager
 from restaurant.models import FoodType
-from restaurant.serializers import FoodTypeSerializer
+from restaurant.serializers.food_type import FoodTypeSerializer
 
 
 class FoodTypeAPIView(generics.ListAPIView):

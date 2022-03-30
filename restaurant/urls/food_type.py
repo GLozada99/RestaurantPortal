@@ -1,7 +1,9 @@
 from django.urls import path
 
-from restaurant.views.food_type import (FoodTypeAPIDetailView,
-                                        FoodTypeAPIView,)
+from restaurant.views.food_type import (
+    FoodTypeAPIDetailView,
+    FoodTypeAPIView,
+)
 
 app_name = 'restaurant'
 urlpatterns = [

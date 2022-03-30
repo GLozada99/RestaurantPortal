@@ -45,7 +45,7 @@ urlpatterns = [
         )
     ),
     path(
-        'restaurant/',
+        'restaurants/',
         include(
             'restaurant.urls.restaurant',
             namespace='restaurant'

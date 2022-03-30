@@ -2,8 +2,10 @@ from rest_framework import generics
 
 from authentication.permissions import IsPortalManager
 from restaurant.models import Restaurant
-from restaurant.serializers import (DetailedRestaurantSerializer,
-                                    RestaurantSerializer, )
+from restaurant.serializers.restaurant import (
+    DetailedRestaurantSerializer,
+    RestaurantSerializer,
+)
 
 
 class RestaurantAPIView(generics.ListAPIView):
