@@ -12,7 +12,7 @@ class PortalManagerAPITestCase(APITestCase):
 
     @get_portal_manager_token
     def test_create_portal_manager(self, token):
-        """Test the creation of a category."""
+        """Test the creation of a portal manager."""
         url = reverse('portal_managers:portal-manager-list')
         response = self.client.post(
             url,
@@ -23,7 +23,7 @@ class PortalManagerAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_portal_manager_without_auth(self):
-        """Test the creation of a category without auth."""
+        """Test the creation of a portal manager without auth."""
         url = reverse('portal_managers:portal-manager-list')
         response = self.client.post(
             url,
