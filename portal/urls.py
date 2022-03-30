@@ -48,7 +48,7 @@ urlpatterns = [
         'restaurants/',
         include(
             'restaurant.urls.restaurant',
-            namespace='restaurant'
+            namespace='restaurants'
         )
     ),
 
