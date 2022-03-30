@@ -19,7 +19,7 @@ class RoleAPIDetailView(generics.RetrieveAPIView):
     serializer_class = RoleSerializer
 
 
-class UserAPIView(generics.ListCreateAPIView):
+class ClientAPIView(generics.ListCreateAPIView):
     """View to list and create Users."""
 
     queryset = User.objects.all().order_by('id')
@@ -28,10 +28,29 @@ class UserAPIView(generics.ListCreateAPIView):
     def post(self, request):
         serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)
-        return UserAPIService.create(serializer)
+        return UserAPIService.create_client(serializer)
 
 
-class UserAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+class ClientAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """View to retrieve, update and delete Users."""
+
+    queryset = User.objects.all().order_by('id')
+    serializer_class = UserSerializer
+
+
+class PortalManagerAPIView(generics.ListCreateAPIView):
+    """View to list and create Users."""
+
+    queryset = User.objects.all().order_by('id')
+    serializer_class = UserSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer_class()(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return UserAPIService.create_portal_manager(serializer)
+
+
+class PortalManagerAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     """View to retrieve, update and delete Users."""
 
     queryset = User.objects.all().order_by('id')
