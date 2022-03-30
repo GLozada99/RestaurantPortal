@@ -5,10 +5,10 @@ from authentication.views import (PortalManagerAPIDetailView,
 
 app_name = 'authentication'
 urlpatterns = [
-    path('', PortalManagerAPIView.as_view(), name='portal_manager-list'),
+    path('', PortalManagerAPIView.as_view(), name='portal-manager-list'),
     path(
         '<pk>/',
         PortalManagerAPIDetailView.as_view(),
-        name='portal_manager-detail'
+        name='portal-manager-detail'
     ),
 ]
