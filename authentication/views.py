@@ -3,6 +3,7 @@ from rest_framework import generics
 from authentication.models import Role, User
 from authentication.serializers import RoleSerializer, UserSerializer
 from authentication.services import UserAPIService
+from portal.settings import CLIENT_LEVEL, PORTAL_MANAGER_LEVEL
 
 
 class RoleAPIView(generics.ListAPIView):
@@ -22,7 +23,7 @@ class RoleAPIDetailView(generics.RetrieveAPIView):
 class ClientAPIView(generics.ListCreateAPIView):
     """View to list and create Users."""
 
-    queryset = User.objects.all().order_by('id')
+    queryset = User.objects.filter(role__level=CLIENT_LEVEL).order_by('id')
     serializer_class = UserSerializer
 
     def post(self, request):
@@ -34,14 +35,15 @@ class ClientAPIView(generics.ListCreateAPIView):
 class ClientAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     """View to retrieve, update and delete Users."""
 
-    queryset = User.objects.all().order_by('id')
+    queryset = User.objects.filter(role__level=CLIENT_LEVEL).order_by('id')
     serializer_class = UserSerializer
 
 
 class PortalManagerAPIView(generics.ListCreateAPIView):
     """View to list and create Users."""
 
-    queryset = User.objects.all().order_by('id')
+    queryset = User.objects.filter(role__level=PORTAL_MANAGER_LEVEL).order_by(
+        'id')
     serializer_class = UserSerializer
 
     def post(self, request):
@@ -53,5 +55,6 @@ class PortalManagerAPIView(generics.ListCreateAPIView):
 class PortalManagerAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     """View to retrieve, update and delete Users."""
 
-    queryset = User.objects.all().order_by('id')
+    queryset = User.objects.filter(role__level=PORTAL_MANAGER_LEVEL).order_by(
+        'id')
     serializer_class = UserSerializer
