@@ -60,6 +60,13 @@ class IsClient(permissions.BasePermission):
         )
 
 
+class SignUp(permissions.BasePermission):
+    """Permission to sign up."""
+
+    def has_permission(self, request, view):
+        return request.method == 'POST'
+
+
 class ReadOnly(permissions.BasePermission):
     """Permission to read only."""
 
