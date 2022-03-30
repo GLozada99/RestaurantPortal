@@ -31,3 +31,20 @@ class PortalManagerAPITestCase(APITestCase):
             format='json',
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class ClientAPITestCase(APITestCase):
+    def setUp(self) -> None:
+        call_command('populatedb')
+
+    @get_portal_manager_token
+    def test_create_client(self, token):
+        """Test the creation of a category."""
+        url = reverse('clients:client-list')
+        response = self.client.post(
+            url,
+            {'username': 'TestClient', 'password': 'TestPassword'},
+            format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
