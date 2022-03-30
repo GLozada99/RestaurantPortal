@@ -19,6 +19,9 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('roles/', include('authentication.urls.role', namespace='roles')),
-    path('users/', include('authentication.urls.user', namespace='users')),
+    path('clients/', include('authentication.urls.client',
+                             namespace='clients')),
+    path('portal-managers/', include('authentication.urls.portal_manager',
+                                     namespace='portal_managers')),
     path('auth/', include('authentication.urls.jwt', namespace='auth')),
 ]
