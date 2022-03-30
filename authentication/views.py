@@ -1,6 +1,7 @@
 from rest_framework import generics
 
 from authentication.models import Role, User
+from authentication.permissions import IsPortalManager, SignUp
 from authentication.serializers import RoleSerializer, UserSerializer
 from authentication.services import UserAPIService
 from portal.settings import CLIENT_LEVEL, PORTAL_MANAGER_LEVEL
@@ -11,6 +12,7 @@ class RoleAPIView(generics.ListAPIView):
 
     queryset = Role.objects.all().order_by('id')
     serializer_class = RoleSerializer
+    permission_classes = [IsPortalManager]
 
 
 class RoleAPIDetailView(generics.RetrieveAPIView):
@@ -18,6 +20,7 @@ class RoleAPIDetailView(generics.RetrieveAPIView):
 
     queryset = Role.objects.all().order_by('id')
     serializer_class = RoleSerializer
+    permission_classes = [IsPortalManager]
 
 
 class ClientAPIView(generics.ListCreateAPIView):
@@ -25,6 +28,7 @@ class ClientAPIView(generics.ListCreateAPIView):
 
     queryset = User.objects.filter(role__level=CLIENT_LEVEL).order_by('id')
     serializer_class = UserSerializer
+    permission_classes = [SignUp | IsPortalManager]
 
     def post(self, request):
         serializer = self.get_serializer_class()(data=request.data)
@@ -37,14 +41,17 @@ class ClientAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = User.objects.filter(role__level=CLIENT_LEVEL).order_by('id')
     serializer_class = UserSerializer
+    permission_classes = [IsPortalManager]
 
 
 class PortalManagerAPIView(generics.ListCreateAPIView):
     """View to list and create Users."""
 
-    queryset = User.objects.filter(role__level=PORTAL_MANAGER_LEVEL).order_by(
-        'id')
+    queryset = User.objects.filter(
+        role__level=PORTAL_MANAGER_LEVEL
+    ).order_by('id')
     serializer_class = UserSerializer
+    permission_classes = [IsPortalManager]
 
     def post(self, request):
         serializer = self.get_serializer_class()(data=request.data)
@@ -55,6 +62,8 @@ class PortalManagerAPIView(generics.ListCreateAPIView):
 class PortalManagerAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     """View to retrieve, update and delete Users."""
 
-    queryset = User.objects.filter(role__level=PORTAL_MANAGER_LEVEL).order_by(
-        'id')
+    queryset = User.objects.filter(
+        role__level=PORTAL_MANAGER_LEVEL
+    ).order_by('id')
     serializer_class = UserSerializer
+    permission_classes = [IsPortalManager]
