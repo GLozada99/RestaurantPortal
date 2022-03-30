@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'drf_spectacular',
 
     'authentication',
     'restaurant',
@@ -169,6 +170,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 
@@ -188,3 +190,13 @@ RESTAURANT_MANAGER_LEVEL = 1
 BRANCH_MANAGER_LEVEL = 2
 EMPLOYEE_LEVEL = 3
 CLIENT_LEVEL = 4
+
+
+# Documentation settings
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Restaurant portal API',
+    'DESCRIPTION': 'API for restaurants',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
