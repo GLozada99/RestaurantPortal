@@ -37,24 +37,12 @@ class ClientAPITestCase(APITestCase):
     def setUp(self) -> None:
         call_command('createroles')
 
-    @get_portal_manager_token
-    def test_create_client(self, token):
-        """Test the creation of a category."""
+    def test_create_client(self):
+        """Test the creation of a client."""
         url = reverse('clients:client-list')
         response = self.client.post(
             url,
             {'username': 'TestClient', 'password': 'TestPassword'},
-            format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
-        )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    def test_create_client_without_auth(self):
-        """Test the creation of a category without auth."""
-        url = reverse('clients:client-list')
-        response = self.client.post(
-            url,
-            {'username': 'TestPortalManager', 'password': 'TestPassword'},
             format='json',
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
