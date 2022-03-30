@@ -30,12 +30,12 @@ class UserAPIService:
     def create_client(cls, serializer: UserSerializer) -> Response:
         serializer.validated_data['role'] = Role.objects.filter(
             level=CLIENT_LEVEL
-        )
+        ).first()
         return cls.create(serializer)
 
     @classmethod
     def create_portal_manager(cls, serializer: UserSerializer) -> Response:
         serializer.validated_data['role'] = Role.objects.filter(
             level=PORTAL_MANAGER_LEVEL
-        )
+        ).first()
         return cls.create(serializer)
