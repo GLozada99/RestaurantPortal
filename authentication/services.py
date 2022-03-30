@@ -15,7 +15,7 @@ class UserAPIService:
     def create(serializer: UserSerializer) -> Response:
         user = User(
             username=serializer.validated_data['username'],
-            role=serializer.validated_data['role'],
+            role_id=serializer.validated_data['role_id'],
         )
         try:
             email = serializer.validated_data['email']
@@ -28,14 +28,14 @@ class UserAPIService:
 
     @classmethod
     def create_client(cls, serializer: UserSerializer) -> Response:
-        serializer.validated_data['role'] = Role.objects.filter(
+        serializer.validated_data['role_id'] = Role.objects.filter(
             level=CLIENT_LEVEL
-        ).first()
+        ).first().id
         return cls.create(serializer)
 
     @classmethod
     def create_portal_manager(cls, serializer: UserSerializer) -> Response:
-        serializer.validated_data['role'] = Role.objects.filter(
+        serializer.validated_data['role_id'] = Role.objects.filter(
             level=PORTAL_MANAGER_LEVEL
-        ).first()
+        ).first().id
         return cls.create(serializer)
