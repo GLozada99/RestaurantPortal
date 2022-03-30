@@ -30,5 +30,20 @@ urlpatterns = [
             namespace='portal_managers'
         )
     ),
+    path(
+         'food-types/',
+         include(
+             'restaurant.urls.food_type',
+             namespace='food_types'
+         )
+    ),
+    path(
+        'delivery-types/',
+        include(
+            'restaurant.urls.delivery_type',
+            namespace='delivery_types'
+        )
+    ),
+
     path('auth/', include('authentication.urls.jwt', namespace='auth')),
 ]
