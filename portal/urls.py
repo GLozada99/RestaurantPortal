@@ -44,6 +44,13 @@ urlpatterns = [
             namespace='delivery_types'
         )
     ),
+    path(
+        'restaurant/',
+        include(
+            'restaurant.urls.restaurant',
+            namespace='restaurant'
+        )
+    ),
 
     path('auth/', include('authentication.urls.jwt', namespace='auth')),
 ]
