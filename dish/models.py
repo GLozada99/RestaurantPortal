@@ -24,3 +24,21 @@ class DishCategory(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+
+class Dish(models.Model):
+    name = models.CharField(max_length=80)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    description = models.TextField(null=True)
+    category = models.ForeignKey(DishCategory, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'category'],
+                name='dish_category'
+            )
+        ]
+
+    def __str__(self):
+        return f'{self.name}'
