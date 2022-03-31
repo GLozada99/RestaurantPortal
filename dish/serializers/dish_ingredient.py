@@ -9,7 +9,7 @@ class DishIngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = DishIngredient
         fields = (
-            'ingredient_id',
+            'ingredient',
             'quantity',
             'unit',
         )
