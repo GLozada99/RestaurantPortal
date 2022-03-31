@@ -25,6 +25,9 @@ class DishSerializer(serializers.ModelSerializer):
     def validate_price(self, value):
         return Validators.validate_greater_than_zero(value)
 
+    def validate_ingredients(self, value):
+        return Validators.validate_list(value)
+
 
 class DetailedDishSerializer(serializers.ModelSerializer):
     """Detailed Serializer for Dish."""
