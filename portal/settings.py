@@ -13,7 +13,6 @@ from datetime import timedelta
 from pathlib import Path
 
 import dj_database_url
-from rest_framework import permissions
 
 from portal.env_handler import EnvHandler
 
