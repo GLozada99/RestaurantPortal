@@ -13,8 +13,6 @@ from datetime import timedelta
 from pathlib import Path
 
 import dj_database_url
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
 from portal.env_handler import EnvHandler
@@ -193,17 +191,7 @@ BRANCH_MANAGER_LEVEL = 2
 EMPLOYEE_LEVEL = 3
 CLIENT_LEVEL = 4
 
-# Swagger Documentation
-schema_view = get_schema_view(
-   openapi.Info(
-      title="Restaurant portal API",
-      default_version='1.0.0',
-      description="API for restaurants",
-      terms_of_service="https://www.google.com/policies/terms/",
-   ),
-   public=True,
-   permission_classes=[permissions.AllowAny],
-)
+# Swagger security settings
 
 SWAGGER_SETTINGS = {
    'SECURITY_DEFINITIONS': {

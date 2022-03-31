@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import path, include, re_path
 
-from portal.settings import schema_view
+from portal.documentation import schema_view
 
 urlpatterns = [
     path('roles/', include('authentication.urls.role', namespace='roles')),
