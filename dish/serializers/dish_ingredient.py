@@ -10,6 +10,6 @@ class DishIngredientSerializer(serializers.ModelSerializer):
         model = DishIngredient
         fields = (
             'ingredient_id',
-            'cuantity',
+            'quantity',
             'unit',
         )
