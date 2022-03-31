@@ -21,7 +21,7 @@ class DishAPIService:
         dish_ingredients = [
             DishIngredient(
                 dish_id=dish.id,
-                ingredient_id=data['ingredient'],
+                ingredient_id=data['ingredient'].id,
                 quantity=data['quantity'],
                 unit=data['unit'],
             ) for data in ingredients_data
