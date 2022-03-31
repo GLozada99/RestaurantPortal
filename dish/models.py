@@ -51,6 +51,6 @@ class DishIngredient(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['dish', 'ingredient'],
-                name='dish_ingredient'
+                name='dish_ingredient_unique_constraint'
             )
         ]
