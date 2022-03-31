@@ -1,8 +1,10 @@
 from rest_framework import generics
 
 from dish.models import DishCategory
-from dish.serializers.dish_category import (DetailedDishCategorySerializer,
-                                            DishCategorySerializer, )
+from dish.serializers.dish_category import (
+    DetailedDishCategorySerializer,
+    DishCategorySerializer,
+)
 
 
 class DishCategoryAPIView(generics.ListCreateAPIView):
