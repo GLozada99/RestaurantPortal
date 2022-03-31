@@ -2,6 +2,7 @@ from rest_framework import generics
 
 from dish.models import Dish
 from dish.serializers.dish import DetailedDishSerializer, DishSerializer
+from dish.services import DishAPIService
 
 
 class DishAPIView(generics.ListCreateAPIView):
@@ -14,6 +15,11 @@ class DishAPIView(generics.ListCreateAPIView):
         if self.request.method == 'POST':
             return DishSerializer
         return DetailedDishSerializer
+
+    def post(self, request):
+        serializer = self.get_serializer_class()(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return DishAPIService.create(serializer)
 
 
 class DishAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
