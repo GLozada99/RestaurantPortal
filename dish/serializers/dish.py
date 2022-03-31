@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from dish.models import Dish
 from dish.serializers.dish_category import DishCategorySerializer
@@ -21,6 +22,13 @@ class DishSerializer(serializers.ModelSerializer):
             'category',
             'ingredients'
         )
+
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Dish.objects.all(),
+                fields=['name', 'category']
+            )
+        ]
 
     def validate_price(self, value):
         return Validators.validate_greater_than_zero(value)
