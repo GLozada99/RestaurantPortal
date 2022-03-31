@@ -13,9 +13,9 @@ boto3 = "*"
 django-extensions = "*"
 djangorestframework = "*"
 djangorestframework-simplejwt = "*"
-drf-spectacular = "*"
 dj-database-url = "*"
 portal = {editable = true, path = "."}
+drf-yasg = "*"
 
 [dev-packages]
 flake8 = "*"
