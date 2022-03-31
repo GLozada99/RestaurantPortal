@@ -10,3 +10,10 @@ class Validators:
         if value <= 0:
             raise ValidationError('This field must be greater than zero.')
         return value
+
+    @staticmethod
+    def validate_list(value):
+        """Validate that the entered list isn't empty."""
+        if not value:
+            raise ValidationError('This field cannot be empty.')
+        return value
