@@ -18,6 +18,7 @@ from django.urls import path, include, re_path
 from portal.documentation import schema_view
 
 urlpatterns = [
+    path('auth/', include('authentication.urls.jwt', namespace='auth')),
     path('roles/', include('authentication.urls.role', namespace='roles')),
     path(
         'clients/',
@@ -51,6 +52,27 @@ urlpatterns = [
             namespace='restaurants'
         )
     ),
+    path(
+        'ingredients/',
+        include(
+            'dish.urls.ingredient',
+            namespace='ingredients'
+        )
+    ),
+    path(
+        'dish-categories/',
+        include(
+            'dish.urls.dish_category',
+            namespace='dish-categories'
+        )
+    ),
+    path(
+        'dishes/',
+        include(
+            'dish.urls.dish',
+            namespace='dishes'
+        )
+    ),
     re_path(
         r'^swagger(?P<format>\.json|\.yaml)$',
         schema_view.without_ui(
@@ -69,5 +91,4 @@ urlpatterns = [
             'redoc', cache_timeout=0
         ), name='schema-redoc'
     ),
-    path('auth/', include('authentication.urls.jwt', namespace='auth')),
 ]
