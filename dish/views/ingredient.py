@@ -1,6 +1,5 @@
 from rest_framework import generics
 
-from authentication.permissions import IsPortalManager
 from dish.models import Ingredient
 from dish.serializers.ingredient import IngredientSerializer
 
@@ -10,7 +9,6 @@ class IngredientAPIView(generics.ListCreateAPIView):
 
     queryset = Ingredient.objects.all().order_by('id')
     serializer_class = IngredientSerializer
-    permission_classes = [IsPortalManager]
 
 
 class IngredientAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -18,4 +16,3 @@ class IngredientAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Ingredient.objects.all().order_by('id')
     serializer_class = IngredientSerializer
-    permission_classes = [IsPortalManager]
