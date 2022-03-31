@@ -4,7 +4,7 @@ from restaurant.models import Restaurant
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=80, unique=True)
+    name = models.CharField(max_length=80)
 
     def __str__(self):
         return f'{self.name}'
@@ -39,3 +39,5 @@ class Dish(models.Model):
                 name='dish_category'
             )
         ]
+
+
