@@ -32,11 +32,11 @@ urlpatterns = [
         )
     ),
     path(
-         'food-types/',
-         include(
-             'restaurant.urls.food_type',
-             namespace='food_types'
-         )
+        'food-types/',
+        include(
+            'restaurant.urls.food_type',
+            namespace='food_types'
+        )
     ),
     path(
         'delivery-types/',
