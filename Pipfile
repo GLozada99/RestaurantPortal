@@ -18,6 +18,7 @@ portal = {editable = true, path = "."}
 drf-yasg = "*"
 drf-extra-fields = "*"
 pillow = "*"
+django-storages = "*"
 
 [dev-packages]
 flake8 = "*"
