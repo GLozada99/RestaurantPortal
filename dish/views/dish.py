@@ -26,7 +26,7 @@ class DishAPIView(generics.ListCreateAPIView):
             'dish_category_id'))
 
 
-class DishAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+class DishAPIDetailView(generics.RetrieveDestroyAPIView):
     """View to retrieve, update and delete Dish."""
 
     serializer_class = DishSerializer
