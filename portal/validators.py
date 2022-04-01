@@ -1,3 +1,4 @@
+from django.db import models
 from rest_framework.serializers import ValidationError
 
 
@@ -17,3 +18,12 @@ class Validators:
         if not value:
             raise ValidationError('This field cannot be empty.')
         return value
+
+    @staticmethod
+    def validate_unique(Model: models.Model, **kwargs):
+        """Validates unique constraint of one or more fields"""
+        if Model.objects.filter(**kwargs).first():
+            print(Model.objects.filter(**kwargs).first())
+            raise ValidationError(
+                {'non_field_errors': 'Breaks unique validation of '
+                                     f'{kwargs.keys()}'})
