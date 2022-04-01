@@ -10,13 +10,10 @@ urlpatterns = [
     path('', RestaurantAPIView.as_view(), name='restaurant-list'),
     path('<pk>/', RestaurantAPIDetailView.as_view(), name='restaurant-detail'),
     path(
-        '<restaurant_pk>/dish-categories/',
-        path(
-            'dish-categories/',
-            include(
-                'dish.urls.dish_category',
-                namespace='dish-categories'
-            )
-        ),
+        '<restaurant_id>/dish-categories/',
+        include(
+            'dish.urls.dish_category',
+            namespace='dish-categories'
+        )
     )
 ]
