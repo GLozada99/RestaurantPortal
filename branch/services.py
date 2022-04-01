@@ -8,6 +8,5 @@ class BranchAPIService:
 
     @classmethod
     def create(cls, serializer: BranchSerializer, restaurant_id) -> Response:
-        serializer.validated_data['restaurant_id'] = restaurant_id
-        serializer.save()
+        serializer.save(restaurant_id=restaurant_id)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
