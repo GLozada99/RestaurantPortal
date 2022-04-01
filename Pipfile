@@ -17,6 +17,7 @@ dj-database-url = "*"
 portal = {editable = true, path = "."}
 drf-yasg = "*"
 drf-extra-fields = "*"
+pillow = "*"
 
 [dev-packages]
 flake8 = "*"
