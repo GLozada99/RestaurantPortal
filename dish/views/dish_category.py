@@ -25,7 +25,6 @@ class DishCategoryAPIView(generics.ListCreateAPIView):
 class DishCategoryAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     """View to retrieve, update and delete DishCategory."""
 
-    queryset = DishCategory.objects.all().order_by('id')
     serializer_class = DishCategorySerializer
 
     def get_serializer_class(self):
