@@ -16,6 +16,7 @@ djangorestframework-simplejwt = "*"
 dj-database-url = "*"
 portal = {editable = true, path = "."}
 drf-yasg = "*"
+drf-extra-fields = "*"
 
 [dev-packages]
 flake8 = "*"
