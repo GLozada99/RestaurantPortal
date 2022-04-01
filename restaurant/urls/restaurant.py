@@ -15,5 +15,12 @@ urlpatterns = [
             'dish.urls.dish_category',
             namespace='dish-categories'
         )
+    ),
+    path(
+        '<restaurant_id>/branches/',
+        include(
+            'branch.urls.branch',
+            namespace='branches'
+        )
     )
 ]
