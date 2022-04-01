@@ -1,5 +1,6 @@
 from django.db import models
 
+from dish.models import Ingredient
 from restaurant.models import Restaurant
 
 
@@ -13,3 +14,10 @@ class Branch(models.Model):
 
     def __str__(self):
         return f'{self.restaurant}\n{self.address}'
+
+
+class Inventory(models.Model):
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    stock = models.FloatField()
+    unit = models.CharField(max_length=20)
