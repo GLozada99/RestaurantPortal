@@ -1,3 +1,4 @@
+from django.db.transaction import atomic
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
@@ -10,6 +11,7 @@ from portal.validators import Validators
 class DishAPIService:
 
     @classmethod
+    @atomic
     def create(cls, serializer: DishSerializer, category_id: int) -> Response:
         Validators.validate_unique(
             Dish, name=serializer.validated_data['name'],
@@ -22,7 +24,7 @@ class DishAPIService:
             category_id=category_id,
         )
         dish.save()
-        ingredients_data = serializer.validated_data['ingredients']
+        ingredients_data = serializer.validated_data.get('ingredients')
 
         dish_ingredients = [
             DishIngredient(
