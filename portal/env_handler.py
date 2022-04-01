@@ -1,4 +1,4 @@
-from decouple import config, UndefinedValueError
+from decouple import UndefinedValueError, config
 
 
 class EnvHandler:
@@ -11,6 +11,11 @@ class EnvHandler:
     AUTH_HEADER_PREFIX = config('AUTH_HEADER_PREFIX', default='Bearer')
     LOGS_FILE = config('LOGS_FILE', default='app') + '.log'
     DJANGO_SETTINGS_MODULE = config('DJANGO_SETTINGS_MODULE')
+
+    AWS_S3_ACCESS_KEY_ID = config('AWS_S3_ACCESS_KEY_ID')
+    AWS_S3_SECRET_ACCESS_KEY = config('AWS_S3_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+    AWS_QUERYSTRING_AUTH = config('AWS_QUERYSTRING_AUTH', cast=bool)
 
     def __init__(self):
         try:
