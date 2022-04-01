@@ -1,4 +1,4 @@
-from django.db import models
+from django.db.models import Model
 from rest_framework.serializers import ValidationError
 
 
@@ -20,10 +20,11 @@ class Validators:
         return value
 
     @staticmethod
-    def validate_unique(Model: models.Model, **kwargs):
+    def validate_unique(Model: Model, **kwargs):
         """Validates unique constraint of one or more fields"""
         if Model.objects.filter(**kwargs).first():
-            print(Model.objects.filter(**kwargs).first())
-            raise ValidationError(
-                {'non_field_errors': 'Breaks unique validation of '
-                                     f'{kwargs.keys()}'})
+            parameters = ', '.join(list(kwargs.keys()))
+            raise ValidationError({
+                'non_field_errors':
+                    f'The fields {parameters} must make a unique set.'
+            })
