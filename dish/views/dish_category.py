@@ -21,6 +21,10 @@ class DishCategoryAPIView(generics.ListCreateAPIView):
         restaurant_id = self.kwargs.get('restaurant_id')
         return DishCategory.objects.filter(restaurant__id=restaurant_id)
 
+    def post(self, request, *args, **kwargs):
+        request.data['restaurant'] = self.kwargs.get('restaurant_id')
+        return super().post(request, *args, **kwargs)
+
 
 class DishCategoryAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     """View to retrieve, update and delete DishCategory."""
