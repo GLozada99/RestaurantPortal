@@ -13,5 +13,8 @@ urlpatterns = [
         DishCategoryAPIDetailView.as_view(),
         name='dish-category-detail'
     ),
-    path('<dish_category_id>/dishes/', include('dish.urls.dish')),
+    path(
+        '<dish_category_id>/dishes/',
+        include('dish.urls.dish', namespace='dishes')
+    ),
 ]
