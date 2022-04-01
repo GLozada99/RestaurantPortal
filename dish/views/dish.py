@@ -19,9 +19,11 @@ class DishAPIView(generics.ListCreateAPIView):
         dish_category_id = self.kwargs.get('dish_category_id')
         return Dish.objects.filter(category__id=dish_category_id)
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.validated_data['category'] = (self.kwargs.
+                                                 get('category_id'))
         return DishAPIService.create(serializer)
 
 
