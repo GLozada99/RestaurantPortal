@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from dish.views.dish_category import (
     DishCategoryAPIDetailView,
@@ -13,4 +13,5 @@ urlpatterns = [
         DishCategoryAPIDetailView.as_view(),
         name='dish-category-detail'
     ),
+    path('<dish_category_id>/dishes/', include('dish.urls.dish')),
 ]
