@@ -13,6 +13,14 @@ class Validators:
         return value
 
     @staticmethod
+    def validate_greater_than_or_equal_to_zero(value):
+        """Validate that the entered value is greater than or equal to zero."""
+        if value < 0:
+            raise ValidationError(
+                'This field must be greater than or equal to zero.'
+            )
+
+    @staticmethod
     def validate_list(value):
         """Validate that the entered list isn't empty."""
         if not value:
