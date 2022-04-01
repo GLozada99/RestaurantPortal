@@ -22,5 +22,12 @@ urlpatterns = [
             'branch.urls.branch',
             namespace='branches'
         )
-    )
+    ),
+    path(
+        '<restaurant_id>/ingredients/',
+        include(
+            'dish.urls.ingredient',
+            namespace='ingredients'
+        )
+    ),
 ]

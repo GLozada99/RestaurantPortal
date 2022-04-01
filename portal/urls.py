@@ -37,13 +37,6 @@ urlpatterns = [
             namespace='restaurants'
         )
     ),
-    path(
-        'ingredients/',
-        include(
-            'dish.urls.ingredient',
-            namespace='ingredients'
-        )
-    ),
     re_path(
         r'^swagger(?P<format>\.json|\.yaml)$',
         schema_view.without_ui(
