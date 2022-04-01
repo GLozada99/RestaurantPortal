@@ -2,7 +2,7 @@ from rest_framework import generics
 
 from dish.models import Dish
 from dish.serializers.dish import DetailedDishSerializer, DishSerializer
-from dish.services import DishAPIService
+from dish.services.dish import DishAPIService
 
 
 class DishAPIView(generics.ListCreateAPIView):
