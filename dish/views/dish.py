@@ -22,9 +22,8 @@ class DishAPIView(generics.ListCreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.validated_data['category'] = (self.kwargs.
-                                                 get('category_id'))
-        return DishAPIService.create(serializer)
+        return DishAPIService.create(serializer, kwargs.get(
+            'dish_category_id'))
 
 
 class DishAPIDetailView(generics.RetrieveUpdateDestroyAPIView):

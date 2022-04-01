@@ -4,17 +4,22 @@ from rest_framework.serializers import ValidationError
 
 from dish.models import Dish, DishIngredient
 from dish.serializers.dish import DishSerializer
+from portal.validators import Validators
 
 
 class DishAPIService:
 
     @classmethod
-    def create(cls, serializer: DishSerializer) -> Response:
+    def create(cls, serializer: DishSerializer, category_id: int) -> Response:
+        Validators.validate_unique(
+            Dish, name=serializer.validated_data['name'],
+            category_id=category_id,
+        )
         dish = Dish(
             name=serializer.validated_data['name'],
             price=serializer.validated_data['price'],
             description=serializer.validated_data['description'],
-            category=serializer.validated_data['category'],
+            category_id=category_id,
         )
         dish.save()
         ingredients_data = serializer.validated_data['ingredients']
