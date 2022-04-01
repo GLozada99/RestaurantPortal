@@ -2,6 +2,7 @@ from rest_framework import generics
 
 from branch.models import Branch
 from branch.serializers.branch import BranchSerializer
+from branch.services import BranchAPIService
 
 
 class BranchAPIView(generics.ListCreateAPIView):
@@ -12,6 +13,13 @@ class BranchAPIView(generics.ListCreateAPIView):
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
         return Branch.objects.filter(restaurant__id=restaurant_id)
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return BranchAPIService.create(
+            serializer, self.kwargs.get('restaurant_id')
+        )
 
 
 class BranchAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
