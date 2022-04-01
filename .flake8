@@ -1,4 +1,6 @@
 [flake8]
 exclude =    
     __pycache__,
-    */migrations/*.py
+    */migrations/*.py,
+    build,
+    portal.egg-info
