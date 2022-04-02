@@ -106,3 +106,8 @@ class UserPermissionService:
     def get_restaurant_id(cls, user: User):
         profile = EmployeeProfile.objects.filter(user=user).first()
         return profile.restaurant.id if profile else None
+
+    @classmethod
+    def get_branch_id(cls, user: User):
+        profile = EmployeeProfile.objects.filter(user=user).first()
+        return profile.branch.id if profile else None
