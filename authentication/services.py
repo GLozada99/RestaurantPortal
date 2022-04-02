@@ -3,6 +3,8 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from authentication.models import Role
+from authentication.serializers.employee_profile import \
+    EmployeeProfileSerializer
 from authentication.serializers.user import UserSerializer
 from portal.settings import CLIENT_LEVEL, PORTAL_MANAGER_LEVEL
 
@@ -40,3 +42,20 @@ class UserAPIService:
             level=PORTAL_MANAGER_LEVEL
         ).first().id
         return cls.create(serializer)
+
+
+class EmployeeProfileAPIService:
+    @classmethod
+    def create_user(
+            cls,
+            serializer: EmployeeProfileSerializer,
+            role_id: int) -> dict:
+        user_data = {
+            'username': serializer.validated_data['username'],
+            'password': serializer.validated_data['password'],
+            'email': serializer.validated_data.get('email'),
+            'role_id': role_id
+        }
+        user_serializer = UserSerializer(data=user_data)
+        response = UserAPIService.create(user_serializer)
+        return response.data
