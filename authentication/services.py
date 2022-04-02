@@ -62,9 +62,10 @@ class UserAPIService:
         user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
         profile = cls.create_profile(user_id, branch_id=branch_id)
-        final_data = user_data | {
+        extra_data = {
             'branch_id': profile.branch.id
         }
+        final_data = extra_data.update(user_data)
         return Response(final_data, status=status.HTTP_201_CREATED)
 
     @classmethod
@@ -75,9 +76,10 @@ class UserAPIService:
         user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
         profile = cls.create_profile(user_id, branch_id=branch_id)
-        final_data = user_data | {
+        extra_data = {
             'branch_id': profile.branch.id
         }
+        final_data = extra_data.update(user_data)
         return Response(final_data, status=status.HTTP_201_CREATED)
 
     @classmethod
@@ -90,7 +92,9 @@ class UserAPIService:
         user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
         profile = cls.create_profile(user_id, restaurant_id=restaurant_id)
-        final_data = user_data | {
+        extra_data = {
             'restaurant_id': profile.restaurant.id
         }
+        final_data = extra_data.update(user_data)
+
         return Response(final_data, status=status.HTTP_201_CREATED)
