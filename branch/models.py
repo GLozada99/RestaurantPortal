@@ -29,3 +29,12 @@ class Inventory(models.Model):
                 name='branch_ingredient'
             )
         ]
+
+
+class Promotion(models.Model):
+    name = models.CharField(max_length=80)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    branches = models.ManyToManyField(Branch)
+
+    def __str__(self):
+        return f'{self.name}'
