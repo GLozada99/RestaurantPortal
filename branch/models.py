@@ -21,3 +21,11 @@ class Inventory(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     stock = models.FloatField()
     unit = models.CharField(max_length=20)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['branch', 'ingredient'],
+                name='branch_ingredient'
+            )
+        ]
