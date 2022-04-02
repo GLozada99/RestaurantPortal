@@ -1,5 +1,6 @@
 from rest_framework import permissions
 
+from authentication.services import UserPermissionService
 from portal.settings import (
     BRANCH_MANAGER_LEVEL,
     CLIENT_LEVEL,
@@ -57,6 +58,17 @@ class IsClient(permissions.BasePermission):
         user = request.user
         return (
             user.is_authenticated and user.role.level == CLIENT_LEVEL
+        )
+
+
+class IsManagerCurrentRestaurant(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        user = request.user
+        user_restaurant_id = UserPermissionService.get_restaurant_id(user)
+        path_restaurant_id = view.kwargs.get('restaurant_id')
+        return (
+            user.is_authenticated and user_restaurant_id == path_restaurant_id
         )
 
 
