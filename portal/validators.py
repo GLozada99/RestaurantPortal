@@ -19,6 +19,7 @@ class Validators:
             raise ValidationError(
                 'This field must be greater than or equal to zero.'
             )
+        return value
 
     @staticmethod
     def validate_list(value):
