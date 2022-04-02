@@ -5,7 +5,7 @@ from dish.views.dish_category import (
     DishCategoryAPIView,
 )
 
-app_name = 'dish_category'
+app_name = 'dish'
 urlpatterns = [
     path('', DishCategoryAPIView.as_view(), name='dish-category-list'),
     path(
