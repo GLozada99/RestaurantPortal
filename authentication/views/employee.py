@@ -11,6 +11,9 @@ from portal.settings import EMPLOYEE_LEVEL
 class EmployeeAPIView(generics.ListCreateAPIView):
     """View to list and create Branch Employees."""
 
+    # permission_classes = [(IsRestaurantManager & HasCurrentRestaurant) |
+    # (IsBranchManager & HasCurrentBranch)]
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return UserSerializer
@@ -35,6 +38,8 @@ class EmployeeAPIDetailView(generics.RetrieveDestroyAPIView):
     """View to retrieve and delete Branch Employees."""
 
     serializer_class = UserSerializer
+    # permission_classes = [(IsRestaurantManager & HasCurrentRestaurant) |
+    # (IsBranchManager & HasCurrentBranch)]
 
     def get_queryset(self):
         branch_id = self.kwargs.get('branch_id')

@@ -9,6 +9,7 @@ class DishAPIView(generics.ListCreateAPIView):
     """View to list and create Dish."""
 
     serializer_class = DishSerializer
+    # permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -30,6 +31,7 @@ class DishAPIDetailView(generics.RetrieveDestroyAPIView):
     """View to retrieve, update and delete Dish."""
 
     serializer_class = DishSerializer
+    # permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
 
     def get_serializer_class(self):
         if self.request.method in {'PUT', 'PATCH'}:

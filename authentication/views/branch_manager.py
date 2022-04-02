@@ -11,6 +11,8 @@ from portal.settings import BRANCH_MANAGER_LEVEL
 class BranchManagerAPIView(generics.ListCreateAPIView):
     """View to list and create Branch Managers."""
 
+    # permission_classes = [IsRestaurantManager & HasCurrentRestaurant]
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return UserSerializer
@@ -35,6 +37,7 @@ class BranchManagerAPIDetailView(generics.RetrieveDestroyAPIView):
     """View to retrieve and delete Branch Managers."""
 
     serializer_class = UserSerializer
+    # permission_classes = [IsRestaurantManager & HasCurrentRestaurant]
 
     def get_queryset(self):
         branch_id = self.kwargs.get('branch_id')

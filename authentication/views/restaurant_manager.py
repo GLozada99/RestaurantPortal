@@ -12,6 +12,9 @@ from portal.settings import RESTAURANT_MANAGER_LEVEL
 class RestaurantManagerAPIView(generics.ListCreateAPIView):
     """View to list and create Restaurant Managers."""
 
+    # permission_classes = [(IsRestaurantManager &
+    # HasCurrentRestaurant) | IsPortalManager]
+
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return UserSerializer
@@ -36,6 +39,8 @@ class RestaurantManagerAPIDetailView(generics.RetrieveDestroyAPIView):
     """View to retrieve and delete Restaurant Managers."""
 
     serializer_class = UserSerializer
+    # permission_classes = [(IsRestaurantManager &
+    # HasCurrentRestaurant) | IsPortalManager]
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')

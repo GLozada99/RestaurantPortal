@@ -1,16 +1,14 @@
 from rest_framework import generics
 
 from branch.models import Inventory
-from branch.serializers.inventory import (
-    InventorySerializer,
-    DetailedInventorySerializer,
-)
+from branch.serializers.inventory import (DetailedInventorySerializer,
+                                          InventorySerializer, )
 from branch.services.inventory import InventoryAPIService
 
 
 class InventoryAPIView(generics.ListCreateAPIView):
     """View to list and create Inventories."""
-
+    # permission_classes = [(IsBranchManager & HasCurrentBranch)]
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return InventorySerializer
@@ -31,7 +29,9 @@ class InventoryAPIView(generics.ListCreateAPIView):
 
 
 class InventoryAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """View to retrieve, update and delete a Inventory."""
+    """View to retrieve, update and delete Inventory."""
+
+    # permission_classes = [(IsBranchManager & HasCurrentBranch)]
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':

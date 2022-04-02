@@ -9,6 +9,7 @@ class IngredientAPIView(generics.ListCreateAPIView):
     """View to list and create Ingredients."""
 
     serializer_class = IngredientSerializer
+    # permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
@@ -26,6 +27,7 @@ class IngredientAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     """View to retrieve, update and delete Ingredients."""
 
     serializer_class = IngredientSerializer
+    # permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
