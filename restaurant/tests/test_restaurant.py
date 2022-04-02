@@ -4,6 +4,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
 from portal.test_helpers import get_portal_manager_token
+from restaurant.models import Restaurant
 
 
 class RestaurantAPITestCase(APITestCase):
@@ -63,3 +64,21 @@ class RestaurantAPITestCase(APITestCase):
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @get_portal_manager_token
+    def test_create_restaurant_manager(self, token):
+        """Test the creation of a restaurant manager."""
+        call_command('createrestaurants')
+        url = reverse(
+            'restaurants:restaurant-managers:restaurant-manager-list',
+            kwargs={'restaurant_id': Restaurant.objects.all().first().id}
+        )
+        manager_data = {
+            'username': 'TestRestaurantManager',
+            'password': 'TestPassword'
+        }
+        response = self.client.post(
+            url, manager_data, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
