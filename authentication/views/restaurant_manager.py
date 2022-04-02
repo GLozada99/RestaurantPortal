@@ -2,6 +2,8 @@
 from rest_framework import generics
 
 from authentication.models import EmployeeProfile
+from authentication.serializers.employee_profile import \
+    RestaurantProfileSerializer
 from authentication.serializers.user import UserSerializer
 from authentication.services import UserAPIService
 from portal.settings import RESTAURANT_MANAGER_LEVEL
@@ -10,7 +12,10 @@ from portal.settings import RESTAURANT_MANAGER_LEVEL
 class RestaurantManagerAPIView(generics.ListCreateAPIView):
     """View to list and create Restaurant Managers."""
 
-    serializer_class = UserSerializer
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return UserSerializer
+        return RestaurantProfileSerializer
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
