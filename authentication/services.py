@@ -8,6 +8,7 @@ from authentication.serializers.user import UserSerializer
 from portal.settings import (BRANCH_MANAGER_LEVEL, CLIENT_LEVEL,
                              EMPLOYEE_LEVEL,
                              PORTAL_MANAGER_LEVEL, RESTAURANT_MANAGER_LEVEL, )
+from restaurant.models import Restaurant
 
 User = get_user_model()
 
@@ -98,3 +99,11 @@ class UserAPIService:
         final_data = extra_data.update(user_data)
 
         return Response(final_data, status=status.HTTP_201_CREATED)
+
+
+class UserPermissionService:
+
+    @classmethod
+    def get_restaurant_id(cls, user: User):
+        restaurant = Restaurant.objects.filter(user=user).first()
+        return restaurant.id if restaurant else None
