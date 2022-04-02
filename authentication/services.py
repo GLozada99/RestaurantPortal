@@ -53,63 +53,40 @@ class UserAPIService:
         role_id = Role.objects.filter(level=PORTAL_MANAGER_LEVEL).first().id
         return cls.create(serializer, role_id)
 
-
-class EmployeeProfileAPIService:
-    @classmethod
-    def create_user(
-            cls,
-            serializer: UserSerializer,
-            role_id: int) -> dict:
-        user_data = {
-            'username': serializer.validated_data['username'],
-            'password': serializer.validated_data['password'],
-            'email': serializer.validated_data.get('email'),
-        }
-        user_serializer = UserSerializer(data=user_data)
-        response = UserAPIService.create(user_serializer)
-        return response.data
-
-
-
     @classmethod
     def create_employee(
-            cls, serializer: EmployeeProfileSerializer) -> Response:
-        employee_id = Role.objects.filter(level=EMPLOYEE_LEVEL).first().id
-        user_data = cls.create_user(serializer, employee_id)
+            cls, serializer: UserSerializer, branch_id: int) -> Response:
+        role_id = Role.objects.filter(level=EMPLOYEE_LEVEL).first().id
+        user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
-        profile = cls.create_profile(serializer, user_id)
-
-        final_data = BranchEmployeeSerializer(profile).data
+        profile = cls.create_profile(user_id, branch_id=branch_id)
+        final_data = user_data | {
+            'branch_id': profile.branch.id
+        }
         return Response(final_data, status=status.HTTP_201_CREATED)
 
     @classmethod
     def create_branch_manager(
-            cls, serializer: EmployeeProfileSerializer) -> Response:
-        branch_manager_id = Role.objects.filter(
-            level=BRANCH_MANAGER_LEVEL).first().id
-        user_data = cls.create_user(serializer, branch_manager_id)
+            cls, serializer: UserSerializer, branch_id: int) -> Response:
+        role_id = Role.objects.filter(level=BRANCH_MANAGER_LEVEL).first().id
+        user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
-        profile = cls.create_profile(serializer, user_id)
-
-        final_data = BranchEmployeeSerializer(profile).data
+        profile = cls.create_profile(user_id, branch_id=branch_id)
+        final_data = user_data | {
+            'branch_id': profile.branch.id
+        }
         return Response(final_data, status=status.HTTP_201_CREATED)
 
     @classmethod
     def create_restaurant_manager(
-            cls,
-            serializer: EmployeeProfileSerializer,
-            restaurant_id: int) -> Response:
-
-        restaurant_manager_id = Role.objects.filter(
-            level=RESTAURANT_MANAGER_LEVEL).first().id
-        user_data = cls.create_user(serializer, restaurant_manager_id)
-
+            cls, serializer: UserSerializer, restaurant_id: int) -> Response:
+        role_id = Role.objects.filter(
+            level=RESTAURANT_MANAGER_LEVEL
+        ).first().id
+        user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
-        profile = cls.create_profile(
-            serializer,
-            user_id,
-            restaurant_id=restaurant_id
-        )
-
-        final_data = RestaurantManagerSerializer(profile).data
+        profile = cls.create_profile(user_id, restaurant_id=restaurant_id)
+        final_data = user_data | {
+            'restaurant_id': profile.restaurant.id
+        }
         return Response(final_data, status=status.HTTP_201_CREATED)
