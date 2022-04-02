@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.response import Response
 
-from authentication.models import Role
+from authentication.models import EmployeeProfile, Role
 from authentication.serializers.employee_profile import \
     EmployeeProfileSerializer
 from authentication.serializers.user import UserSerializer
@@ -59,3 +59,17 @@ class EmployeeProfileAPIService:
         user_serializer = UserSerializer(data=user_data)
         response = UserAPIService.create(user_serializer)
         return response.data
+
+    @classmethod
+    def create_profile(
+            cls,
+            serializer: EmployeeProfileSerializer,
+            user_id: int) -> dict:
+        profile = EmployeeProfile(
+            user_id=user_id,
+            restaurant=serializer.validated_data.get('restaurant'),
+            branch=serializer.validated_data.get('branch')
+        )
+        profile.save()
+        final_data = EmployeeProfileSerializer(profile).data
+        return final_data
