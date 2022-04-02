@@ -3,9 +3,6 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from authentication.models import EmployeeProfile, Role
-from authentication.serializers.employee_profile import \
-    (BranchEmployeeSerializer, EmployeeProfileSerializer,
-     RestaurantManagerSerializer, )
 from authentication.serializers.user import UserSerializer
 from portal.settings import (BRANCH_MANAGER_LEVEL, CLIENT_LEVEL,
                              EMPLOYEE_LEVEL,
@@ -17,10 +14,10 @@ User = get_user_model()
 class UserAPIService:
 
     @staticmethod
-    def create(serializer: UserSerializer) -> Response:
+    def create(serializer: UserSerializer, role_id: int) -> Response:
         user = User(
             username=serializer.validated_data['username'],
-            role_id=serializer.validated_data['role_id'],
+            role_id=role_id,
         )
         try:
             email = serializer.validated_data['email']
@@ -34,24 +31,20 @@ class UserAPIService:
 
     @classmethod
     def create_client(cls, serializer: UserSerializer) -> Response:
-        serializer.validated_data['role_id'] = Role.objects.filter(
-            level=CLIENT_LEVEL
-        ).first().id
-        return cls.create(serializer)
+        role_id = Role.objects.filter(level=CLIENT_LEVEL).first().id
+        return cls.create(serializer, role_id)
 
     @classmethod
     def create_portal_manager(cls, serializer: UserSerializer) -> Response:
-        serializer.validated_data['role_id'] = Role.objects.filter(
-            level=PORTAL_MANAGER_LEVEL
-        ).first().id
-        return cls.create(serializer)
+        role_id = Role.objects.filter(level=PORTAL_MANAGER_LEVEL).first().id
+        return cls.create(serializer, role_id)
 
 
 class EmployeeProfileAPIService:
     @classmethod
     def create_user(
             cls,
-            serializer: EmployeeProfileSerializer,
+            serializer: UserSerializer,
             role_id: int) -> dict:
         user_data = {
             'username': serializer.validated_data['username'],
@@ -66,12 +59,13 @@ class EmployeeProfileAPIService:
     @classmethod
     def create_profile(
             cls,
-            serializer: EmployeeProfileSerializer,
-            user_id: int) -> EmployeeProfile:
+            user_id: int,
+            restaurant_id: int = None,
+            branch_id: int = None) -> EmployeeProfile:
         profile = EmployeeProfile(
             user_id=user_id,
-            restaurant=serializer.validated_data.get('restaurant'),
-            branch=serializer.validated_data.get('branch')
+            restaurant_id=restaurant_id,
+            branch_id=branch_id
         )
         profile.save()
         return profile
@@ -101,12 +95,20 @@ class EmployeeProfileAPIService:
 
     @classmethod
     def create_restaurant_manager(
-            cls, serializer: EmployeeProfileSerializer) -> Response:
+            cls,
+            serializer: EmployeeProfileSerializer,
+            restaurant_id: int) -> Response:
+
         restaurant_manager_id = Role.objects.filter(
             level=RESTAURANT_MANAGER_LEVEL).first().id
         user_data = cls.create_user(serializer, restaurant_manager_id)
+
         user_id = user_data['id']
-        profile = cls.create_profile(serializer, user_id)
+        profile = cls.create_profile(
+            serializer,
+            user_id,
+            restaurant_id=restaurant_id
+        )
 
         final_data = RestaurantManagerSerializer(profile).data
         return Response(final_data, status=status.HTTP_201_CREATED)
