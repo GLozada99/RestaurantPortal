@@ -30,6 +30,20 @@ class UserAPIService:
         return Response(final_data, status=status.HTTP_201_CREATED)
 
     @classmethod
+    def create_profile(
+            cls,
+            user_id: int,
+            restaurant_id: int = None,
+            branch_id: int = None) -> EmployeeProfile:
+        profile = EmployeeProfile(
+            user_id=user_id,
+            restaurant_id=restaurant_id,
+            branch_id=branch_id
+        )
+        profile.save()
+        return profile
+
+    @classmethod
     def create_client(cls, serializer: UserSerializer) -> Response:
         role_id = Role.objects.filter(level=CLIENT_LEVEL).first().id
         return cls.create(serializer, role_id)
@@ -50,25 +64,12 @@ class EmployeeProfileAPIService:
             'username': serializer.validated_data['username'],
             'password': serializer.validated_data['password'],
             'email': serializer.validated_data.get('email'),
-            'role_id': role_id
         }
         user_serializer = UserSerializer(data=user_data)
         response = UserAPIService.create(user_serializer)
         return response.data
 
-    @classmethod
-    def create_profile(
-            cls,
-            user_id: int,
-            restaurant_id: int = None,
-            branch_id: int = None) -> EmployeeProfile:
-        profile = EmployeeProfile(
-            user_id=user_id,
-            restaurant_id=restaurant_id,
-            branch_id=branch_id
-        )
-        profile.save()
-        return profile
+
 
     @classmethod
     def create_employee(
