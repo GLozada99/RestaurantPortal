@@ -28,7 +28,7 @@ class BranchAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     serializer_class = BranchSerializer
     # permission_classes = [IsRestaurantManager & IsManagerCurrentRestaurant]
-    
+
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
         return Branch.objects.filter(restaurant__id=restaurant_id)

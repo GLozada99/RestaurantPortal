@@ -1,7 +1,6 @@
 from rest_framework import generics
 
 from authentication.models import User
-from authentication.permissions import IsPortalManager
 from authentication.serializers.user import UserSerializer
 from authentication.services import UserAPIService
 from portal.settings import PORTAL_MANAGER_LEVEL
@@ -14,7 +13,7 @@ class PortalManagerAPIView(generics.ListCreateAPIView):
         role__level=PORTAL_MANAGER_LEVEL
     ).order_by('id')
     serializer_class = UserSerializer
-    permission_classes = [IsPortalManager]
+    # permission_classes = [IsPortalManager]
 
     def post(self, request):
         serializer = self.get_serializer_class()(data=request.data)
@@ -29,4 +28,4 @@ class PortalManagerAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
         role__level=PORTAL_MANAGER_LEVEL
     ).order_by('id')
     serializer_class = UserSerializer
-    permission_classes = [IsPortalManager]
+    # permission_classes = [IsPortalManager]
