@@ -2,7 +2,7 @@ from rest_framework import generics
 
 from branch.models import Branch
 from branch.serializers.branch import BranchSerializer
-from branch.services import BranchAPIService
+from branch.services.branch import BranchAPIService
 
 
 class BranchAPIView(generics.ListCreateAPIView):
