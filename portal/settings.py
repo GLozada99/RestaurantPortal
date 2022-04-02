@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'storages',
+    'django_extensions',
 
     'authentication',
     'restaurant',
