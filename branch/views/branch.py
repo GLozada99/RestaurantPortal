@@ -9,6 +9,7 @@ class BranchAPIView(generics.ListCreateAPIView):
     """View to list and create Branch."""
 
     serializer_class = BranchSerializer
+    # permission_classes = [IsRestaurantManager & IsManagerCurrentRestaurant]
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
@@ -26,7 +27,8 @@ class BranchAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     """View to retrieve, update and delete Branch."""
 
     serializer_class = BranchSerializer
-
+    # permission_classes = [IsRestaurantManager & IsManagerCurrentRestaurant]
+    
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
         return Branch.objects.filter(restaurant__id=restaurant_id)
