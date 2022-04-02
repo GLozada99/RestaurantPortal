@@ -5,27 +5,27 @@ from authentication.serializers.user import UserSerializer
 
 
 class EmployeeProfileSerializer(serializers.ModelSerializer):
+    """Serializer for EmployeeProfile"""
+    user = UserSerializer()
+
+    class Meta:
+        model = EmployeeProfile
+        fields = (
+            'id',
+            'user',
+        )
+
+
+class BranchEmployeeSerializer(EmployeeProfileSerializer):
     """Serializer for EmployeeProfile to be used for Employees and Branch
-    Admins"""
-    user = UserSerializer()
-
+    Managers"""
     class Meta:
         model = EmployeeProfile
-        fields = (
-            'id',
-            'user',
-            'branch',
-        )
+        fields = EmployeeProfileSerializer.Meta.fields + ('branch',)
 
 
-class RestaurantAdminProfileSerializer(serializers.ModelSerializer):
-    """Serializer for EmployeeProfile to be used for Restaurant Admins"""
-    user = UserSerializer()
-
+class RestaurantManagerSerializer(serializers.ModelSerializer):
+    """Serializer for EmployeeProfile to be used for Restaurant Managers"""
     class Meta:
         model = EmployeeProfile
-        fields = (
-            'id',
-            'user',
-            'restaurant',
-        )
+        fields = EmployeeProfileSerializer.Meta.fields + ('restaurant',)
