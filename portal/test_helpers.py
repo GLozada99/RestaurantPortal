@@ -2,7 +2,7 @@ from functools import wraps
 
 from rest_framework.reverse import reverse
 
-from authentication.serializers import UserSerializer
+from authentication.serializers.user import UserSerializer
 from authentication.services import UserAPIService
 
 user_data = {
