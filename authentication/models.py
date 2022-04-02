@@ -56,8 +56,10 @@ class User(AbstractUser):
 
 class EmployeeProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-    branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE,
+                                   blank=True, null=True, default=None)
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE,
+                               blank=True, null=True, default=None)
 
     class Meta:
         constraints = [
