@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.response import Response
 
 from authentication.models import Role
-from authentication.serializers import UserSerializer
+from authentication.serializers.user import UserSerializer
 from portal.settings import CLIENT_LEVEL, PORTAL_MANAGER_LEVEL
 
 User = get_user_model()

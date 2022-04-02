@@ -2,7 +2,7 @@ from rest_framework import generics
 
 from authentication.models import Role
 from authentication.permissions import IsPortalManager
-from authentication.serializers import RoleSerializer
+from authentication.serializers.role import RoleSerializer
 
 
 class RoleAPIView(generics.ListAPIView):
