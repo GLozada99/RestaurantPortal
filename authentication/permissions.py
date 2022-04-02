@@ -66,7 +66,7 @@ class IsManagerCurrentRestaurant(permissions.BasePermission):
     def has_permission(self, request, view):
         user = request.user
         user_restaurant_id = UserPermissionService.get_restaurant_id(user)
-        path_restaurant_id = view.kwargs.get('restaurant_id')
+        path_restaurant_id = int(view.kwargs.get('restaurant_id'))
         return (
             user.is_authenticated and user_restaurant_id == path_restaurant_id
         )
