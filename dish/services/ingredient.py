@@ -10,16 +10,16 @@ class IngredientAPIService:
 
     @classmethod
     def create(
-        cls, serializer: IngredientSerializer, restaurant_id
+        cls, serializer: IngredientSerializer, restaurant
     ) -> Response:
         cls.validate_restaurant(
-            serializer.validated_data['name'], restaurant_id
+            serializer.validated_data['name'], restaurant
         )
-        serializer.save(restaurant_id=restaurant_id)
+        serializer.save(restaurant_id=restaurant)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @staticmethod
-    def validate_restaurant(name, restaurant_id):
+    def validate_restaurant(name, restaurant):
         Validators.validate_unique(
-            Ingredient, name=name, restaurant_id=restaurant_id
+            Ingredient, name=name, restaurant=restaurant
         )
