@@ -24,7 +24,8 @@ class UserAPIService:
             pass
         user.set_password(serializer.validated_data['password'])
         user.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        final_data = UserSerializer(user).data
+        return Response(final_data, status=status.HTTP_201_CREATED)
 
     @classmethod
     def create_client(cls, serializer: UserSerializer) -> Response:
