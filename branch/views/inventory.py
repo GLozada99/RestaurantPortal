@@ -24,7 +24,9 @@ class InventoryAPIView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return InventoryAPIService.create(
-            serializer, self.kwargs.get('branch_id')
+            serializer,
+            int(self.kwargs.get('restaurant_id')),
+            self.kwargs.get('branch_id')
         )
 
 
