@@ -7,7 +7,7 @@ from authentication.services import UserAPIService
 from portal.settings import EMPLOYEE_LEVEL
 
 
-class RestaurantManagerAPIView(generics.ListCreateAPIView):
+class EmployeeAPIView(generics.ListCreateAPIView):
     """View to list and create Branch Employees."""
 
     serializer_class = UserSerializer
@@ -27,7 +27,7 @@ class RestaurantManagerAPIView(generics.ListCreateAPIView):
         )
 
 
-class RestaurantManagerAPIDetailView(generics.RetrieveDestroyAPIView):
+class EmployeeAPIDetailView(generics.RetrieveDestroyAPIView):
     """View to retrieve and delete Branch Employees."""
 
     serializer_class = UserSerializer

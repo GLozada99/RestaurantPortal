@@ -7,7 +7,7 @@ from authentication.services import UserAPIService
 from portal.settings import BRANCH_MANAGER_LEVEL
 
 
-class RestaurantManagerAPIView(generics.ListCreateAPIView):
+class BranchManagerAPIView(generics.ListCreateAPIView):
     """View to list and create Branch Managers."""
 
     serializer_class = UserSerializer
@@ -27,7 +27,7 @@ class RestaurantManagerAPIView(generics.ListCreateAPIView):
         )
 
 
-class RestaurantManagerAPIDetailView(generics.RetrieveDestroyAPIView):
+class BranchManagerAPIDetailView(generics.RetrieveDestroyAPIView):
     """View to retrieve and delete Branch Managers."""
 
     serializer_class = UserSerializer
