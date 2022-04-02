@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db.transaction import atomic
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -54,6 +55,7 @@ class UserAPIService:
         return cls.create(serializer, role_id)
 
     @classmethod
+    @atomic
     def create_employee(
             cls, serializer: UserSerializer, branch_id: int) -> Response:
         role_id = Role.objects.filter(level=EMPLOYEE_LEVEL).first().id
@@ -66,6 +68,7 @@ class UserAPIService:
         return Response(final_data, status=status.HTTP_201_CREATED)
 
     @classmethod
+    @atomic
     def create_branch_manager(
             cls, serializer: UserSerializer, branch_id: int) -> Response:
         role_id = Role.objects.filter(level=BRANCH_MANAGER_LEVEL).first().id
@@ -78,6 +81,7 @@ class UserAPIService:
         return Response(final_data, status=status.HTTP_201_CREATED)
 
     @classmethod
+    @atomic
     def create_restaurant_manager(
             cls, serializer: UserSerializer, restaurant_id: int) -> Response:
         role_id = Role.objects.filter(
