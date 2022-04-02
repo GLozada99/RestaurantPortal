@@ -1,6 +1,6 @@
 from django.db import models
 
-from dish.models import Ingredient
+from dish.models import Ingredient, Dish
 from restaurant.models import Restaurant
 
 
@@ -38,3 +38,17 @@ class Promotion(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+
+class Combo(models.Model):
+    promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['promotion', 'dish'],
+                name='promotion_dish'
+            )
+        ]
