@@ -100,20 +100,3 @@ class RestaurantAPITestCase(APITestCase):
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    @get_portal_manager_token
-    def test_create_dish_category(self, token):
-        """Test the creation of a dish category."""
-        call_command('createrestaurants')
-        url = reverse(
-            'restaurants:dish-categories:dish-category-list',
-            kwargs={'restaurant_id': Restaurant.objects.all().first().id}
-        )
-        category_data = {
-            'name': 'TestDishCategory',
-        }
-        response = self.client.post(
-            url, category_data, format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
-        )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
