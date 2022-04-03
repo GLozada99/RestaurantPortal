@@ -5,7 +5,7 @@ from dish.views.ingredient import (
     IngredientAPIView,
 )
 
-app_name = 'dish'
+app_name = 'ingredient'
 urlpatterns = [
     path('', IngredientAPIView.as_view(), name='ingredient-list'),
     path(

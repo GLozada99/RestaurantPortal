@@ -1,11 +1,11 @@
-from django.urls import path, include
+from django.urls import include, path
 
 from dish.views.dish_category import (
     DishCategoryAPIDetailView,
     DishCategoryAPIView,
 )
 
-app_name = 'dish'
+app_name = 'dish-category'
 urlpatterns = [
     path('', DishCategoryAPIView.as_view(), name='dish-category-list'),
     path(
