@@ -3,7 +3,8 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from portal.test_helpers import get_portal_manager_token
+from portal.test_helpers import (get_portal_manager_token,
+                                 get_restaurant_manager_token, )
 from restaurant.models import Restaurant
 
 
@@ -83,10 +84,9 @@ class RestaurantAPITestCase(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    @get_portal_manager_token
+    @get_restaurant_manager_token
     def test_create_branch(self, token):
         """Test the creation of a restaurant branch."""
-        call_command('createrestaurants')
         url = reverse(
             'restaurants:branch:branch-list',
             kwargs={'restaurant_id': Restaurant.objects.all().first().id}
