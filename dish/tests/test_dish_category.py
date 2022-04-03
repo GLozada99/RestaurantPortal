@@ -3,19 +3,18 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from portal.test_helpers import get_portal_manager_token
+from portal.test_helpers import (get_restaurant_manager_token, )
 from restaurant.models import Restaurant
 
 
-class RestaurantAPITestCase(APITestCase):
+class DishCategoryAPITestCase(APITestCase):
 
     def setUp(self) -> None:
         call_command('createroles')
         call_command('createdeliverytypes')
         call_command('createfoodtypes')
-        call_command('createrestaurants')
 
-    @get_portal_manager_token
+    @get_restaurant_manager_token
     def test_create_dish_category(self, token):
         """Test the creation of a dish category."""
         url = reverse(
