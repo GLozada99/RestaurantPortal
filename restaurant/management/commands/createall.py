@@ -14,4 +14,5 @@ class Command(BaseCommand):
         call_command('createfoodtypes')
         call_command('createdeliverytypes')
         call_command('createrestaurants')
+        call_command('createdishcategories')
         call_command('createbranches')
