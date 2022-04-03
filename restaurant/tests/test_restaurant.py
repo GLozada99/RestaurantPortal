@@ -82,3 +82,21 @@ class RestaurantAPITestCase(APITestCase):
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    @get_portal_manager_token
+    def test_create_branch(self, token):
+        """Test the creation of a restaurant branch."""
+        call_command('createrestaurants')
+        url = reverse(
+            'restaurants:branch:branch-list',
+            kwargs={'restaurant_id': Restaurant.objects.all().first().id}
+        )
+        branch = {
+            'address': 'TestAddress',
+            'phone_number': '555-555-5555',
+        }
+        response = self.client.post(
+            url, branch, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
