@@ -16,5 +16,5 @@ class Command(BaseCommand):
         call_command('createrestaurants')
         call_command('createdishcategories')
         call_command('createingredients')
-        call_command('createdish')
+        call_command('createdishes')
         call_command('createbranches')
