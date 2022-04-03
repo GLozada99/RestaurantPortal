@@ -3,7 +3,8 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from portal.test_helpers import (get_restaurant_manager_token, )
+from portal.test_helpers import (get_branch_manager_token,
+                                 get_restaurant_manager_token, )
 from restaurant.models import Restaurant
 
 
@@ -29,3 +30,19 @@ class DishCategoryAPITestCase(APITestCase):
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    @get_branch_manager_token
+    def test_create_dish_category_wrong_token(self, token):
+        """Test the creation of a dish category with branch manager token."""
+        url = reverse(
+            'restaurants:dish-categories:dish-category-list',
+            kwargs={'restaurant_id': Restaurant.objects.all().first().id}
+        )
+        category_data = {
+            'name': 'TestDishCategory',
+        }
+        response = self.client.post(
+            url, category_data, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
