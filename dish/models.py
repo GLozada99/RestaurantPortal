@@ -32,6 +32,7 @@ class Dish(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     description = models.TextField(null=True)
     category = models.ForeignKey(DishCategory, on_delete=models.CASCADE)
+    ingredients = models.ManyToManyField(Ingredient, through='DishIngredient')
 
     class Meta:
         constraints = [
