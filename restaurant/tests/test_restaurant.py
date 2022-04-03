@@ -1,14 +1,15 @@
 from django.core.management import call_command
 from rest_framework import status
 from rest_framework.reverse import reverse
-from rest_framework.test import APITestCase
+from rest_framework.test import APITransactionTestCase
 
 from portal.test_helpers import (get_portal_manager_token,
                                  get_restaurant_manager_token, )
 from restaurant.models import Restaurant
 
 
-class RestaurantAPITestCase(APITestCase):
+class RestaurantAPITestCase(APITransactionTestCase):
+    reset_sequences = True
 
     def setUp(self) -> None:
         call_command('createroles')

@@ -15,7 +15,7 @@ class Command(BaseCommand):
         CommandHelpers.print_creating_message(self, 'Restaurant', 3)
         exists = Restaurant.objects.all().first()
         if exists:
-            CommandHelpers.print_error(self, 'Delivery types already exist.')
+            CommandHelpers.print_error(self, 'Restaurant already exist.')
         else:
             restaurant = [
                 Restaurant(

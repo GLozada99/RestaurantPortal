@@ -1,7 +1,7 @@
 from django.core.management import call_command
 from rest_framework import status
 from rest_framework.reverse import reverse
-from rest_framework.test import APITestCase
+from rest_framework.test import APITransactionTestCase
 
 from dish.models import DishCategory
 from portal.test_helpers import (get_branch_manager_token,
@@ -9,7 +9,8 @@ from portal.test_helpers import (get_branch_manager_token,
 from restaurant.models import Restaurant
 
 
-class DishCategoryAPITestCase(APITestCase):
+class DishCategoryAPITestCase(APITransactionTestCase):
+    reset_sequences = True
 
     def setUp(self) -> None:
         call_command('createroles')
@@ -34,7 +35,8 @@ class DishCategoryAPITestCase(APITestCase):
 
     @get_branch_manager_token
     def test_create_dish_category_wrong_token(self, token):
-        """Test the creation of a dish category with branch manager token."""
+        """Test the creation of a dish category with branch
+        manager token.."""
         url = reverse(
             'restaurants:dish-categories:dish-category-list',
             kwargs={'restaurant_id': Restaurant.objects.all().first().id}
