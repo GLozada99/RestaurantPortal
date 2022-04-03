@@ -4,7 +4,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITransactionTestCase
 
 from portal.test_helpers import (get_portal_manager_token,
-                                 get_restaurant_manager_token, )
+                                 )
 from restaurant.models import Restaurant
 
 
@@ -82,23 +82,6 @@ class RestaurantAPITestCase(APITransactionTestCase):
         }
         response = self.client.post(
             url, manager_data, format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
-        )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-    @get_restaurant_manager_token
-    def test_create_branch(self, token):
-        """Test the creation of a restaurant branch."""
-        url = reverse(
-            'restaurants:branch:branch-list',
-            kwargs={'restaurant_id': Restaurant.objects.all().first().id}
-        )
-        branch_data = {
-            'address': 'TestAddress',
-            'phone_number': '555-555-5555',
-        }
-        response = self.client.post(
-            url, branch_data, format='json',
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
