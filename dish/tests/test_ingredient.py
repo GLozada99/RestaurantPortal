@@ -53,8 +53,8 @@ class IngredientAPITestCase(APITransactionTestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     @get_restaurant_manager_token
-    def test_delete_dish_category(self, token):
-        """Test the deletion of a dish category."""
+    def test_delete_ingredient(self, token):
+        """Test the deletion of an ingredient."""
         call_command('createingredients')
         url_get = reverse(
             'restaurants:ingredients:ingredient-list',
