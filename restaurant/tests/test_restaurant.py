@@ -15,6 +15,7 @@ class RestaurantAPITestCase(APITransactionTestCase):
         call_command('createroles')
         call_command('createdeliverytypes')
         call_command('createfoodtypes')
+        call_command('createrestaurants')
         self.restaurant_data = {
             'name': 'TestRestaurant',
             'food_type': 1,

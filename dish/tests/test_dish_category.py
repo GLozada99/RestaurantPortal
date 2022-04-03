@@ -16,6 +16,8 @@ class DishCategoryAPITestCase(APITransactionTestCase):
         call_command('createroles')
         call_command('createdeliverytypes')
         call_command('createfoodtypes')
+        call_command('createrestaurants')
+        call_command('createbranches')
 
     @get_restaurant_manager_token
     def test_create_dish_category(self, token):

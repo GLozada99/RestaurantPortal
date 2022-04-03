@@ -1,6 +1,5 @@
 from functools import wraps
 
-from django.core.management import call_command
 from rest_framework.reverse import reverse
 
 from authentication.serializers.user import UserSerializer
@@ -46,7 +45,6 @@ def get_client_token(f):
 def get_restaurant_manager_token(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        call_command('createrestaurants')
         serializer = UserSerializer(data=user_data)
         serializer.is_valid(raise_exception=True)
         UserAPIService.create_restaurant_manager(
@@ -65,8 +63,6 @@ def get_restaurant_manager_token(f):
 def get_employee_token(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        call_command('createrestaurants')
-        call_command('createbranches')
         serializer = UserSerializer(data=user_data)
         serializer.is_valid(raise_exception=True)
         UserAPIService.create_employee(
@@ -84,8 +80,6 @@ def get_employee_token(f):
 def get_branch_manager_token(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
-        call_command('createrestaurants')
-        call_command('createbranches')
         serializer = UserSerializer(data=user_data)
         serializer.is_valid(raise_exception=True)
         UserAPIService.create_branch_manager(
