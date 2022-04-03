@@ -1,9 +1,12 @@
 from functools import wraps
 
+from django.core.management import call_command
 from rest_framework.reverse import reverse
 
 from authentication.serializers.user import UserSerializer
 from authentication.services import UserAPIService
+from branch.models import Branch
+from restaurant.models import Restaurant
 
 user_data = {
     'username': 'UserTest',
@@ -32,7 +35,7 @@ def get_client_token(f):
         serializer = UserSerializer(data=user_data)
         UserAPIService.create_client(serializer)
         self = args[0]
-        token_url = reverse('auth:auth')
+        token_url = reverse('auth:obtain-token')
         token = self.client.post(
             token_url, user_data, format='json'
         ).data['access']
@@ -41,14 +44,17 @@ def get_client_token(f):
 
 
 def get_restaurant_manager_token(f):
-    """This decorator only works if there's at least one restaurant created"""
     @wraps(f)
     def wrapper(*args, **kwargs):
+        call_command('createrestaurants')
         serializer = UserSerializer(data=user_data)
-        restaurant_id = 1
-        UserAPIService.create_restaurant_manager(serializer, restaurant_id)
+        serializer.is_valid(raise_exception=True)
+        UserAPIService.create_restaurant_manager(
+            serializer,
+            Restaurant.objects.all().first().id
+        )
         self = args[0]
-        token_url = reverse('auth:auth')
+        token_url = reverse('auth:obtain-token')
         token = self.client.post(
             token_url, user_data, format='json'
         ).data['access']
@@ -57,14 +63,17 @@ def get_restaurant_manager_token(f):
 
 
 def get_employee_token(f):
-    """This decorator only works if there's at least one branch created"""
     @wraps(f)
     def wrapper(*args, **kwargs):
+        call_command('createrestaurants')
+        call_command('createbranches')
         serializer = UserSerializer(data=user_data)
-        branch_id = 1
-        UserAPIService.create_restaurant_manager(serializer, branch_id)
+        serializer.is_valid(raise_exception=True)
+        UserAPIService.create_employee(
+            serializer,
+            Branch.objects.all().first().id)
         self = args[0]
-        token_url = reverse('auth:auth')
+        token_url = reverse('auth:obtain-token')
         token = self.client.post(
             token_url, user_data, format='json'
         ).data['access']
@@ -73,14 +82,18 @@ def get_employee_token(f):
 
 
 def get_branch_manager_token(f):
-    """This decorator only works if there's at least one restaurant created"""
     @wraps(f)
     def wrapper(*args, **kwargs):
+        call_command('createrestaurants')
+        call_command('createbranches')
         serializer = UserSerializer(data=user_data)
-        branch_id = 1
-        UserAPIService.create_branch_manager(serializer, branch_id)
+        serializer.is_valid(raise_exception=True)
+        UserAPIService.create_branch_manager(
+            serializer,
+            Branch.objects.all().first().id
+        )
         self = args[0]
-        token_url = reverse('auth:auth')
+        token_url = reverse('auth:obtain-token')
         token = self.client.post(
             token_url, user_data, format='json'
         ).data['access']
