@@ -100,3 +100,36 @@ class RestaurantAPITestCase(APITestCase):
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    @get_portal_manager_token
+    def test_delete_restaurant(self, token):
+        """Test the deletion of a restaurant."""
+        call_command('createrestaurants')
+
+        url_get = reverse(
+            'restaurants:restaurant-list',
+        )
+        response_get = self.client.get(
+            url_get, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        current_restaurants = len(response_get.data)
+
+        url_delete = reverse(
+            'restaurants:restaurant-detail',
+            kwargs={
+                'pk': Restaurant.objects.all().first().id,
+            }
+        )
+
+        self.client.delete(
+            url_delete, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+
+        response_get = self.client.get(
+            url_get, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+
+        self.assertEqual(current_restaurants, len(response_get.data) + 1)
