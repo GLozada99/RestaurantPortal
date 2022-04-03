@@ -1,6 +1,6 @@
 from django.db import models
 
-from dish.models import Ingredient, Dish
+from dish.models import Dish, Ingredient
 from restaurant.models import Restaurant
 
 
@@ -11,6 +11,7 @@ class Branch(models.Model):
     front_picture = models.ImageField(
         upload_to='branch_front_pictures/', null=True, blank=True
     )
+    ingredients = models.ManyToManyField(Ingredient, through='Inventory')
 
     def __str__(self):
         return f'{self.restaurant}\n{self.address}'
