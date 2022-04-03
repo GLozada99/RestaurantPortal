@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITransactionTestCase
 
-from dish.models import DishCategory, Ingredient
+from dish.models import Dish, DishCategory, Ingredient
 from portal.test_helpers import get_restaurant_manager_token
 from restaurant.models import Restaurant
 
@@ -18,19 +18,19 @@ class IngredientAPITestCase(APITransactionTestCase):
         call_command('createrestaurants')
         call_command('createdishcategories')
         call_command('createingredients')
+        self.restaurant_id = Restaurant.objects.all().first().id
+        self.dish_category_id = DishCategory.objects.filter(
+            restaurant_id=self.restaurant_id
+        ).first().id
 
     @get_restaurant_manager_token
     def test_create_dish(self, token):
         """Test the creation of a dish."""
-        restaurant_id = Restaurant.objects.all().first().id
-        dish_category_id = DishCategory.objects.filter(
-            restaurant_id=restaurant_id
-        ).first().id
         url = reverse(
             'restaurants:dish-category:dish:dish-list',
             kwargs={
-                'restaurant_id': restaurant_id,
-                'dish_category_id': dish_category_id
+                'restaurant_id': self.restaurant_id,
+                'dish_category_id': self.dish_category_id
             }
         )
         ingredients = [
@@ -39,7 +39,7 @@ class IngredientAPITestCase(APITransactionTestCase):
                 'quantity': 5,
                 'unit': 'TestUnit'
             } for ing in Ingredient.objects.filter(
-                restaurant_id=restaurant_id
+                restaurant_id=self.restaurant_id
             )
         ]
 
@@ -53,8 +53,11 @@ class IngredientAPITestCase(APITransactionTestCase):
             url, dish_data, format='json',
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
-        dish = DishCategory.objects.get(id=dish_category_id).dish_set.filter(
-            name='TestDish').first()
+        dish = DishCategory.objects.get(
+            id=self.dish_category_id
+        ).dish_set.filter(
+            name='TestDish'
+        ).first()
         for ingredient, dish_ingredient in zip(dish.ingredients.all(),
                                                ingredients):
             self.assertEqual(ingredient.id, dish_ingredient['ingredient'])
@@ -63,15 +66,11 @@ class IngredientAPITestCase(APITransactionTestCase):
     @get_restaurant_manager_token
     def test_create_dish_repeated_ingredients(self, token):
         """Test the creation of a dish."""
-        restaurant_id = Restaurant.objects.all().first().id
-        dish_category_id = DishCategory.objects.filter(
-            restaurant_id=restaurant_id
-        ).first().id
         url = reverse(
             'restaurants:dish-category:dish:dish-list',
             kwargs={
-                'restaurant_id': restaurant_id,
-                'dish_category_id': dish_category_id
+                'restaurant_id': self.restaurant_id,
+                'dish_category_id': self.dish_category_id
             }
         )
         ingredients = [
@@ -94,3 +93,42 @@ class IngredientAPITestCase(APITransactionTestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @get_restaurant_manager_token
+    def test_delete_restaurant(self, token):
+        """Test the deletion of a dish."""
+        call_command('createdishes')
+
+        url_get = reverse(
+            'restaurants:dish-category:dish:dish-list',
+            kwargs={
+                'restaurant_id': self.restaurant_id,
+                'dish_category_id': self.dish_category_id,
+            }
+        )
+        response_get = self.client.get(
+            url_get, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        current_dishes = len(response_get.data)
+
+        url_delete = reverse(
+            'restaurants:dish-category:dish:dish-detail',
+            kwargs={
+                'restaurant_id': self.restaurant_id,
+                'dish_category_id': self.dish_category_id,
+                'pk': Dish.objects.all().first().id,
+            }
+        )
+
+        self.client.delete(
+            url_delete, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+
+        response_get = self.client.get(
+            url_get, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+
+        self.assertEqual(current_dishes, len(response_get.data) + 1)
