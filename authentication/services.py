@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.contrib.auth import get_user_model
 from django.db.transaction import atomic
 from rest_framework import status
@@ -103,11 +105,11 @@ class UserAPIService:
 class UserPermissionService:
 
     @classmethod
-    def get_restaurant_id(cls, user: User):
+    def get_restaurant_id(cls, user: User) -> Optional[int]:
         profile = EmployeeProfile.objects.filter(user=user).first()
         return profile.restaurant.id if profile else None
 
     @classmethod
-    def get_branch_id(cls, user: User):
+    def get_branch_id(cls, user: User) -> Optional[int]:
         profile = EmployeeProfile.objects.filter(user=user).first()
         return profile.branch.id if profile else None
