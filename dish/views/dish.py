@@ -5,9 +5,11 @@ from authentication.permissions import (HasCurrentRestaurant,
 from dish.models import Dish
 from dish.serializers.dish import DetailedDishSerializer, DishSerializer
 from dish.services.dish import DishAPIService
+from portal.mixins import CheckRestaurantDishCategoryAccordingMixin
 
 
-class DishAPIView(generics.ListCreateAPIView):
+class DishAPIView(
+        CheckRestaurantDishCategoryAccordingMixin, generics.ListCreateAPIView):
     """View to list and create Dish."""
 
     serializer_class = DishSerializer
@@ -29,7 +31,9 @@ class DishAPIView(generics.ListCreateAPIView):
             'dish_category_id'))
 
 
-class DishAPIDetailView(generics.RetrieveDestroyAPIView):
+class DishAPIDetailView(
+        CheckRestaurantDishCategoryAccordingMixin,
+        generics.RetrieveDestroyAPIView):
     """View to retrieve, update and delete Dish."""
 
     serializer_class = DishSerializer
