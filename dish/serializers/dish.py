@@ -6,6 +6,17 @@ from dish.serializers.dish_ingredient import DishIngredientSerializer
 from portal.validators import Validators
 
 
+class ShortDishSerializer(serializers.ModelSerializer):
+    """Short Serializer for Dish."""
+
+    class Meta:
+        model = Dish
+        fields = (
+            'id',
+            'name'
+        )
+
+
 class DishSerializer(serializers.ModelSerializer):
     """Serializer for Dish."""
 
