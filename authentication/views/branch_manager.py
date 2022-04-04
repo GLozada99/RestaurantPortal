@@ -7,10 +7,12 @@ from authentication.permissions import (HasCurrentRestaurant,
 from authentication.serializers.employee_profile import BranchProfileSerializer
 from authentication.serializers.user import UserSerializer
 from authentication.services import UserAPIService
+from portal.mixins import CheckRestaurantBranchAccordingMixin
 from portal.settings import BRANCH_MANAGER_LEVEL
 
 
-class BranchManagerAPIView(generics.ListCreateAPIView):
+class BranchManagerAPIView(
+        CheckRestaurantBranchAccordingMixin, generics.ListCreateAPIView):
     """View to list and create Branch Managers."""
 
     permission_classes = [IsRestaurantManager & HasCurrentRestaurant]
@@ -35,7 +37,8 @@ class BranchManagerAPIView(generics.ListCreateAPIView):
         )
 
 
-class BranchManagerAPIDetailView(generics.RetrieveDestroyAPIView):
+class BranchManagerAPIDetailView(
+        CheckRestaurantBranchAccordingMixin, generics.RetrieveDestroyAPIView):
     """View to retrieve and delete Branch Managers."""
 
     serializer_class = UserSerializer

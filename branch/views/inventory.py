@@ -5,9 +5,11 @@ from branch.models import Inventory
 from branch.serializers.inventory import (DetailedInventorySerializer,
                                           InventorySerializer, )
 from branch.services.inventory import InventoryAPIService
+from portal.mixins import CheckRestaurantBranchAccordingMixin
 
 
-class InventoryAPIView(generics.ListCreateAPIView):
+class InventoryAPIView(
+        CheckRestaurantBranchAccordingMixin, generics.ListCreateAPIView):
     """View to list and create Inventories."""
     permission_classes = [(IsBranchManager & HasCurrentBranch)]
 
@@ -30,7 +32,9 @@ class InventoryAPIView(generics.ListCreateAPIView):
         )
 
 
-class InventoryAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+class InventoryAPIDetailView(
+        CheckRestaurantBranchAccordingMixin,
+        generics.RetrieveUpdateDestroyAPIView):
     """View to retrieve, update and delete Inventory."""
 
     permission_classes = [(IsBranchManager & HasCurrentBranch)]
