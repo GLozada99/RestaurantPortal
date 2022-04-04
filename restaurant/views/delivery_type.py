@@ -1,5 +1,6 @@
 from rest_framework import generics
 
+from authentication.permissions import IsPortalManager
 from restaurant.models import DeliveryType
 from restaurant.serializers.delivery_type import DeliveryTypeSerializer
 
@@ -9,7 +10,7 @@ class DeliveryTypeAPIView(generics.ListAPIView):
 
     queryset = DeliveryType.objects.all().order_by('id')
     serializer_class = DeliveryTypeSerializer
-    # permission_classes = [IsPortalManager]
+    permission_classes = [IsPortalManager]
 
 
 class DeliveryTypeAPIDetailView(generics.RetrieveAPIView):
@@ -17,4 +18,4 @@ class DeliveryTypeAPIDetailView(generics.RetrieveAPIView):
 
     queryset = DeliveryType.objects.all().order_by('id')
     serializer_class = DeliveryTypeSerializer
-    # permission_classes = [IsPortalManager]
+    permission_classes = [IsPortalManager]

@@ -2,6 +2,8 @@
 from rest_framework import generics
 
 from authentication.models import EmployeeProfile
+from authentication.permissions import (HasCurrentRestaurant, IsPortalManager,
+                                        IsRestaurantManager, )
 from authentication.serializers.employee_profile import \
     RestaurantProfileSerializer
 from authentication.serializers.user import UserSerializer
@@ -12,8 +14,8 @@ from portal.settings import RESTAURANT_MANAGER_LEVEL
 class RestaurantManagerAPIView(generics.ListCreateAPIView):
     """View to list and create Restaurant Managers."""
 
-    # permission_classes = [(IsRestaurantManager &
-    # HasCurrentRestaurant) | IsPortalManager]
+    permission_classes = [(IsRestaurantManager &
+                          HasCurrentRestaurant) | IsPortalManager]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -39,8 +41,8 @@ class RestaurantManagerAPIDetailView(generics.RetrieveDestroyAPIView):
     """View to retrieve and delete Restaurant Managers."""
 
     serializer_class = UserSerializer
-    # permission_classes = [(IsRestaurantManager &
-    # HasCurrentRestaurant) | IsPortalManager]
+    permission_classes = [(IsRestaurantManager &
+                          HasCurrentRestaurant) | IsPortalManager]
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')

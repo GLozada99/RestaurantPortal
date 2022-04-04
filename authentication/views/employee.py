@@ -2,6 +2,8 @@
 from rest_framework import generics
 
 from authentication.models import EmployeeProfile
+from authentication.permissions import (HasCurrentBranch, HasCurrentRestaurant,
+                                        IsBranchManager, IsRestaurantManager, )
 from authentication.serializers.employee_profile import BranchProfileSerializer
 from authentication.serializers.user import UserSerializer
 from authentication.services import UserAPIService
@@ -11,8 +13,8 @@ from portal.settings import EMPLOYEE_LEVEL
 class EmployeeAPIView(generics.ListCreateAPIView):
     """View to list and create Branch Employees."""
 
-    # permission_classes = [(IsRestaurantManager & HasCurrentRestaurant) |
-    # (IsBranchManager & HasCurrentBranch)]
+    permission_classes = [(IsRestaurantManager & HasCurrentRestaurant) |
+                          (IsBranchManager & HasCurrentBranch)]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -38,8 +40,8 @@ class EmployeeAPIDetailView(generics.RetrieveDestroyAPIView):
     """View to retrieve and delete Branch Employees."""
 
     serializer_class = UserSerializer
-    # permission_classes = [(IsRestaurantManager & HasCurrentRestaurant) |
-    # (IsBranchManager & HasCurrentBranch)]
+    permission_classes = [(IsRestaurantManager & HasCurrentRestaurant) |
+                          (IsBranchManager & HasCurrentBranch)]
 
     def get_queryset(self):
         branch_id = self.kwargs.get('branch_id')

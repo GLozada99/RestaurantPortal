@@ -1,6 +1,7 @@
 from rest_framework import generics
 
 from authentication.models import Role
+from authentication.permissions import IsPortalManager
 from authentication.serializers.role import RoleSerializer
 
 
@@ -9,7 +10,7 @@ class RoleAPIView(generics.ListAPIView):
 
     queryset = Role.objects.all().order_by('id')
     serializer_class = RoleSerializer
-    # permission_classes = [IsPortalManager]
+    permission_classes = [IsPortalManager]
 
 
 class RoleAPIDetailView(generics.RetrieveAPIView):
@@ -17,4 +18,4 @@ class RoleAPIDetailView(generics.RetrieveAPIView):
 
     queryset = Role.objects.all().order_by('id')
     serializer_class = RoleSerializer
-    # permission_classes = [IsPortalManager]
+    permission_classes = [IsPortalManager]

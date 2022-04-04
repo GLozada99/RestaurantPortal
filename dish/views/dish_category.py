@@ -1,5 +1,7 @@
 from rest_framework import generics
 
+from authentication.permissions import (HasCurrentRestaurant,
+                                        IsRestaurantManager, )
 from dish.models import DishCategory
 from dish.serializers.dish_category import DishCategorySerializer
 from dish.services.dish_category import DishCategoryAPIService
@@ -9,7 +11,7 @@ class DishCategoryAPIView(generics.ListCreateAPIView):
     """View to list and create DishCategory."""
 
     serializer_class = DishCategorySerializer
-    # permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
+    permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
@@ -27,7 +29,7 @@ class DishCategoryAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     """View to retrieve, update and delete DishCategory."""
 
     serializer_class = DishCategorySerializer
-    # permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
+    permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')

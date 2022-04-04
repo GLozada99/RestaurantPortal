@@ -1,5 +1,7 @@
 from rest_framework import generics
 
+from authentication.permissions import (HasCurrentRestaurant,
+                                        IsRestaurantManager, )
 from dish.models import Dish
 from dish.serializers.dish import DetailedDishSerializer, DishSerializer
 from dish.services.dish import DishAPIService
@@ -9,7 +11,7 @@ class DishAPIView(generics.ListCreateAPIView):
     """View to list and create Dish."""
 
     serializer_class = DishSerializer
-    # permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
+    permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -31,7 +33,7 @@ class DishAPIDetailView(generics.RetrieveDestroyAPIView):
     """View to retrieve, update and delete Dish."""
 
     serializer_class = DishSerializer
-    # permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
+    permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
 
     def get_serializer_class(self):
         if self.request.method in {'PUT', 'PATCH'}:
