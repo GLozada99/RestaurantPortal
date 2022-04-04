@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from dish.models import Dish
-from dish.serializers.dish_category import DishCategorySerializer
 from dish.serializers.dish_ingredient import DishIngredientSerializer
 from portal.validators import Validators
 
@@ -41,7 +40,6 @@ class DishSerializer(serializers.ModelSerializer):
 
 class DetailedDishSerializer(serializers.ModelSerializer):
     """Detailed Serializer for Dish."""
-    category = DishCategorySerializer()
 
     class Meta:
         model = Dish
@@ -50,5 +48,4 @@ class DetailedDishSerializer(serializers.ModelSerializer):
             'name',
             'price',
             'description',
-            'category'
         )
