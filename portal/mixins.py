@@ -15,8 +15,8 @@ class CheckRestaurantBranchAccordingMixin(object):
             return True
 
     def dispatch(self, request, *args, **kwargs):
-        branch_id = self.kwargs.get('branch_id')
-        restaurant_id = self.kwargs.get('restaurant_id')
+        branch_id = int(self.kwargs.get('branch_id'))
+        restaurant_id = int(self.kwargs.get('restaurant_id'))
         result = self.are_restaurant_branch_according(branch_id,
                                                       restaurant_id)
         if result:
