@@ -37,4 +37,11 @@ urlpatterns = [
             namespace='ingredients'
         )
     ),
+    path(
+        '<restaurant_id>/promotions/',
+        include(
+            'branch.urls.promotion',
+            namespace='promotions'
+        )
+    ),
 ]
