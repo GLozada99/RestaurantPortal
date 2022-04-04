@@ -100,3 +100,39 @@ class BranchAPITestCase(APITransactionTestCase):
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    @get_portal_manager_token
+    def test_delete_branch(self, token):
+        """Test the deletion of a branch."""
+
+        url_get = reverse(
+            'restaurants:branches:branch-list',
+            kwargs={
+                'restaurant_id': self.restaurant_id,
+            }
+        )
+        response_get = self.client.get(
+            url_get, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        current_branch = len(response_get.data)
+
+        url_delete = reverse(
+            'restaurants:branches:branch-detail',
+            kwargs={
+                'restaurant_id': self.restaurant_id,
+                'pk': Branch.objects.all().first().id
+            }
+        )
+
+        self.client.delete(
+            url_delete, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+
+        response_get = self.client.get(
+            url_get, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+
+        self.assertEqual(current_branch, len(response_get.data) + 1)
