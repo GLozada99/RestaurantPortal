@@ -2,8 +2,10 @@ from rest_framework import generics
 
 from authentication.permissions import HasCurrentBranch, IsBranchManager
 from branch.models import Inventory
-from branch.serializers.inventory import (DetailedInventorySerializer,
-                                          InventorySerializer, )
+from branch.serializers.inventory import (
+    DetailedInventorySerializer,
+    InventorySerializer,
+)
 from branch.services.inventory import InventoryAPIService
 from portal.mixins import CheckRestaurantBranchAccordingMixin
 

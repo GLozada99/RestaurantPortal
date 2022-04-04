@@ -1,7 +1,9 @@
 from rest_framework import generics
 
-from authentication.permissions import (HasCurrentRestaurant,
-                                        IsRestaurantManager, )
+from authentication.permissions import (
+    HasCurrentRestaurant,
+    IsRestaurantManager,
+)
 from branch.models import Branch
 from branch.serializers.branch import BranchSerializer
 from branch.services.branch import BranchAPIService
