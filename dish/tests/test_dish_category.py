@@ -50,7 +50,7 @@ class DishCategoryAPITestCase(APITransactionTestCase):
             url, category_data, format='json',
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     @get_restaurant_manager_token
     def test_delete_dish_category(self, token):
