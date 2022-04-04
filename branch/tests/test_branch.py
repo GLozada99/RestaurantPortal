@@ -78,7 +78,7 @@ class BranchAPITestCase(APITransactionTestCase):
             url, manager_data, format='json',
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     @get_restaurant_manager_token
     def test_create_employee(self, token):
@@ -101,7 +101,7 @@ class BranchAPITestCase(APITransactionTestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    @get_portal_manager_token
+    @get_restaurant_manager_token
     def test_delete_branch(self, token):
         """Test the deletion of a branch."""
 
@@ -124,12 +124,10 @@ class BranchAPITestCase(APITransactionTestCase):
                 'pk': Branch.objects.all().first().id
             }
         )
-
         self.client.delete(
             url_delete, format='json',
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
-
         response_get = self.client.get(
             url_get, format='json',
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
