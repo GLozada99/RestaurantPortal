@@ -47,7 +47,7 @@ class CheckRestaurantDishCategoryAccordingMixin(object):
         dish_category_id = int(self.kwargs.get('dish_category_id'))
         restaurant_id = int(self.kwargs.get('restaurant_id'))
         according = self.are_restaurant_dish_category_according(
-            dish_category_id, restaurant_id
+            restaurant_id, dish_category_id
         )
         if not according:
             return JsonResponse(
