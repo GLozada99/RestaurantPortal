@@ -48,3 +48,51 @@ class InventoryAPITestCase(APITransactionTestCase):
                 **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
             )
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    @get_branch_manager_token
+    def test_add_repeated_to_inventory(self, token):
+        """Test adding repeated ingredient to inventory."""
+        url = reverse(
+            'restaurants:branches:inventory:inventory-list',
+            kwargs={
+                'restaurant_id': self.restaurant_id,
+                'branch_id': self.branch_id,
+            }
+        )
+        ingredient_data = [
+            {'ingredient': 1,
+             'stock': 5,
+             'unit': 'TestUnit'},
+            {'ingredient': 1,
+             'stock': 5,
+             'unit': 'TestUnit'},
+        ]
+        response = None
+        for data in ingredient_data:
+            response = self.client.post(
+                url, data, format='json',
+                **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            )
+        # first response is 201, but second is 400
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @get_branch_manager_token
+    def test_add_ingredient_other_restaurant(self, token):
+        """Test adding ingredient from other restaurant to inventory."""
+        url = reverse(
+            'restaurants:branches:inventory:inventory-list',
+            kwargs={
+                'restaurant_id': self.restaurant_id,
+                'branch_id': self.branch_id,
+            }
+        )
+        ingredient_data = {
+            'ingredient': 3,
+            'stock': 5,
+            'unit': 'TestUnit'
+        }
+        response = self.client.post(
+            url, ingredient_data, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
