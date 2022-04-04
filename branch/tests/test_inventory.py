@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITransactionTestCase
 
-from branch.models import Branch
+from branch.models import Branch, Inventory
 from portal.test_helpers import (get_branch_manager_token,
                                  )
 from restaurant.models import Restaurant
@@ -96,3 +96,41 @@ class InventoryAPITestCase(APITransactionTestCase):
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @get_branch_manager_token
+    def test_delete_inventory(self, token):
+        """Test the deletion of an ingredient of inventory."""
+        call_command('createinventories')
+        url_get = reverse(
+            'restaurants:branches:inventory:inventory-list',
+            kwargs={
+                'restaurant_id': self.restaurant_id,
+                'branch_id': self.branch_id,
+            }
+        )
+        response_get = self.client.get(
+            url_get, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        current_inventory_ingredients = len(response_get.data)
+
+        url_delete = reverse(
+            'restaurants:branches:inventory:inventory-detail',
+            kwargs={
+                'restaurant_id': self.restaurant_id,
+                'branch_id': self.branch_id,
+                'pk': Inventory.objects.filter(
+                    branch_id=self.branch_id).first().id
+            }
+        )
+        self.client.delete(
+            url_delete, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        response_get = self.client.get(
+            url_get, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+
+        self.assertEqual(current_inventory_ingredients, len(response_get.data)
+                         + 1)
