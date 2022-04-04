@@ -36,6 +36,7 @@ class Inventory(models.Model):
 class Promotion(models.Model):
     name = models.CharField(max_length=80)
     price = models.DecimalField(max_digits=5, decimal_places=2)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     branches = models.ManyToManyField(Branch)
     dishes = models.ManyToManyField(Dish, through='Combo')
 
