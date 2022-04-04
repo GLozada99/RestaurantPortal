@@ -38,3 +38,24 @@ class BranchAPITestCase(APITransactionTestCase):
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    @get_restaurant_manager_token
+    def test_create_restaurant_manager(self, token):
+        """Test the creation of a branch manager."""
+        call_command('createrestaurants')
+        url = reverse(
+            'restaurants:branches:branch-managers:branch-manager-list',
+            kwargs={
+                'restaurant_id': self.restaurant_id,
+                'branch_id': self.branch_id
+            }
+        )
+        manager_data = {
+            'username': 'TestBranchManager',
+            'password': 'TestPassword'
+        }
+        response = self.client.post(
+            url, manager_data, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
