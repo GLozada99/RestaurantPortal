@@ -4,7 +4,8 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITransactionTestCase
 
 from branch.models import Branch
-from portal.test_helpers import get_restaurant_manager_token
+from portal.test_helpers import (get_portal_manager_token,
+                                 get_restaurant_manager_token, )
 from restaurant.models import Restaurant
 
 
@@ -42,7 +43,6 @@ class BranchAPITestCase(APITransactionTestCase):
     @get_restaurant_manager_token
     def test_create_branch_manager(self, token):
         """Test the creation of a branch manager."""
-        call_command('createrestaurants')
         url = reverse(
             'restaurants:branches:branch-managers:branch-manager-list',
             kwargs={
@@ -59,6 +59,26 @@ class BranchAPITestCase(APITransactionTestCase):
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    @get_portal_manager_token
+    def test_create_branch_manager_wrong_token(self, token):
+        """Test the creation of a branch manager with portal manager user."""
+        url = reverse(
+            'restaurants:branches:branch-managers:branch-manager-list',
+            kwargs={
+                'restaurant_id': self.restaurant_id,
+                'branch_id': self.branch_id
+            }
+        )
+        manager_data = {
+            'username': 'TestBranchManager',
+            'password': 'TestPassword'
+        }
+        response = self.client.post(
+            url, manager_data, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     @get_restaurant_manager_token
     def test_create_employee(self, token):
