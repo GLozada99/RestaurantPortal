@@ -1,6 +1,7 @@
 import random
 
 from django.contrib.auth import authenticate, get_user_model
+from django.db import transaction
 from google.auth.exceptions import GoogleAuthError
 from google.auth.transport import requests
 from google.oauth2 import id_token
@@ -45,6 +46,7 @@ class GeneralUserServices:
         }
 
     @classmethod
+    @transaction.atomic
     def register_get_user(cls, email: str, name: str, provider: str):
         if user := User.objects.filter(email=email).first():
             if provider != user.authentication_provider:
@@ -56,10 +58,9 @@ class GeneralUserServices:
             role = Role.objects.filter(level=settings.CLIENT_LEVEL).first()
             user = {
                 'username': cls.generate_username(name), 'email': email,
-                'role': role, 'password': settings.THIRD_PARTY_SECRET
+                'role': role, 'password': settings.THIRD_PARTY_SECRET,
+                'provider': provider
             }
             user = User.objects.create_user(**user)
-            user.authentication_provider = provider
             user.save()
-
         return cls.get_user_data(email)
