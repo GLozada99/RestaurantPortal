@@ -1,7 +1,9 @@
 from rest_framework import generics
 
-from authentication.permissions import (HasCurrentRestaurant,
-                                        IsRestaurantManager, )
+from authentication.permissions import (
+    HasCurrentRestaurant,
+    IsRestaurantManager,
+)
 from dish.models import DishCategory
 from dish.serializers.dish_category import DishCategorySerializer
 from dish.services.dish_category import DishCategoryAPIService
