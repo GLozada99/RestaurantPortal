@@ -4,7 +4,10 @@ from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 from dish.models import Dish, DishIngredient
-from dish.serializers.dish import DishSerializer
+from dish.serializers.dish import (
+    DishSerializer,
+    DetailedDishWithIngredientsSerializer,
+)
 from portal.validators import Validators
 
 
@@ -26,7 +29,9 @@ class DishAPIService:
         cls.create_dish_ingredients(serializer, ingredients_data)
         cls.update_response_data(serializer, ingredients_data)
         return Response(
-            DishSerializer(serializer.validated_data).data,
+            DetailedDishWithIngredientsSerializer(
+                serializer.validated_data
+            ).data,
             status=status.HTTP_201_CREATED
         )
 
