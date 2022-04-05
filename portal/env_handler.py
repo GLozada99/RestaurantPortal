@@ -16,6 +16,8 @@ class EnvHandler:
     AWS_S3_SECRET_ACCESS_KEY = config('AWS_S3_SECRET_ACCESS_KEY')
     AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
     AWS_QUERYSTRING_AUTH = config('AWS_QUERYSTRING_AUTH', cast=bool)
+    GOOGLE_ID = config('GOOGLE_ID')
+    THIRD_PARTY_SECRET = config('THIRD_PARTY_SECRET')
 
     def __init__(self):
         try:
