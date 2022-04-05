@@ -1,5 +1,6 @@
 from rest_framework import generics
 
+from authentication.permissions import IsRestaurantManager, ReadOnly
 from branch.models import Promotion
 from branch.serializers.promotion import (
     DetailedPromotionSerializer,
@@ -10,6 +11,8 @@ from branch.services.promotion import PromotionAPIService
 
 class PromotionAPIView(generics.ListCreateAPIView):
     """View to list and create Promotion."""
+
+    permission_classes = [IsRestaurantManager | ReadOnly]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
@@ -30,6 +33,8 @@ class PromotionAPIView(generics.ListCreateAPIView):
 
 class PromotionAPIDetailView(generics.RetrieveDestroyAPIView):
     """View to retrieve, update and delete Promotion."""
+
+    permission_classes = [IsRestaurantManager | ReadOnly]
 
     def get_serializer_class(self):
         if self.request.method in {'PUT', 'PATCH'}:
