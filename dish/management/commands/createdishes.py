@@ -26,6 +26,10 @@ class Command(BaseCommand):
                     name='Mojito', description='Goood',
                     price=15.79, category_id=2
                 ),
+                Dish(
+                    name='Cheesecake', description='Goood',
+                    price=15.79, category_id=3
+                ),
             ]
             CommandHelpers.add_to_db(self, Dish, dishes)
 
@@ -44,6 +48,10 @@ class Command(BaseCommand):
                 ),
                 DishIngredient(
                     dish_id=dishes[1].id, ingredient_id=2,
+                    quantity=1, unit='tablespoon'
+                ),
+                DishIngredient(
+                    dish_id=dishes[2].id, ingredient_id=3,
                     quantity=1, unit='tablespoon'
                 ),
             ]
