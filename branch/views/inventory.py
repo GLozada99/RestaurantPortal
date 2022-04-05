@@ -11,8 +11,10 @@ from portal.mixins import CheckRestaurantBranchAccordingMixin
 
 
 class InventoryAPIView(
-        CheckRestaurantBranchAccordingMixin, generics.ListCreateAPIView):
+    CheckRestaurantBranchAccordingMixin, generics.ListCreateAPIView
+):
     """View to list and create Inventories."""
+
     permission_classes = [(IsBranchManager & HasCurrentBranch)]
 
     def get_serializer_class(self):
@@ -35,8 +37,10 @@ class InventoryAPIView(
 
 
 class InventoryAPIDetailView(
-        CheckRestaurantBranchAccordingMixin,
-        generics.RetrieveUpdateDestroyAPIView):
+    CheckRestaurantBranchAccordingMixin,
+    generics.RetrieveUpdateDestroyAPIView
+):
+
     """View to retrieve, update and delete Inventory."""
 
     permission_classes = [(IsBranchManager & HasCurrentBranch)]
