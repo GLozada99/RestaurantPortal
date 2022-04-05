@@ -1,6 +1,7 @@
 from django.db.transaction import atomic
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
 
 from dish.models import Dish, DishIngredient
 from dish.serializers.dish import DishSerializer
@@ -11,10 +12,15 @@ class DishAPIService:
 
     @classmethod
     @atomic
-    def create(cls, serializer: DishSerializer, category_id: int) -> Response:
+    def create(
+        cls, serializer: DishSerializer, category_id: int, restaurant_id: int
+    ) -> Response:
         ingredients_data = serializer.validated_data.pop('ingredients')
         cls.validate_data(
-            serializer.validated_data['name'], category_id, ingredients_data
+            serializer.validated_data['name'],
+            category_id,
+            restaurant_id,
+            ingredients_data
         )
         serializer.save(category_id=category_id)
         cls.create_dish_ingredients(serializer, ingredients_data)
@@ -42,10 +48,19 @@ class DishAPIService:
         serializer.validated_data['id'] = serializer.data['id']
 
     @classmethod
-    def validate_data(cls, name, category_id, dish_ingredients):
+    def validate_data(cls, name, category_id, restaurant_id, dish_ingredients):
         Validators.validate_unique(
             Dish, name=name, category_id=category_id,
         )
         Validators.validate_unique_id_in_list(
             dish_ingredients, 'ingredient', 'dish'
         )
+        cls.validate_ingredients(restaurant_id, dish_ingredients)
+
+    @staticmethod
+    def validate_ingredients(restaurant_id, dish_ingredients):
+        for dish_ingredient in dish_ingredients:
+            if dish_ingredient['ingredient'].restaurant_id != restaurant_id:
+                raise ValidationError({
+                    'ingredients': 'Invalid ingredients.'
+                })

@@ -30,9 +30,11 @@ class DishAPIView(
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)
-        return DishAPIService.create(serializer, kwargs.get(
-            'dish_category_id'
-        ))
+        return DishAPIService.create(
+            serializer,
+            kwargs.get('dish_category_id'),
+            int(kwargs.get('restaurant_id'))
+        )
 
 
 class DishAPIDetailView(
