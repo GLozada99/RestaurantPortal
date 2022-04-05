@@ -19,11 +19,10 @@ class GoogleAuthSerializer(serializers.Serializer):
         if user_data.get('aud') != settings.GOOGLE_ID:
             raise AuthenticationFailed('Wrong ID')
 
-        user_id = user_data['sub']
         email = user_data['email']
         name = user_data['name']
         auth_provider = 'google'
 
-        return GeneralUserServices.register_user(
+        return GeneralUserServices.register_get_user(
             email=email, name=name, provider=auth_provider
         )
