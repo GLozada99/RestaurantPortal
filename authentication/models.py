@@ -52,6 +52,7 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     objects = UserManager()
     role = models.ForeignKey(Role, on_delete=models.PROTECT)
+    authentication_provider = models.TextField(default='django')
 
 
 class EmployeeProfile(models.Model):
