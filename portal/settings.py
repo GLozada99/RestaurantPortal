@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -68,7 +69,7 @@ ROOT_URLCONF = 'portal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,6 +113,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'authentication.auth_backends.EmailBackend'
+]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -131,7 +137,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -217,3 +223,8 @@ AWS_S3_SECRET_ACCESS_KEY = env_handler.AWS_S3_SECRET_ACCESS_KEY
 AWS_STORAGE_BUCKET_NAME = env_handler.AWS_STORAGE_BUCKET_NAME
 
 AWS_QUERYSTRING_AUTH = env_handler.AWS_QUERYSTRING_AUTH
+
+# Google auth settings
+
+GOOGLE_ID = env_handler.GOOGLE_ID
+THIRD_PARTY_SECRET = env_handler.THIRD_PARTY_SECRET
