@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from branch.models import Branch
 from restaurant.models import Restaurant
@@ -54,6 +55,13 @@ class User(AbstractUser):
     objects = UserManager()
     role = models.ForeignKey(Role, on_delete=models.PROTECT)
     authentication_provider = models.TextField(default='portal')
+
+    def get_tokens(self):
+        refresh = RefreshToken.for_user(self)
+        return {
+            'access': str(refresh.access_token),
+            'refresh': str(refresh)
+        }
 
 
 class EmployeeProfile(models.Model):
