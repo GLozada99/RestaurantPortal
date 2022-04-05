@@ -29,7 +29,7 @@ class DetailedPromotionSerializer(serializers.ModelSerializer):
     """Detailed Serializer for Promotion."""
 
     branches = ShortBranchSerializer(many=True)
-    dishes = DetailedComboSerializer(many=True)
+    dishes = DetailedComboSerializer(many=True, source='combo_set')
 
     class Meta:
         model = Promotion

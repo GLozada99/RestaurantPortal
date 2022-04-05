@@ -47,7 +47,7 @@ class PromotionAPIService:
         serializer.validated_data['branches'] = list(
             set(serializer.validated_data['branches'])
         )
-        serializer.validated_data['dishes'] = combos_data
+        serializer.validated_data['combo_set'] = combos_data
 
     @classmethod
     def validate_data(cls, restaurant_id, branches, combos):
