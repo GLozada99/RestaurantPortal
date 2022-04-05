@@ -1,10 +1,22 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
 
 from dish.models import Dish
-from dish.serializers.dish_category import DishCategorySerializer
-from dish.serializers.dish_ingredient import DishIngredientSerializer
+from dish.serializers.dish_ingredient import (
+    DishIngredientSerializer,
+    DetailedDishIngredientSerializer,
+)
 from portal.validators import Validators
+
+
+class ShortDishSerializer(serializers.ModelSerializer):
+    """Short Serializer for Dish."""
+
+    class Meta:
+        model = Dish
+        fields = (
+            'id',
+            'name'
+        )
 
 
 class DishSerializer(serializers.ModelSerializer):
@@ -19,16 +31,8 @@ class DishSerializer(serializers.ModelSerializer):
             'name',
             'price',
             'description',
-            'category',
             'ingredients'
         )
-
-        validators = [
-            UniqueTogetherValidator(
-                queryset=Dish.objects.all(),
-                fields=['name', 'category']
-            )
-        ]
 
     def validate_price(self, value):
         return Validators.validate_greater_than_zero(value)
@@ -39,7 +43,6 @@ class DishSerializer(serializers.ModelSerializer):
 
 class DetailedDishSerializer(serializers.ModelSerializer):
     """Detailed Serializer for Dish."""
-    category = DishCategorySerializer()
 
     class Meta:
         model = Dish
@@ -48,5 +51,20 @@ class DetailedDishSerializer(serializers.ModelSerializer):
             'name',
             'price',
             'description',
-            'category'
+        )
+
+
+class DetailedDishWithIngredientsSerializer(serializers.ModelSerializer):
+    """Detailed Serializer for Dish with ingredients."""
+
+    ingredients = DetailedDishIngredientSerializer(many=True)
+
+    class Meta:
+        model = Dish
+        fields = (
+            'id',
+            'name',
+            'price',
+            'description',
+            'ingredients'
         )

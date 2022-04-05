@@ -1,6 +1,9 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 
+from branch.models import Branch
+from restaurant.models import Restaurant
+
 
 class Role(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -49,3 +52,20 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     objects = UserManager()
     role = models.ForeignKey(Role, on_delete=models.PROTECT)
+
+
+class EmployeeProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE,
+                                   blank=True, null=True, default=None)
+    branch = models.ForeignKey(Branch, on_delete=models.CASCADE,
+                               blank=True, null=True, default=None)
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(restaurant__isnull=False) | models.Q(
+                    branch__isnull=False),
+                name='employee_profile_restaurant_branch_both_not_null'
+            )
+        ]

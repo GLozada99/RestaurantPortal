@@ -2,7 +2,7 @@ from rest_framework import generics
 
 from authentication.models import User
 from authentication.permissions import IsPortalManager
-from authentication.serializers import UserSerializer
+from authentication.serializers.user import UserSerializer
 from authentication.services import UserAPIService
 from portal.settings import PORTAL_MANAGER_LEVEL
 

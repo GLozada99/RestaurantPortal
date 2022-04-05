@@ -1,17 +1,21 @@
 from django.core.management import call_command
 from rest_framework import status
 from rest_framework.reverse import reverse
-from rest_framework.test import APITestCase
+from rest_framework.test import APITransactionTestCase
 
-from portal.test_helpers import get_portal_manager_token
+from portal.test_helpers import (get_portal_manager_token,
+                                 )
+from restaurant.models import Restaurant
 
 
-class RestaurantAPITestCase(APITestCase):
+class RestaurantAPITestCase(APITransactionTestCase):
+    reset_sequences = True
 
     def setUp(self) -> None:
         call_command('createroles')
         call_command('createdeliverytypes')
         call_command('createfoodtypes')
+        call_command('createrestaurants')
         self.restaurant_data = {
             'name': 'TestRestaurant',
             'food_type': 1,
@@ -63,3 +67,54 @@ class RestaurantAPITestCase(APITestCase):
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @get_portal_manager_token
+    def test_create_restaurant_manager(self, token):
+        """Test the creation of a restaurant manager."""
+        call_command('createrestaurants')
+        url = reverse(
+            'restaurants:restaurant-managers:restaurant-manager-list',
+            kwargs={'restaurant_id': Restaurant.objects.all().first().id}
+        )
+        manager_data = {
+            'username': 'TestRestaurantManager',
+            'password': 'TestPassword'
+        }
+        response = self.client.post(
+            url, manager_data, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    @get_portal_manager_token
+    def test_delete_restaurant(self, token):
+        """Test the deletion of a restaurant."""
+        call_command('createrestaurants')
+
+        url_get = reverse(
+            'restaurants:restaurant-list',
+        )
+        response_get = self.client.get(
+            url_get, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        current_restaurants = len(response_get.data)
+
+        url_delete = reverse(
+            'restaurants:restaurant-detail',
+            kwargs={
+                'pk': Restaurant.objects.all().first().id,
+            }
+        )
+
+        self.client.delete(
+            url_delete, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+
+        response_get = self.client.get(
+            url_get, format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+
+        self.assertEqual(current_restaurants, len(response_get.data) + 1)

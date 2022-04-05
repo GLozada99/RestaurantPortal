@@ -1,14 +1,6 @@
 from rest_framework import serializers
 
-from authentication.models import Role, User
-
-
-class RoleSerializer(serializers.ModelSerializer):
-    """Serializer for Role"""
-
-    class Meta:
-        model = Role
-        fields = ('id', 'name', 'level')
+from authentication.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
