@@ -23,7 +23,15 @@ class PromotionAPIService:
             restaurant_id, serializer.validated_data['branches'], combos_data
         )
         serializer.save(restaurant_id=restaurant_id)
-        serializer.validated_data['dishes'] = combos_data
+        cls.create_combos(serializer, combos_data)
+        cls.update_response_data(serializer, combos_data)
+        return Response(
+            DetailedPromotionSerializer(serializer.validated_data).data,
+            status=status.HTTP_201_CREATED
+        )
+
+    @staticmethod
+    def create_combos(serializer: PromotionSerializer, combos_data):
         combos = [
             Combo(
                 promotion_id=serializer.data['id'],
@@ -32,10 +40,11 @@ class PromotionAPIService:
             ) for combo in combos_data
         ]
         Combo.objects.bulk_create(combos)
-        return Response(
-            DetailedPromotionSerializer(serializer.validated_data).data,
-            status=status.HTTP_201_CREATED
-        )
+
+    @staticmethod
+    def update_response_data(serializer: PromotionSerializer, combos_data):
+        serializer.validated_data['dishes'] = combos_data
+        serializer.validated_data['id'] = serializer.data['id']
 
     @classmethod
     def validate_data(cls, restaurant_id, branches, combos):
