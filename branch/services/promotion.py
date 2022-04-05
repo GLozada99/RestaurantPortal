@@ -43,8 +43,11 @@ class PromotionAPIService:
 
     @staticmethod
     def update_response_data(serializer: PromotionSerializer, combos_data):
-        serializer.validated_data['dishes'] = combos_data
         serializer.validated_data['id'] = serializer.data['id']
+        serializer.validated_data['branches'] = list(
+            set(serializer.validated_data['branches'])
+        )
+        serializer.validated_data['dishes'] = combos_data
 
     @classmethod
     def validate_data(cls, restaurant_id, branches, combos):
