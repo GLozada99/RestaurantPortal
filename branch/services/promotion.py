@@ -1,3 +1,4 @@
+from django.db.transaction import atomic
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
@@ -12,6 +13,7 @@ from branch.serializers.promotion import (
 class PromotionAPIService:
 
     @classmethod
+    @atomic
     def create(
         cls, serializer: PromotionSerializer, restaurant_id
     ) -> Response:
