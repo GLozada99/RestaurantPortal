@@ -8,6 +8,7 @@ from branch.serializers.promotion import (
     PromotionSerializer,
     DetailedPromotionSerializer,
 )
+from portal.validators import Validators
 
 
 class PromotionAPIService:
@@ -38,6 +39,9 @@ class PromotionAPIService:
 
     @classmethod
     def validate_data(cls, restaurant_id, branches, combos):
+        Validators.validate_unique_id_in_list(
+            combos, 'dish', 'promotion'
+        )
         cls.validate_branches(restaurant_id, branches)
         cls.validate_dishes(restaurant_id, combos)
 
