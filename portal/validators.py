@@ -37,3 +37,18 @@ class Validators:
                 'non_field_errors':
                     f'The fields {parameters} must make a unique set.'
             })
+
+    @staticmethod
+    def validate_unique_id_in_list(instances, model_field, model_name):
+        """Validate that the ids in instances are unique from each other."""
+        ids = []
+        for instance in instances:
+            if instance[model_field].id in ids:
+                raise ValidationError({
+                    'non_field_errors':
+                        [
+                            f'The fields {model_field}, {model_name} must make'
+                            ' a unique set.'
+                        ]
+                })
+            ids.append(instance[model_field].id)
