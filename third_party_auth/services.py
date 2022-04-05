@@ -36,9 +36,9 @@ class GeneralUserServices:
 
     @staticmethod
     def get_user_data(email: str):
-        authenticated_user = authenticate(email=email,
-                                          password=
-                                          settings.THIRD_PARTY_SECRET)
+        authenticated_user = authenticate(
+            email=email, password=settings.THIRD_PARTY_SECRET
+        )
         return {
             'username': authenticated_user.username,
             'email': authenticated_user.email,
@@ -50,15 +50,16 @@ class GeneralUserServices:
     def register_get_user(cls, email: str, name: str, provider: str):
         if user := User.objects.filter(email=email).first():
             if provider != user.authentication_provider:
-                raise AuthenticationFailed('Email already in use with '
-                                           'another provider. Please '
-                                           'login with '
-                                           f'{user.authentication_provider}')
+                raise AuthenticationFailed(
+                    'Email already in use with another provider. Please '
+                    f'login with {user.authentication_provider}')
         else:
             role = Role.objects.filter(level=settings.CLIENT_LEVEL).first()
             user = {
-                'username': cls.generate_username(name), 'email': email,
-                'role': role, 'password': settings.THIRD_PARTY_SECRET,
+                'username': cls.generate_username(name),
+                'email': email,
+                'role': role,
+                'password': settings.THIRD_PARTY_SECRET,
                 'provider': provider
             }
             user = User.objects.create_user(**user)
