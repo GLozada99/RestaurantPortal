@@ -19,15 +19,15 @@ class Command(BaseCommand):
         else:
             restaurant = [
                 Restaurant(
-                    name='McDonalds', food_type_id=1, active_branches=2,
+                    name='McDonalds', food_type_id=1, active_branches=3,
                     active_administrators=2
                 ),
                 Restaurant(
-                    name='Wendys', food_type_id=1, active_branches=2,
+                    name='Wendys', food_type_id=1, active_branches=3,
                     active_administrators=2
                 ),
                 Restaurant(
-                    name='Burger King', food_type_id=1, active_branches=2,
+                    name='Burger King', food_type_id=1, active_branches=3,
                     active_administrators=2
                 ),
             ]
