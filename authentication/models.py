@@ -22,12 +22,18 @@ class UserManager(BaseUserManager):
         if not username:
             raise ValueError('Users must have an username')
 
+        norm_email = self.normalize_email(email)
+        if norm_email and User.objects.filter(email=norm_email).first():
+            raise ValueError('User with that email already exists')
+
         user = self.model(
             username=username,
-            email=self.normalize_email(email),
+            email=norm_email,
             role=role,
-            authentication_provider=provider
         )
+
+        if provider:
+            user.authentication_provider = provider
 
         user.set_password(password)
         user.save(using=self._db)
