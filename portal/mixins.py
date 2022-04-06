@@ -22,11 +22,7 @@ class CheckRestaurantBranchAccordingMixin(object):
         )
         if not according:
             return JsonResponse(
-                {
-                    'detail':
-                    f'The branch with id {branch_id} does not '
-                    f'belong to the restaurant with id {restaurant_id}'
-                },
+                {'detail': 'Not found.'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         return super(CheckRestaurantBranchAccordingMixin, self).dispatch(
@@ -51,11 +47,7 @@ class CheckRestaurantDishCategoryAccordingMixin(object):
         )
         if not according:
             return JsonResponse(
-                {
-                    'detail':
-                    f'The dish category with id {dish_category_id} does not '
-                    f'belong to the restaurant with id {restaurant_id}'
-                },
+                {'detail': 'Not found.'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         return super(CheckRestaurantDishCategoryAccordingMixin, self).dispatch(
