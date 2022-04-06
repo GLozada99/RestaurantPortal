@@ -1,10 +1,8 @@
 from rest_framework import serializers
 
 from dish.models import Dish
-from dish.serializers.dish_ingredient import (
-    DishIngredientSerializer,
-    DetailedDishIngredientSerializer,
-)
+from dish.serializers.dish_ingredient import (DetailedDishIngredientSerializer,
+                                              DishIngredientSerializer, )
 from portal.validators import Validators
 
 
@@ -41,7 +39,7 @@ class DishSerializer(serializers.ModelSerializer):
         return Validators.validate_list(value)
 
 
-class DetailedDishSerializer(serializers.ModelSerializer):
+class BasicDishSerializer(serializers.ModelSerializer):
     """Detailed Serializer for Dish."""
 
     class Meta:

@@ -5,7 +5,7 @@ from authentication.permissions import (
     IsRestaurantManager,
 )
 from dish.models import Dish
-from dish.serializers.dish import DetailedDishSerializer, DishSerializer
+from dish.serializers.dish import BasicDishSerializer, DishSerializer
 from dish.services.dish import DishAPIService
 from portal.mixins import CheckRestaurantDishCategoryAccordingMixin
 
@@ -21,7 +21,7 @@ class DishAPIView(
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return DishSerializer
-        return DetailedDishSerializer
+        return BasicDishSerializer
 
     def get_queryset(self):
         dish_category_id = self.kwargs.get('dish_category_id')
@@ -49,7 +49,7 @@ class DishAPIDetailView(
     def get_serializer_class(self):
         if self.request.method in {'PUT', 'PATCH'}:
             return DishSerializer
-        return DetailedDishSerializer
+        return BasicDishSerializer
 
     def get_queryset(self):
         dish_category_id = self.kwargs.get('dish_category_id')
