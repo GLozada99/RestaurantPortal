@@ -55,6 +55,19 @@ class Validators:
                 })
             ids.append(instance[model_field].id)
 
+    @classmethod
+    def validate_create_new_restaurant_manager(cls, restaurant_id):
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+        active_managers = restaurant.employeeprofile_set.all().count()
+        if active_managers == restaurant.active_administrators:
+            raise ValidationError({
+                'non_field_errors':
+                    [
+                        'This restaurant reached the maximum capacity of '
+                        'administrators.'
+                    ]
+            })
+
     @staticmethod
     def validate_active_restaurant_managers(restaurant, quantity):
         active_managers = restaurant.employeeprofile_set.all().count()

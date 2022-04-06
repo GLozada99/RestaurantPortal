@@ -14,6 +14,7 @@ from portal.settings import (
     PORTAL_MANAGER_LEVEL,
     RESTAURANT_MANAGER_LEVEL,
 )
+from portal.validators import Validators
 
 User = get_user_model()
 
@@ -91,6 +92,7 @@ class UserAPIService:
         role_id = Role.objects.filter(
             level=RESTAURANT_MANAGER_LEVEL
         ).first().id
+        Validators.validate_create_new_restaurant_manager(restaurant_id)
         user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
         profile = cls.create_profile(user_id, restaurant_id=restaurant_id)
