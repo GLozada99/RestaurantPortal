@@ -23,19 +23,28 @@ class UserAPIService:
 
     @staticmethod
     def create(serializer: UserSerializer, role_id: int) -> Response:
-        user = User(
-            username=serializer.validated_data['username'],
-            role_id=role_id,
-        )
+        user_data = {
+            'username': serializer.validated_data['username'],
+            'password': serializer.validated_data['password'],
+            'role': Role.objects.get(pk=role_id),
+        }
         try:
-            email = serializer.validated_data['email']
-            user.email = email
+            user_data['email'] = serializer.validated_data['email']
         except KeyError:
             pass
-        user.set_password(serializer.validated_data['password'])
-        user.save()
-        final_data = UserSerializer(user).data
-        return Response(final_data, status=status.HTTP_201_CREATED)
+
+        try:
+            user = User.objects.create_user(**user_data)
+            response_data = {
+                'data': UserSerializer(user).data,
+                'status': status.HTTP_201_CREATED
+            }
+        except ValueError as e:
+            response_data = {
+                'data': {'message': str(e)},
+                'status': status.HTTP_400_BAD_REQUEST,
+            }
+        return Response(**response_data)
 
     @classmethod
     def create_profile(
