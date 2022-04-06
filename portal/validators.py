@@ -55,8 +55,8 @@ class Validators:
                 })
             ids.append(instance[model_field].id)
 
-    @classmethod
-    def validate_create_new_restaurant_manager(cls, restaurant_id):
+    @staticmethod
+    def validate_create_new_restaurant_manager(restaurant_id):
         restaurant = Restaurant.objects.get(id=restaurant_id)
         active_managers = restaurant.employeeprofile_set.all().count()
         if active_managers == restaurant.active_administrators:
@@ -72,5 +72,12 @@ class Validators:
     def validate_active_restaurant_managers(restaurant, quantity):
         active_managers = restaurant.employeeprofile_set.all().count()
         if active_managers > quantity:
+            return True
+        return False
+
+    @staticmethod
+    def validate_active_branches(restaurant, quantity):
+        active_branches = restaurant.branch_set.all().count()
+        if active_branches > quantity:
             return True
         return False
