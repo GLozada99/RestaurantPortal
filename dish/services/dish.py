@@ -3,11 +3,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
+from branch.models import Branch, Inventory
 from dish.models import Dish, DishIngredient
-from dish.serializers.dish import (
-    DishSerializer,
-    DetailedDishWithIngredientsSerializer,
-)
+from dish.serializers.dish import (BasicDishSerializer,
+                                   DetailedDishWithIngredientsSerializer,
+                                   DishSerializer, )
 from portal.validators import Validators
 
 
@@ -69,3 +69,28 @@ class DishAPIService:
                 raise ValidationError({
                     'ingredients': 'Invalid ingredients.'
                 })
+
+    @staticmethod
+    def is_dish_available(branch, dish):
+        available = True
+        dish_ingredients = DishIngredient.objects.filter(dish=dish)
+        for ingredient_data in dish_ingredients:
+            branch_inventory_ingredient = Inventory.objects.get(
+                branch=branch, ingredient=ingredient_data.ingredient)
+            if branch_inventory_ingredient.stock < ingredient_data.quantity:
+                available = False
+                break
+        return available
+
+    @classmethod
+    def get_available_dishes_branch(cls, branch_id: int):
+        branch = Branch.objects.get(pk=branch_id)
+        restaurant = branch.restaurant
+        restaurant_categories = restaurant.dishcategory_set.all()
+        restaurant_dishes = Dish.objects.filter(
+            category__in=restaurant_categories
+        )
+        available_dishes = [dish for dish in restaurant_dishes if
+                            cls.is_dish_available(branch, dish)]
+        serializer = BasicDishSerializer(data=available_dishes, many=True)
+        return Response(serializer.data)
