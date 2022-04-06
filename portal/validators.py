@@ -1,6 +1,8 @@
 from django.db.models import Model
 from rest_framework.serializers import ValidationError
 
+from restaurant.models import Restaurant
+
 
 class Validators:
     """Class to handle validations."""
@@ -52,3 +54,12 @@ class Validators:
                         ]
                 })
             ids.append(instance[model_field].id)
+
+    @staticmethod
+    def validate_active_restaurant_managers(restaurant_id, quantity):
+        active_managers = Restaurant.objects.get(
+            id=restaurant_id
+        ).employeeprofile_set.all().count()
+        if active_managers > quantity:
+            return True
+        return False

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.serializers import ValidationError
 
 from portal.validators import Validators
 from restaurant.models import Restaurant
@@ -24,7 +25,16 @@ class RestaurantSerializer(serializers.ModelSerializer):
         return Validators.validate_greater_than_zero(value)
 
     def validate_active_administrators(self, value):
-        return Validators.validate_greater_than_zero(value)
+        Validators.validate_greater_than_zero(value)
+        instance = self.instance
+        if instance and Validators.validate_active_restaurant_managers(
+            instance.id, value
+        ):
+            raise ValidationError(
+                'This field cannot be less than the number of '
+                'restaurant administrators.'
+            )
+        return value
 
 
 class DetailedRestaurantSerializer(serializers.ModelSerializer):
