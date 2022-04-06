@@ -2,12 +2,13 @@ from rest_framework import generics
 
 from authentication.permissions import (
     HasCurrentRestaurant,
-    IsRestaurantManager,
+    IsRestaurantManager, ReadOnly,
 )
 from dish.models import Dish
-from dish.serializers.dish import DetailedDishSerializer, DishSerializer
+from dish.serializers.dish import BasicDishSerializer, DishSerializer
 from dish.services.dish import DishAPIService
-from portal.mixins import CheckRestaurantDishCategoryAccordingMixin
+from portal.mixins import (CheckRestaurantBranchAccordingMixin,
+                           CheckRestaurantDishCategoryAccordingMixin, )
 
 
 class DishAPIView(
@@ -21,7 +22,7 @@ class DishAPIView(
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return DishSerializer
-        return DetailedDishSerializer
+        return BasicDishSerializer
 
     def get_queryset(self):
         dish_category_id = self.kwargs.get('dish_category_id')
@@ -49,8 +50,21 @@ class DishAPIDetailView(
     def get_serializer_class(self):
         if self.request.method in {'PUT', 'PATCH'}:
             return DishSerializer
-        return DetailedDishSerializer
+        return BasicDishSerializer
 
     def get_queryset(self):
         dish_category_id = self.kwargs.get('dish_category_id')
         return Dish.objects.filter(category__id=dish_category_id)
+
+
+class DishBranchAvailableAPIView(
+    CheckRestaurantBranchAccordingMixin, generics.ListAPIView
+):
+    """View to get Dishes available in specific branch."""
+
+    serializer_class = BasicDishSerializer
+    permission_classes = [ReadOnly]
+
+    def get(self, request, *args, **kwargs):
+        branch_id = int(self.kwargs.get('branch_id'))
+        return DishAPIService.get_available_dishes_branch(branch_id)
