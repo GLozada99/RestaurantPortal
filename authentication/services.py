@@ -7,9 +7,13 @@ from rest_framework.response import Response
 
 from authentication.models import EmployeeProfile, Role
 from authentication.serializers.user import UserSerializer
-from portal.settings import (BRANCH_MANAGER_LEVEL, CLIENT_LEVEL,
-                             EMPLOYEE_LEVEL,
-                             PORTAL_MANAGER_LEVEL, RESTAURANT_MANAGER_LEVEL, )
+from portal.settings import (
+    BRANCH_MANAGER_LEVEL,
+    CLIENT_LEVEL,
+    EMPLOYEE_LEVEL,
+    PORTAL_MANAGER_LEVEL,
+    RESTAURANT_MANAGER_LEVEL,
+)
 
 User = get_user_model()
 
@@ -34,14 +38,13 @@ class UserAPIService:
 
     @classmethod
     def create_profile(
-            cls,
-            user_id: int,
-            restaurant_id: int = None,
-            branch_id: int = None) -> EmployeeProfile:
+        cls,
+        user_id: int,
+        restaurant_id: int = None,
+        branch_id: int = None
+    ) -> EmployeeProfile:
         profile = EmployeeProfile(
-            user_id=user_id,
-            restaurant_id=restaurant_id,
-            branch_id=branch_id
+            user_id=user_id, restaurant_id=restaurant_id, branch_id=branch_id
         )
         profile.save()
         return profile
@@ -59,47 +62,40 @@ class UserAPIService:
     @classmethod
     @atomic
     def create_employee(
-            cls, serializer: UserSerializer, branch_id: int) -> Response:
+        cls, serializer: UserSerializer, branch_id: int
+    ) -> Response:
         role_id = Role.objects.filter(level=EMPLOYEE_LEVEL).first().id
         user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
         profile = cls.create_profile(user_id, branch_id=branch_id)
-        extra_data = {
-            'branch_id': profile.branch.id
-        }
-        final_data = extra_data.update(user_data)
-        return Response(final_data, status=status.HTTP_201_CREATED)
+        user_data.update({'branch_id': profile.branch.id})
+        return Response(user_data, status=status.HTTP_201_CREATED)
 
     @classmethod
     @atomic
     def create_branch_manager(
-            cls, serializer: UserSerializer, branch_id: int) -> Response:
+        cls, serializer: UserSerializer, branch_id: int
+    ) -> Response:
         role_id = Role.objects.filter(level=BRANCH_MANAGER_LEVEL).first().id
         user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
         profile = cls.create_profile(user_id, branch_id=branch_id)
-        extra_data = {
-            'branch_id': profile.branch.id
-        }
-        final_data = extra_data.update(user_data)
-        return Response(final_data, status=status.HTTP_201_CREATED)
+        user_data.update({'branch_id': profile.branch.id})
+        return Response(user_data, status=status.HTTP_201_CREATED)
 
     @classmethod
     @atomic
     def create_restaurant_manager(
-            cls, serializer: UserSerializer, restaurant_id: int) -> Response:
+        cls, serializer: UserSerializer, restaurant_id: int
+    ) -> Response:
         role_id = Role.objects.filter(
             level=RESTAURANT_MANAGER_LEVEL
         ).first().id
         user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
         profile = cls.create_profile(user_id, restaurant_id=restaurant_id)
-        extra_data = {
-            'restaurant_id': profile.restaurant.id
-        }
-        final_data = extra_data.update(user_data)
-
-        return Response(final_data, status=status.HTTP_201_CREATED)
+        user_data.update({'restaurant_id': profile.restaurant.id})
+        return Response(user_data, status=status.HTTP_201_CREATED)
 
 
 class UserPermissionService:
