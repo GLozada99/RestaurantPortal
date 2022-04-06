@@ -46,6 +46,27 @@ class BranchAPITestCase(APITransactionTestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     @get_restaurant_manager_token
+    def create_more_branches_than_allowed(self, token):
+        """Test creating more branches than allowed."""
+        branch_data = {
+            'address': 'TestAddress',
+            'phone_number': '555-555-5555',
+        }
+        self.client.post(
+            self.branch_list_url,
+            branch_data,
+            format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        response = self.client.post(
+            self.branch_list_url,
+            branch_data,
+            format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @get_restaurant_manager_token
     def test_create_branch_manager(self, token):
         """Test the creation of a branch manager."""
         url = reverse(
