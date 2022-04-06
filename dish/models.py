@@ -32,6 +32,9 @@ class Dish(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     description = models.TextField(null=True)
     category = models.ForeignKey(DishCategory, on_delete=models.CASCADE)
+    picture = models.ImageField(
+        upload_to='dish_pictures/', null=True, blank=True
+    )
     ingredients = models.ManyToManyField(Ingredient, through='DishIngredient')
 
     class Meta:
