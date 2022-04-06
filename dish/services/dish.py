@@ -93,4 +93,5 @@ class DishAPIService:
         available_dishes = [dish for dish in restaurant_dishes if
                             cls.is_dish_available(branch, dish)]
         serializer = BasicDishSerializer(data=available_dishes, many=True)
+        serializer.is_valid()
         return Response(serializer.data)
