@@ -76,6 +76,19 @@ class Validators:
         return False
 
     @staticmethod
+    def validate_create_new_branch(restaurant_id):
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+        branches = restaurant.branch_set.all().count()
+        if branches == restaurant.active_branches:
+            raise ValidationError({
+                'non_field_errors':
+                    [
+                        'This restaurant reached the maximum capacity of '
+                        'branches.'
+                    ]
+            })
+
+    @staticmethod
     def validate_active_branches(restaurant, quantity):
         active_branches = restaurant.branch_set.all().count()
         if active_branches > quantity:
