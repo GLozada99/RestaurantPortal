@@ -7,7 +7,8 @@ from authentication.permissions import (
 from dish.models import Dish
 from dish.serializers.dish import BasicDishSerializer, DishSerializer
 from dish.services.dish import DishAPIService
-from portal.mixins import CheckRestaurantDishCategoryAccordingMixin
+from portal.mixins import (CheckRestaurantBranchAccordingMixin,
+                           CheckRestaurantDishCategoryAccordingMixin, )
 
 
 class DishAPIView(
@@ -57,7 +58,7 @@ class DishAPIDetailView(
 
 
 class DishBranchAvailableAPIView(
-    CheckRestaurantDishCategoryAccordingMixin, generics.ListAPIView
+    CheckRestaurantBranchAccordingMixin, generics.ListAPIView
 ):
     """View to get Dishes available in specific branch."""
 
