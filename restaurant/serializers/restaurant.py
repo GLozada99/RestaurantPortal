@@ -28,7 +28,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
         Validators.validate_greater_than_zero(value)
         instance = self.instance
         if instance and Validators.validate_active_restaurant_managers(
-            instance.id, value
+            instance, value
         ):
             raise ValidationError(
                 'This field cannot be less than the number of '
