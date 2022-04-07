@@ -13,8 +13,7 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **kwargs):
         CommandHelpers.print_creating_message(self, 'DeliveryType', 3)
-        exists = DeliveryType.objects.filter(name='Delivery')
-        if exists:
+        if DeliveryType.objects.filter(name='Delivery').exists():
             CommandHelpers.print_error(self, 'Delivery types already exist.')
         else:
             delivery_types = [

@@ -15,7 +15,7 @@ class IngredientAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
-        return Ingredient.objects.filter(restaurant__id=restaurant_id)
+        return Ingredient.objects.filter(restaurant_id=restaurant_id)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -33,4 +33,4 @@ class IngredientAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
-        return Ingredient.objects.filter(restaurant__id=restaurant_id)
+        return Ingredient.objects.filter(restaurant_id=restaurant_id)
