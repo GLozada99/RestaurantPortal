@@ -42,7 +42,7 @@ class GeneralUserServices:
         return {
             'username': authenticated_user.username,
             'email': authenticated_user.email,
-            'tokens': authenticated_user.get_tokens()
+            'tokens': authenticated_user.get_tokens(),
         }
 
     @classmethod
@@ -54,14 +54,13 @@ class GeneralUserServices:
                     'Email already in use with another provider. Please '
                     f'login with {user.authentication_provider}')
         else:
-            role = Role.objects.filter(level=settings.CLIENT_LEVEL).first()
-            user = {
-                'username': cls.generate_username(name),
-                'email': email,
-                'role': role,
-                'password': settings.THIRD_PARTY_SECRET,
-                'provider': provider
-            }
-            user = User.objects.create_user(**user)
+            role = Role.objects.get(level=settings.CLIENT_LEVEL)
+            user = User.objects.create_user(
+                username=cls.generate_username(name),
+                email=email,
+                role=role,
+                password=settings.THIRD_PARTY_SECRET,
+                provider=provider,
+            )
             user.save()
         return cls.get_user_data(email)
