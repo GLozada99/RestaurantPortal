@@ -73,12 +73,14 @@ class DishAPIService:
                 })
 
     @staticmethod
-    def is_dish_available(branch: Branch, dish: Dish):
+    def is_dish_available(
+            branch: Branch, dish: Dish, dishes_quantity: int = 1):
         dish_ingredients = dish.dishingredient_set.all()
         for ingredient_data in dish_ingredients:
             branch_inventory_ingredient = branch.inventory_set.get(
                 ingredient=ingredient_data.ingredient)
-            if branch_inventory_ingredient.stock < ingredient_data.quantity:
+            if (branch_inventory_ingredient.stock <
+                    (ingredient_data.quantity * dishes_quantity)):
                 return False
         return True
 
