@@ -26,12 +26,9 @@ class UserAPIService:
         user_data = {
             'username': serializer.validated_data['username'],
             'password': serializer.validated_data['password'],
+            'email': serializer.validated_data.get('email'),
             'role': Role.objects.get(pk=role_id),
         }
-        try:
-            user_data['email'] = serializer.validated_data['email']
-        except KeyError:
-            pass
 
         try:
             user = User.objects.create_user(**user_data)
