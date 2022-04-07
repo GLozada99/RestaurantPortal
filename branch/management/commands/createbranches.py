@@ -13,8 +13,7 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **kwargs):
         CommandHelpers.print_creating_message(self, 'Branch', 4)
-        exists = Branch.objects.all().first()
-        if exists:
+        if Branch.objects.all().exists():
             CommandHelpers.print_error(self, 'Branches already exist.')
         else:
             branches = [
