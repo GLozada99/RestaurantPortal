@@ -7,14 +7,14 @@ app_name = 'branch'
 urlpatterns = [
     path('', BranchAPIView.as_view(), name='branch-list'),
     path(
-        '<branch_id>/managers/',
+        '<int:branch_id>/managers/',
         include(
             'authentication.urls.branch_manager',
             namespace='branch-managers'
         )
     ),
     path(
-        '<branch_id>/employees/',
+        '<int:branch_id>/employees/',
         include(
             'authentication.urls.employee',
             namespace='employees'
@@ -26,11 +26,11 @@ urlpatterns = [
         name='branch-detail'
     ),
     path(
-        '<branch_id>/inventory/',
+        '<int:branch_id>/inventory/',
         include('branch.urls.inventory', namespace='inventory')
     ),
     path(
-        '<branch_id>/dishes/',
+        '<int:branch_id>/dishes/',
         DishBranchAvailableAPIView.as_view(),
         name='available-dishes'
     ),

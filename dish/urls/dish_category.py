@@ -14,7 +14,7 @@ urlpatterns = [
         name='dish-category-detail'
     ),
     path(
-        '<dish_category_id>/dishes/',
+        '<int:dish_category_id>/dishes/',
         include('dish.urls.dish', namespace='dishes')
     ),
 ]
