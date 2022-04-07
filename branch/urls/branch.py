@@ -1,7 +1,7 @@
 from django.urls import include, path
 
 from branch.views.branch import BranchAPIDetailView, BranchAPIView
-from dish.views.dish import DishBranchAvailableAPIView
+from dish.views.dish import (DishBranchCategoryAvailableAPIView, )
 
 app_name = 'branch'
 urlpatterns = [
@@ -30,8 +30,8 @@ urlpatterns = [
         include('branch.urls.inventory', namespace='inventory'),
     ),
     path(
-        '<int:branch_id>/dishes/',
-        DishBranchAvailableAPIView.as_view(),
+        '<int:branch_id>/categories/<int:dish_category_id>/dishes/',
+        DishBranchCategoryAvailableAPIView.as_view(),
         name='available-dishes',
     ),
 ]
