@@ -57,6 +57,7 @@ class Validators:
 
     @staticmethod
     def validate_create_new_restaurant_manager(restaurant_id):
+        """Validate if another restaurant manager can be created."""
         restaurant = Restaurant.objects.get(id=restaurant_id)
         active_managers = restaurant.employeeprofile_set.all().count()
         if active_managers == restaurant.active_administrators:
@@ -70,6 +71,10 @@ class Validators:
 
     @staticmethod
     def validate_active_restaurant_managers(restaurant, quantity):
+        """
+        Validate that the active_administrators field has not reached the
+        limit.
+        """
         active_managers = restaurant.employeeprofile_set.all().count()
         if active_managers > quantity:
             return True
@@ -77,6 +82,7 @@ class Validators:
 
     @staticmethod
     def validate_create_new_branch(restaurant_id):
+        """Validate if another branch can be created."""
         restaurant = Restaurant.objects.get(id=restaurant_id)
         branches = restaurant.branch_set.all().count()
         if branches == restaurant.active_branches:
@@ -90,6 +96,9 @@ class Validators:
 
     @staticmethod
     def validate_active_branches(restaurant, quantity):
+        """
+        Validate that the active_branches field has not reached the limit.
+        """
         active_branches = restaurant.branch_set.all().count()
         if active_branches > quantity:
             return True
