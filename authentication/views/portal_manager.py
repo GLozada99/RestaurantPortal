@@ -1,10 +1,12 @@
+from django.contrib.auth import get_user_model
 from rest_framework import generics
 
-from authentication.models import User
 from authentication.permissions import IsPortalManager
 from authentication.serializers.user import UserSerializer
 from authentication.services import UserAPIService
 from portal.settings import PORTAL_MANAGER_LEVEL
+
+User = get_user_model()
 
 
 class PortalManagerAPIView(generics.ListCreateAPIView):
