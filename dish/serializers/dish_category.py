@@ -8,4 +8,7 @@ class DishCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DishCategory
-        fields = ('id', 'name')
+        fields = (
+            'id',
+            'name',
+        )

@@ -15,12 +15,12 @@ class DishAPITestCase(APITransactionTestCase):
         'name': 'TestDish',
         'price': 49.99,
         'description': 'Test Description...',
-        'ingredients': None
+        'ingredients': None,
     }
 
     dish_list_url = reverse(
         'restaurants:dish-category:dish:dish-list',
-        kwargs={'restaurant_id': 1, 'dish_category_id': 1}
+        kwargs={'restaurant_id': 1, 'dish_category_id': 1},
     )
 
     def setUp(self) -> None:
@@ -38,7 +38,7 @@ class DishAPITestCase(APITransactionTestCase):
             {
                 'ingredient': ing.id,
                 'quantity': 5,
-                'unit': 'TestUnit'
+                'unit': 'TestUnit',
             } for ing in Ingredient.objects.filter(
                 restaurant_id=1
             )
@@ -48,13 +48,13 @@ class DishAPITestCase(APITransactionTestCase):
             self.dish_list_url,
             self.dish_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         dish = DishCategory.objects.get(id=1).dish_set.filter(
-            name='TestDish'
+            name='TestDish',
         ).first()
         for ingredient, dish_ingredient in zip(
-            dish.ingredients.all(), ingredients
+            dish.ingredients.all(), ingredients,
         ):
             self.assertEqual(ingredient.id, dish_ingredient['ingredient'])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -66,7 +66,7 @@ class DishAPITestCase(APITransactionTestCase):
             {
                 'ingredient': 1,
                 'quantity': 5,
-                'unit': 'TestUnit'
+                'unit': 'TestUnit',
             } for _ in range(2)
         ]
         self.dish_data['ingredients'] = ingredients
@@ -74,7 +74,7 @@ class DishAPITestCase(APITransactionTestCase):
             self.dish_list_url,
             self.dish_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -84,7 +84,7 @@ class DishAPITestCase(APITransactionTestCase):
         call_command('createdishes')
         response_get = self.client.get(
             self.dish_list_url, format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         current_dishes = len(response_get.data)
         url_delete = reverse(
@@ -93,16 +93,16 @@ class DishAPITestCase(APITransactionTestCase):
                 'restaurant_id': 1,
                 'dish_category_id': 1,
                 'pk': response_get.data[0]['id'],
-            }
+            },
         )
         self.client.delete(
             url_delete,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         response_get = self.client.get(
             self.dish_list_url,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(current_dishes, len(response_get.data) + 1)

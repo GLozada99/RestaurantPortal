@@ -11,10 +11,10 @@ urlpatterns = [
     path(
         '<int:pk>/',
         DishCategoryAPIDetailView.as_view(),
-        name='dish-category-detail'
+        name='dish-category-detail',
     ),
     path(
         '<int:dish_category_id>/dishes/',
-        include('dish.urls.dish', namespace='dishes')
+        include('dish.urls.dish', namespace='dishes'),
     ),
 ]

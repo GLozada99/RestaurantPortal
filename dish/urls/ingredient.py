@@ -11,6 +11,6 @@ urlpatterns = [
     path(
         '<int:pk>/',
         IngredientAPIDetailView.as_view(),
-        name='ingredient-detail'
+        name='ingredient-detail',
     ),
 ]

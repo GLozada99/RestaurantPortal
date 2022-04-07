@@ -5,9 +5,11 @@ from rest_framework.serializers import ValidationError
 
 from branch.models import Branch
 from dish.models import Dish, DishIngredient
-from dish.serializers.dish import (BasicDishSerializer,
-                                   DetailedDishWithIngredientsSerializer,
-                                   DishSerializer, )
+from dish.serializers.dish import (
+    BasicDishSerializer,
+    DetailedDishWithIngredientsSerializer,
+    DishSerializer,
+)
 from portal.validators import Validators
 
 
@@ -23,16 +25,16 @@ class DishAPIService:
             serializer.validated_data['name'],
             category_id,
             restaurant_id,
-            ingredients_data
+            ingredients_data,
         )
         serializer.save(category_id=category_id)
         cls.create_dish_ingredients(serializer, ingredients_data)
         cls.update_response_data(serializer, ingredients_data)
         return Response(
             DetailedDishWithIngredientsSerializer(
-                serializer.validated_data
+                serializer.validated_data,
             ).data,
-            status=status.HTTP_201_CREATED
+            status=status.HTTP_201_CREATED,
         )
 
     @staticmethod
@@ -58,7 +60,7 @@ class DishAPIService:
             Dish, name=name, category_id=category_id,
         )
         Validators.validate_unique_id_in_list(
-            dish_ingredients, 'ingredient', 'dish'
+            dish_ingredients, 'ingredient', 'dish',
         )
         cls.validate_ingredients(restaurant_id, dish_ingredients)
 
@@ -88,7 +90,7 @@ class DishAPIService:
         restaurant = branch.restaurant
         restaurant_categories = restaurant.dishcategory_set.all()
         restaurant_dishes = Dish.objects.filter(
-            category__in=restaurant_categories
+            category__in=restaurant_categories,
         )
         available_dishes = [dish for dish in restaurant_dishes if
                             cls.is_dish_available(branch, dish)]

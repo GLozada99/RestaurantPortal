@@ -23,7 +23,7 @@ class DishCategoryAPIView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return DishCategoryAPIService.create(
-            serializer, self.kwargs.get('restaurant_id')
+            serializer, self.kwargs.get('restaurant_id'),
         )
 
 

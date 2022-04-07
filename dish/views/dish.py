@@ -2,13 +2,16 @@ from rest_framework import generics
 
 from authentication.permissions import (
     HasCurrentRestaurant,
-    IsRestaurantManager, ReadOnly,
+    IsRestaurantManager,
+    ReadOnly,
 )
 from dish.models import Dish
 from dish.serializers.dish import BasicDishSerializer, DishSerializer
 from dish.services.dish import DishAPIService
-from portal.mixins import (CheckRestaurantBranchAccordingMixin,
-                           CheckRestaurantDishCategoryAccordingMixin, )
+from portal.mixins import (
+    CheckRestaurantBranchAccordingMixin,
+    CheckRestaurantDishCategoryAccordingMixin,
+)
 
 
 class DishAPIView(
@@ -34,7 +37,7 @@ class DishAPIView(
         return DishAPIService.create(
             serializer,
             kwargs.get('dish_category_id'),
-            kwargs.get('restaurant_id')
+            kwargs.get('restaurant_id'),
         )
 
 

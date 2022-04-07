@@ -2,8 +2,10 @@ from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 
 from dish.models import Dish
-from dish.serializers.dish_ingredient import (DetailedDishIngredientSerializer,
-                                              DishIngredientSerializer, )
+from dish.serializers.dish_ingredient import (
+    DetailedDishIngredientSerializer,
+    DishIngredientSerializer,
+)
 from portal.validators import Validators
 
 
@@ -14,7 +16,7 @@ class ShortDishSerializer(serializers.ModelSerializer):
         model = Dish
         fields = (
             'id',
-            'name'
+            'name',
         )
 
 
@@ -34,7 +36,7 @@ class DishSerializer(serializers.ModelSerializer):
             'price',
             'description',
             'ingredients',
-            'picture'
+            'picture',
         )
 
     def validate_price(self, value):
@@ -54,7 +56,7 @@ class BasicDishSerializer(serializers.ModelSerializer):
             'name',
             'price',
             'description',
-            'picture'
+            'picture',
         )
 
 
@@ -70,5 +72,5 @@ class DetailedDishWithIngredientsSerializer(serializers.ModelSerializer):
             'name',
             'price',
             'description',
-            'ingredients'
+            'ingredients',
         )

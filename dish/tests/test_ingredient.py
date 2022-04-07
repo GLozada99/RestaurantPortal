@@ -19,7 +19,7 @@ class IngredientAPITestCase(APITransactionTestCase):
 
     ingredient_list_url = reverse(
         'restaurants:ingredients:ingredient-list',
-        kwargs={'restaurant_id': 1}
+        kwargs={'restaurant_id': 1},
     )
 
     def setUp(self) -> None:
@@ -36,7 +36,7 @@ class IngredientAPITestCase(APITransactionTestCase):
             self.ingredient_list_url,
             self.ingredient_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -49,7 +49,7 @@ class IngredientAPITestCase(APITransactionTestCase):
             self.ingredient_list_url,
             self.ingredient_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -60,24 +60,24 @@ class IngredientAPITestCase(APITransactionTestCase):
         response_get = self.client.get(
             self.ingredient_list_url,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         current_ingredients = len(response_get.data)
         url_delete = reverse(
             'restaurants:ingredients:ingredient-detail',
             kwargs={
                 'restaurant_id': 1,
-                'pk': response_get.data[0]['id']
-            }
+                'pk': response_get.data[0]['id'],
+            },
         )
         self.client.delete(
             url_delete,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         response_get = self.client.get(
             self.ingredient_list_url,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(current_ingredients, len(response_get.data) + 1)

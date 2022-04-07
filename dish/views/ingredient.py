@@ -1,7 +1,9 @@
 from rest_framework import generics
 
-from authentication.permissions import (HasCurrentRestaurant,
-                                        IsRestaurantManager, )
+from authentication.permissions import (
+    HasCurrentRestaurant,
+    IsRestaurantManager,
+)
 from dish.models import Ingredient
 from dish.serializers.ingredient import IngredientSerializer
 from dish.services.ingredient import IngredientAPIService
@@ -21,7 +23,7 @@ class IngredientAPIView(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         return IngredientAPIService.create(
-            serializer, self.kwargs.get('restaurant_id')
+            serializer, self.kwargs.get('restaurant_id'),
         )
 
 

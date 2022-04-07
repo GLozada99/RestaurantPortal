@@ -19,8 +19,8 @@ class DishCategory(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['name', 'restaurant'],
-                name='restaurant_dish_category'
-            )
+                name='restaurant_dish_category',
+            ),
         ]
 
     def __str__(self):
@@ -33,7 +33,7 @@ class Dish(models.Model):
     description = models.TextField(null=True)
     category = models.ForeignKey(DishCategory, on_delete=models.CASCADE)
     picture = models.ImageField(
-        upload_to='dish_pictures/', null=True, blank=True
+        upload_to='dish_pictures/', null=True, blank=True,
     )
     ingredients = models.ManyToManyField(Ingredient, through='DishIngredient')
 
@@ -41,8 +41,8 @@ class Dish(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['name', 'category'],
-                name='dish_category'
-            )
+                name='dish_category',
+            ),
         ]
 
 
@@ -56,6 +56,6 @@ class DishIngredient(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=['dish', 'ingredient'],
-                name='dish_ingredient_unique_constraint'
-            )
+                name='dish_ingredient_unique_constraint',
+            ),
         ]

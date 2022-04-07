@@ -19,7 +19,7 @@ class DishCategoryAPITestCase(APITransactionTestCase):
 
     dish_category_list_url = reverse(
         'restaurants:dish-categories:dish-category-list',
-        kwargs={'restaurant_id': 1}
+        kwargs={'restaurant_id': 1},
     )
 
     def setUp(self) -> None:
@@ -36,7 +36,7 @@ class DishCategoryAPITestCase(APITransactionTestCase):
             self.dish_category_list_url,
             self.category_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -49,7 +49,7 @@ class DishCategoryAPITestCase(APITransactionTestCase):
             self.dish_category_list_url,
             self.category_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -60,24 +60,24 @@ class DishCategoryAPITestCase(APITransactionTestCase):
         response_get = self.client.get(
             self.dish_category_list_url,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         current_categories = len(response_get.data)
         url_delete = reverse(
             'restaurants:dish-categories:dish-category-detail',
             kwargs={
                 'restaurant_id': 1,
-                'pk': response_get.data[0]['id']
-            }
+                'pk': response_get.data[0]['id'],
+            },
         )
         self.client.delete(
             url_delete,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         response_get = self.client.get(
             self.dish_category_list_url,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(current_categories, len(response_get.data) + 1)

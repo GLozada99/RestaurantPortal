@@ -13,7 +13,7 @@ class DishCategoryAPIService:
         cls, serializer: DishCategorySerializer, restaurant_id
     ) -> Response:
         cls.validate_restaurant(
-            serializer.validated_data['name'], restaurant_id
+            serializer.validated_data['name'], restaurant_id,
         )
         serializer.save(restaurant_id=restaurant_id)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -21,5 +21,5 @@ class DishCategoryAPIService:
     @staticmethod
     def validate_restaurant(name, restaurant_id):
         Validators.validate_unique(
-            DishCategory, name=name, restaurant=restaurant_id
+            DishCategory, name=name, restaurant=restaurant_id,
         )
