@@ -15,12 +15,12 @@ class BranchAPITestCase(APITransactionTestCase):
 
     manager_data = {
         'username': 'TestManager',
-        'password': 'TestPassword'
+        'password': 'TestPassword',
     }
 
     branch_list_url = reverse(
         'restaurants:branches:branch-list',
-        kwargs={'restaurant_id': 1}
+        kwargs={'restaurant_id': 1},
     )
 
     def setUp(self) -> None:
@@ -41,7 +41,7 @@ class BranchAPITestCase(APITransactionTestCase):
             self.branch_list_url,
             branch_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -56,13 +56,13 @@ class BranchAPITestCase(APITransactionTestCase):
             self.branch_list_url,
             branch_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         response = self.client.post(
             self.branch_list_url,
             branch_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -73,14 +73,14 @@ class BranchAPITestCase(APITransactionTestCase):
             'restaurants:branches:branch-managers:branch-manager-list',
             kwargs={
                 'restaurant_id': 1,
-                'branch_id': 1
+                'branch_id': 1,
             }
         )
         response = self.client.post(
             url,
             self.manager_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -91,14 +91,14 @@ class BranchAPITestCase(APITransactionTestCase):
             'restaurants:branches:branch-managers:branch-manager-list',
             kwargs={
                 'restaurant_id': 1,
-                'branch_id': 1
-            }
+                'branch_id': 1,
+            },
         )
         response = self.client.post(
             url,
             self.manager_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
@@ -110,14 +110,14 @@ class BranchAPITestCase(APITransactionTestCase):
             'restaurants:branches:employees:employee-list',
             kwargs={
                 'restaurant_id': 1,
-                'branch_id': 1
-            }
+                'branch_id': 1,
+            },
         )
         response = self.client.post(
             url,
             self.manager_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -127,24 +127,24 @@ class BranchAPITestCase(APITransactionTestCase):
         response_get = self.client.get(
             self.branch_list_url,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         current_branch = len(response_get.data)
         url_delete = reverse(
             'restaurants:branches:branch-detail',
             kwargs={
                 'restaurant_id': 1,
-                'pk': response_get.data[0]['id']
-            }
+                'pk': response_get.data[0]['id'],
+            },
         )
         self.client.delete(
             url_delete,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         response_get = self.client.get(
             self.branch_list_url,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(current_branch, len(response_get.data) + 1)

@@ -12,7 +12,7 @@ urlpatterns = [
         'google/',
         include(
             'third_party_auth.urls.google',
-            namespace='google'
-        )
+            namespace='google',
+        ),
     ),
 ]

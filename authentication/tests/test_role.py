@@ -17,7 +17,7 @@ class RoleAPITestCase(APITestCase):
         response = self.client.get(
             url,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

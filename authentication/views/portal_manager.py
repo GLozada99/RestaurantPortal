@@ -16,7 +16,7 @@ class PortalManagerAPIView(generics.ListCreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsPortalManager]
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)
         return UserAPIService.create_portal_manager(serializer)

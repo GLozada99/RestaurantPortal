@@ -9,6 +9,6 @@ urlpatterns = [
     path(
         '<int:pk>/',
         PortalManagerAPIDetailView.as_view(),
-        name='portal-manager-detail'
+        name='portal-manager-detail',
     ),
 ]

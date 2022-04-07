@@ -26,14 +26,14 @@ class RestaurantManagerAPIView(generics.ListCreateAPIView):
         restaurant_id = self.kwargs.get('restaurant_id')
         return EmployeeProfile.objects.filter(
             restaurant__id=restaurant_id,
-            user__role__level=RESTAURANT_MANAGER_LEVEL
+            user__role__level=RESTAURANT_MANAGER_LEVEL,
         )
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)
         return UserAPIService.create_restaurant_manager(
-            serializer, self.kwargs.get('restaurant_id')
+            serializer, self.kwargs.get('restaurant_id'),
         )
 
 
@@ -48,5 +48,5 @@ class RestaurantManagerAPIDetailView(generics.RetrieveDestroyAPIView):
         restaurant_id = self.kwargs.get('restaurant_id')
         return EmployeeProfile.objects.filter(
             restaurant__id=restaurant_id,
-            user__role__level=RESTAURANT_MANAGER_LEVEL
+            user__role__level=RESTAURANT_MANAGER_LEVEL,
         )

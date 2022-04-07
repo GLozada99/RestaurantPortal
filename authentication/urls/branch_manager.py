@@ -10,6 +10,6 @@ urlpatterns = [
     path(
         '<int:pk>/',
         BranchManagerAPIDetailView.as_view(),
-        name='branch-manager-detail'
+        name='branch-manager-detail',
     ),
 ]

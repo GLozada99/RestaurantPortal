@@ -8,6 +8,6 @@ urlpatterns = [
     path(
         '<int:pk>/',
         PromotionAPIDetailView.as_view(),
-        name='promotion-detail'
+        name='promotion-detail',
     ),
 ]

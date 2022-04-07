@@ -10,28 +10,28 @@ urlpatterns = [
         '<int:branch_id>/managers/',
         include(
             'authentication.urls.branch_manager',
-            namespace='branch-managers'
-        )
+            namespace='branch-managers',
+        ),
     ),
     path(
         '<int:branch_id>/employees/',
         include(
             'authentication.urls.employee',
-            namespace='employees'
-        )
+            namespace='employees',
+        ),
     ),
     path(
         '<int:pk>/',
         BranchAPIDetailView.as_view(),
-        name='branch-detail'
+        name='branch-detail',
     ),
     path(
         '<int:branch_id>/inventory/',
-        include('branch.urls.inventory', namespace='inventory')
+        include('branch.urls.inventory', namespace='inventory'),
     ),
     path(
         '<int:branch_id>/dishes/',
         DishBranchAvailableAPIView.as_view(),
-        name='available-dishes'
+        name='available-dishes',
     ),
 ]

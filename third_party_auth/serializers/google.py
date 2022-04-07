@@ -23,5 +23,5 @@ class GoogleAuthSerializer(serializers.Serializer):
         auth_provider = 'google'
 
         return GeneralUserServices.register_get_user(
-            email=email, name=name, provider=auth_provider
+            email=email, name=name, provider=auth_provider,
         )

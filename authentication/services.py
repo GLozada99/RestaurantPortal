@@ -37,7 +37,7 @@ class UserAPIService:
             user = User.objects.create_user(**user_data)
             response_data = {
                 'data': UserSerializer(user).data,
-                'status': status.HTTP_201_CREATED
+                'status': status.HTTP_201_CREATED,
             }
         except ValueError as e:
             response_data = {
@@ -51,22 +51,22 @@ class UserAPIService:
         cls,
         user_id: int,
         restaurant_id: int = None,
-        branch_id: int = None
+        branch_id: int = None,
     ) -> EmployeeProfile:
         profile = EmployeeProfile(
-            user_id=user_id, restaurant_id=restaurant_id, branch_id=branch_id
+            user_id=user_id, restaurant_id=restaurant_id, branch_id=branch_id,
         )
         profile.save()
         return profile
 
     @classmethod
     def create_client(cls, serializer: UserSerializer) -> Response:
-        role_id = Role.objects.filter(level=CLIENT_LEVEL).first().id
+        role_id = Role.objects.get(level=CLIENT_LEVEL).id
         return cls.create(serializer, role_id)
 
     @classmethod
     def create_portal_manager(cls, serializer: UserSerializer) -> Response:
-        role_id = Role.objects.filter(level=PORTAL_MANAGER_LEVEL).first().id
+        role_id = Role.objects.get(level=PORTAL_MANAGER_LEVEL).id
         return cls.create(serializer, role_id)
 
     @classmethod
@@ -74,7 +74,7 @@ class UserAPIService:
     def create_employee(
         cls, serializer: UserSerializer, branch_id: int
     ) -> Response:
-        role_id = Role.objects.filter(level=EMPLOYEE_LEVEL).first().id
+        role_id = Role.objects.get(level=EMPLOYEE_LEVEL).id
         user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
         profile = cls.create_profile(user_id, branch_id=branch_id)
@@ -86,7 +86,7 @@ class UserAPIService:
     def create_branch_manager(
         cls, serializer: UserSerializer, branch_id: int
     ) -> Response:
-        role_id = Role.objects.filter(level=BRANCH_MANAGER_LEVEL).first().id
+        role_id = Role.objects.get(level=BRANCH_MANAGER_LEVEL).id
         user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
         profile = cls.create_profile(user_id, branch_id=branch_id)
@@ -98,9 +98,9 @@ class UserAPIService:
     def create_restaurant_manager(
         cls, serializer: UserSerializer, restaurant_id: int
     ) -> Response:
-        role_id = Role.objects.filter(
-            level=RESTAURANT_MANAGER_LEVEL
-        ).first().id
+        role_id = Role.objects.get(
+            level=RESTAURANT_MANAGER_LEVEL,
+        ).id
         Validators.validate_create_new_restaurant_manager(restaurant_id)
         user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
@@ -113,10 +113,10 @@ class UserPermissionService:
 
     @classmethod
     def get_restaurant_id(cls, user: User) -> Optional[int]:
-        profile = EmployeeProfile.objects.filter(user=user).first()
+        profile = EmployeeProfile.objects.get(user=user)
         return profile.restaurant.id if profile else None
 
     @classmethod
     def get_branch_id(cls, user: User) -> Optional[int]:
-        profile = EmployeeProfile.objects.filter(user=user).first()
+        profile = EmployeeProfile.objects.get(user=user)
         return profile.branch.id if profile else None

@@ -13,18 +13,17 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **kwargs):
         CommandHelpers.print_creating_message(self, 'Inventory', 4)
-        exists = Inventory.objects.all().first()
-        if exists:
+        if Inventory.objects.all().exists():
             CommandHelpers.print_error(self, 'Inventory already exist.')
         else:
             inventory = [
                 Inventory(
                     branch_id=1, ingredient_id=1,
-                    stock=5, unit='Pounds'
+                    stock=5, unit='Pounds',
                 ),
                 Inventory(
                     branch_id=1, ingredient_id=2,
-                    stock=3, unit='teaspoon'
+                    stock=3, unit='teaspoon',
                 ),
                 Inventory(
                     branch_id=2, ingredient_id=1,

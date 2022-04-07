@@ -31,14 +31,14 @@ class InventoryAPITestCase(APITransactionTestCase):
         """Test adding ingredients to inventory."""
         ingredient_data = [
             {'ingredient': 1, 'stock': 5, 'unit': 'TestUnit'},
-            {'ingredient': 2, 'stock': 5, 'unit': 'TestUnit'}
+            {'ingredient': 2, 'stock': 5, 'unit': 'TestUnit'},
         ]
         for data in ingredient_data:
             response = self.client.post(
                 self.inventory_list_url,
                 data,
                 format='json',
-                **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+                **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
             )
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -47,7 +47,7 @@ class InventoryAPITestCase(APITransactionTestCase):
         """Test adding repeated ingredient to inventory."""
         ingredient_data = [
             {'ingredient': 1, 'stock': 5, 'unit': 'TestUnit'},
-            {'ingredient': 1, 'stock': 5, 'unit': 'TestUnit'}
+            {'ingredient': 1, 'stock': 5, 'unit': 'TestUnit'},
         ]
         response = None
         for data in ingredient_data:
@@ -55,7 +55,7 @@ class InventoryAPITestCase(APITransactionTestCase):
                 self.inventory_list_url,
                 data,
                 format='json',
-                **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+                **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
             )
         # first response is 201, but second is 400
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -83,7 +83,7 @@ class InventoryAPITestCase(APITransactionTestCase):
         response_get = self.client.get(
             self.inventory_list_url,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         current_inventory_ingredients = len(response_get.data)
         url_delete = reverse(
@@ -91,18 +91,18 @@ class InventoryAPITestCase(APITransactionTestCase):
             kwargs={
                 'restaurant_id': 1,
                 'branch_id': 1,
-                'pk': response_get.data[0]['id']
+                'pk': response_get.data[0]['id'],
             }
         )
         self.client.delete(
             url_delete,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         response_get = self.client.get(
             self.inventory_list_url,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(
             current_inventory_ingredients, len(response_get.data) + 1

@@ -23,7 +23,7 @@ class UserManager(BaseUserManager):
             raise ValueError('Users must have an username')
 
         norm_email = self.normalize_email(email)
-        if norm_email and User.objects.filter(email=norm_email).first():
+        if norm_email and User.objects.filter(email=norm_email).exist():
             raise ValueError('User with that email already exists')
 
         user = self.model(
@@ -41,15 +41,15 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, username, password, email=None):
         """
-        Creates and saves a super user with the given data and the
+        Creates and saves a superuser with the given data and the
         Administrator role.
         """
-        portal_manager = Role.objects.filter(level=0).first()
+        portal_manager = Role.objects.get(level=0)
         user = self.create_user(
             username,
             password,
             portal_manager,
-            email=self.normalize_email(email)
+            email=self.normalize_email(email),
         )
         user.is_staff = True
         user.is_superuser = True
@@ -66,7 +66,7 @@ class User(AbstractUser):
         refresh = RefreshToken.for_user(self)
         return {
             'access': str(refresh.access_token),
-            'refresh': str(refresh)
+            'refresh': str(refresh),
         }
 
 
@@ -82,6 +82,6 @@ class EmployeeProfile(models.Model):
             models.CheckConstraint(
                 check=models.Q(restaurant__isnull=False) | models.Q(
                     branch__isnull=False),
-                name='employee_profile_restaurant_branch_both_not_null'
+                name='employee_profile_restaurant_branch_both_not_null',
             )
         ]

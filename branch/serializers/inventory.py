@@ -10,7 +10,12 @@ class InventorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Inventory
-        fields = ('id', 'ingredient', 'stock', 'unit')
+        fields = (
+            'id',
+            'ingredient',
+            'stock',
+            'unit',
+        )
 
     def validate_stock(self, value):
         return Validators.validate_greater_than_or_equal_to_zero(value)
@@ -23,4 +28,9 @@ class DetailedInventorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Inventory
-        fields = ('id', 'ingredient', 'stock', 'unit')
+        fields = (
+            'id',
+            'ingredient',
+            'stock',
+            'unit',
+        )

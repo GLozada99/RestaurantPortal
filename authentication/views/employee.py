@@ -27,14 +27,14 @@ class EmployeeAPIView(
         branch_id = self.kwargs.get('branch_id')
         return EmployeeProfile.objects.filter(
             branch__id=branch_id,
-            user__role__level=EMPLOYEE_LEVEL
+            user__role__level=EMPLOYEE_LEVEL,
         )
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)
         return UserAPIService.create_employee(
-            serializer, self.kwargs.get('branch_id')
+            serializer, self.kwargs.get('branch_id'),
         )
 
 
@@ -50,5 +50,5 @@ class EmployeeAPIDetailView(
         branch_id = self.kwargs.get('branch_id')
         return EmployeeProfile.objects.filter(
             branch__id=branch_id,
-            user__role__level=EMPLOYEE_LEVEL
+            user__role__level=EMPLOYEE_LEVEL,
         )
