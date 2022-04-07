@@ -13,22 +13,21 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **kwargs):
         CommandHelpers.print_creating_message(self, 'Restaurant', 3)
-        exists = Restaurant.objects.all().first()
-        if exists:
+        if Restaurant.objects.all().exists():
             CommandHelpers.print_error(self, 'Restaurant already exist.')
         else:
             restaurant = [
                 Restaurant(
                     name='McDonalds', food_type_id=1, active_branches=3,
-                    active_administrators=2
+                    active_administrators=2,
                 ),
                 Restaurant(
                     name='Wendys', food_type_id=1, active_branches=3,
-                    active_administrators=2
+                    active_administrators=2,
                 ),
                 Restaurant(
                     name='Burger King', food_type_id=1, active_branches=3,
-                    active_administrators=2
+                    active_administrators=2,
                 ),
             ]
             CommandHelpers.add_to_db(self, Restaurant, restaurant)

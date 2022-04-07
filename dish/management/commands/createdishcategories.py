@@ -13,10 +13,10 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **kwargs):
         CommandHelpers.print_creating_message(self, 'DishCategory', 3)
-        exists = DishCategory.objects.all().first()
-        if exists:
-            CommandHelpers.print_error(self, 'Dish categories already '
-                                             'exist.')
+        if DishCategory.objects.all().exists():
+            CommandHelpers.print_error(
+                self, 'Dish categories already exist.',
+            )
         else:
             dish_categories = [
                 DishCategory(name='Entree', restaurant_id=1),

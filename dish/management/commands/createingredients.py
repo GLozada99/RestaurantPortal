@@ -13,10 +13,10 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **kwargs):
         CommandHelpers.print_creating_message(self, 'Ingredient', 3)
-        exists = Ingredient.objects.all().first()
-        if exists:
-            CommandHelpers.print_error(self, 'Ingredients already '
-                                             'exist.')
+        if Ingredient.objects.all().exists():
+            CommandHelpers.print_error(
+                self, 'Ingredients already exist.',
+            )
         else:
             dish_categories = [
                 Ingredient(name='Onion', restaurant_id=1),
