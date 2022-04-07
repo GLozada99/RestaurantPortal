@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
-from branch.models import Branch, Inventory
+from branch.models import Branch
 from dish.models import Dish, DishIngredient
 from dish.serializers.dish import (BasicDishSerializer,
                                    DetailedDishWithIngredientsSerializer,
@@ -73,10 +73,10 @@ class DishAPIService:
     @staticmethod
     def is_dish_available(branch, dish):
         available = True
-        dish_ingredients = DishIngredient.objects.filter(dish=dish)
+        dish_ingredients = dish.dishingredient_set.all()
         for ingredient_data in dish_ingredients:
-            branch_inventory_ingredient = Inventory.objects.get(
-                branch=branch, ingredient=ingredient_data.ingredient)
+            branch_inventory_ingredient = branch.inventory_set.get(
+                ingredient=ingredient_data.ingredient)
             if branch_inventory_ingredient.stock < ingredient_data.quantity:
                 available = False
                 break
