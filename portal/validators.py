@@ -1,8 +1,8 @@
 from django.db.models import Model
 from rest_framework.serializers import ValidationError
 
-from branch.models import Branch
-from restaurant.models import Restaurant
+from portal.branch.models import Branch
+from portal.restaurant.models import Restaurant
 
 
 class Validators:

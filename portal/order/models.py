@@ -1,8 +1,8 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from branch.models import Branch, Promotion
-from dish.models import Dish
+from portal.branch.models import Branch, Promotion
+from portal.dish.models import Dish
 
 User = get_user_model()
 

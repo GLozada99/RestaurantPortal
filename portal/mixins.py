@@ -1,8 +1,8 @@
 from django.http import JsonResponse
 from rest_framework import status
 
-from branch.models import Branch
-from dish.models import DishCategory
+from portal.branch.models import Branch
+from portal.dish.models import DishCategory
 
 
 class CheckRestaurantBranchAccordingMixin(object):

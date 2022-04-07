@@ -1,39 +1,39 @@
-from django.urls import path, include, re_path
+from django.urls import include, path, re_path
 
 from portal.documentation import schema_view
 
 urlpatterns = [
-    path('auth/', include('authentication.urls.jwt', namespace='auth')),
-    path('roles/', include('authentication.urls.role', namespace='roles')),
+    path('auth/', include('portal.authentication.urls.jwt', namespace='auth')),
+    path('roles/', include('portal.authentication.urls.role', namespace='roles')),
     path(
         'clients/',
-        include('authentication.urls.client', namespace='clients')
+        include('portal.authentication.urls.client', namespace='clients')
     ),
     path(
         'portal-managers/',
         include(
-            'authentication.urls.portal_manager',
+            'portal.authentication.urls.portal_manager',
             namespace='portal_managers'
         )
     ),
     path(
         'food-types/',
         include(
-            'restaurant.urls.food_type',
+            'portal.restaurant.urls.food_type',
             namespace='food_types'
         )
     ),
     path(
         'delivery-types/',
         include(
-            'restaurant.urls.delivery_type',
+            'portal.restaurant.urls.delivery_type',
             namespace='delivery_types'
         )
     ),
     path(
         'restaurants/',
         include(
-            'restaurant.urls.restaurant',
+            'portal.restaurant.urls.restaurant',
             namespace='restaurants'
         )
     ),

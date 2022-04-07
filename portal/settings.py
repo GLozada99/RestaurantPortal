@@ -48,10 +48,10 @@ INSTALLED_APPS = [
     'storages',
     'django_extensions',
 
-    'authentication',
-    'restaurant',
-    'dish',
-    'branch',
+    'portal.authentication',
+    'portal.restaurant',
+    'portal.dish',
+    'portal.branch',
     'portal.order',
 ]
 
@@ -116,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'authentication.auth_backends.EmailBackend'
+    'portal.authentication.auth_backends.EmailBackend'
 ]
 
 

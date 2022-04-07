@@ -2,10 +2,10 @@ from functools import wraps
 
 from rest_framework.reverse import reverse
 
-from authentication.serializers.user import UserSerializer
-from authentication.services import UserAPIService
-from branch.models import Branch
-from restaurant.models import Restaurant
+from portal.authentication.serializers.user import UserSerializer
+from portal.authentication.services import UserAPIService
+from portal.branch.models import Branch
+from portal.restaurant.models import Restaurant
 
 user_data = {
     'username': 'UserTest',

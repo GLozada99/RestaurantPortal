@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from authentication.serializers.user import UserSerializer
-from branch.serializers.branch import ShortBranchSerializer
+from portal.authentication.serializers.user import UserSerializer
+from portal.branch.serializers.branch import ShortBranchSerializer
 from portal.order.models import Order
 from portal.order.serializers.order_dish import OrderDishSerializer
 from portal.order.serializers.order_promotion import OrderPromotionSerializer
