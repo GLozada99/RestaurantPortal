@@ -2,8 +2,12 @@
 from rest_framework import generics
 
 from authentication.models import EmployeeProfile
-from authentication.permissions import (HasCurrentBranch, HasCurrentRestaurant,
-                                        IsBranchManager, IsRestaurantManager, )
+from authentication.permissions import (
+    HasCurrentBranch,
+    HasCurrentRestaurant,
+    IsBranchManager,
+    IsRestaurantManager,
+)
 from authentication.serializers.employee_profile import BranchProfileSerializer
 from authentication.serializers.user import UserSerializer
 from authentication.services import UserAPIService

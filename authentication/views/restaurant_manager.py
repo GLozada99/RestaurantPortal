@@ -2,8 +2,11 @@
 from rest_framework import generics
 
 from authentication.models import EmployeeProfile
-from authentication.permissions import (HasCurrentRestaurant, IsPortalManager,
-                                        IsRestaurantManager, )
+from authentication.permissions import (
+    HasCurrentRestaurant,
+    IsPortalManager,
+    IsRestaurantManager,
+)
 from authentication.serializers.employee_profile import \
     RestaurantProfileSerializer
 from authentication.serializers.user import UserSerializer

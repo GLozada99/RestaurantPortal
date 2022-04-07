@@ -1,7 +1,9 @@
 from django.urls import path
 
-from authentication.views.portal_manager import (PortalManagerAPIDetailView,
-                                                 PortalManagerAPIView, )
+from authentication.views.portal_manager import (
+    PortalManagerAPIDetailView,
+    PortalManagerAPIView,
+)
 
 app_name = 'portal_manager'
 urlpatterns = [

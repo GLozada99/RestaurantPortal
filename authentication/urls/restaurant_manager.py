@@ -1,7 +1,9 @@
 from django.urls import path
 
 from authentication.views.restaurant_manager import (
-    RestaurantManagerAPIDetailView, RestaurantManagerAPIView, )
+    RestaurantManagerAPIDetailView,
+    RestaurantManagerAPIView,
+)
 
 app_name = 'restaurant_manager'
 urlpatterns = [

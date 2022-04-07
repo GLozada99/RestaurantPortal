@@ -4,8 +4,10 @@ from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 from branch.models import Combo
-from branch.serializers.promotion import (DetailedPromotionSerializer,
-                                          PromotionSerializer, )
+from branch.serializers.promotion import (
+    DetailedPromotionSerializer,
+    PromotionSerializer,
+)
 from portal.validators import Validators
 
 

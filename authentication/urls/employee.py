@@ -1,7 +1,9 @@
 from django.urls import path
 
 from authentication.views.employee import (
-    EmployeeAPIDetailView, EmployeeAPIView, )
+    EmployeeAPIDetailView,
+    EmployeeAPIView,
+)
 
 app_name = 'employee'
 urlpatterns = [
