@@ -128,8 +128,7 @@ class Validators:
 
     @classmethod
     def is_promotion_available(
-            cls, branch: Branch, promotion: Promotion,
-            promotions_quantity: int = 1,
+        cls, branch: Branch, promotion: Promotion, promotions_quantity: int = 1
     ):
         combo_data = promotion.combo_set.all()
         for combo in combo_data:
