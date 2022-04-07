@@ -1,7 +1,7 @@
 from django.db.models import Model
 from rest_framework.serializers import ValidationError
 
-from portal.branch.models import Branch
+from portal.branch.models import Branch, Promotion
 from portal.dish.models import Dish
 from portal.restaurant.models import Restaurant
 
@@ -123,5 +123,17 @@ class Validators:
             )
             if(branch_inventory_ingredient.stock <
                (ingredient_data.quantity * dishes_quantity)):
+                return False
+        return True
+
+    @classmethod
+    def is_promotion_available(
+            cls, branch: Branch, promotion: Promotion,
+            promotions_quantity: int = 1,
+    ):
+        combo_data = promotion.combo_set.all()
+        for combo in combo_data:
+            if not cls.is_dish_available(
+                    branch, combo.dish, combo.quantity * promotions_quantity):
                 return False
         return True
