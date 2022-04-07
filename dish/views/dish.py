@@ -60,14 +60,19 @@ class DishAPIDetailView(
         return Dish.objects.filter(category_id=dish_category_id)
 
 
-class DishBranchAvailableAPIView(
-    CheckRestaurantBranchAccordingMixin, generics.ListAPIView
+class DishBranchCategoryAvailableAPIView(
+    CheckRestaurantBranchAccordingMixin,
+    CheckRestaurantDishCategoryAccordingMixin,
+    generics.GenericAPIView,
 ):
-    """View to get Dishes available in specific branch."""
+    """View to get Dishes available in specific Branch and Dish Category."""
 
     serializer_class = BasicDishSerializer
     permission_classes = [ReadOnly]
 
     def get(self, request, *args, **kwargs):
         branch_id = self.kwargs.get('branch_id')
-        return DishAPIService.get_available_dishes_branch(branch_id)
+        dish_category_id = self.kwargs.get('dish_category_id')
+        return DishAPIService.get_available_dishes_category_branch(
+            dish_category_id, branch_id,
+        )
