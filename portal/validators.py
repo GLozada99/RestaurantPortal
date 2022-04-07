@@ -105,6 +105,13 @@ class Validators:
             })
 
     @staticmethod
+    def validate_restaurant_in_model(instance, restaurant_id, model_name):
+        if instance.restaurant_id != restaurant_id:
+            raise ValidationError({
+                'non_field_errors': [f'{model_name} not available.']
+            })
+
+    @staticmethod
     def validate_active_branches(restaurant, quantity):
         """
         Validate that the active_branches field has not reached the limit.
