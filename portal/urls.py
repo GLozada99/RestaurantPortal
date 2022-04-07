@@ -4,7 +4,12 @@ from portal.documentation import schema_view
 
 urlpatterns = [
     path('auth/', include('portal.authentication.urls.jwt', namespace='auth')),
-    path('roles/', include('portal.authentication.urls.role', namespace='roles')),
+    path(
+        'roles/',
+        include(
+            'portal.authentication.urls.role', namespace='roles'
+        ),
+    ),
     path(
         'clients/',
         include('portal.authentication.urls.client', namespace='clients')
