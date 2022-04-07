@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'restaurant',
     'dish',
     'branch',
-    'order',
+    'portal.order',
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from order.models import OrderPromotion
+from portal.order.models import OrderPromotion
 from portal.validators import Validators
 
 

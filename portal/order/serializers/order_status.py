@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from order.models import OrderStatus
+from portal.order.models import OrderStatus
 
 
 class OrderStatusSerializer(serializers.ModelSerializer):

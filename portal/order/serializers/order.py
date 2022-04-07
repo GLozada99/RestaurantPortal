@@ -2,10 +2,10 @@ from rest_framework import serializers
 
 from authentication.serializers.user import UserSerializer
 from branch.serializers.branch import ShortBranchSerializer
-from order.models import Order
-from order.serializers.order_dish import OrderDishSerializer
-from order.serializers.order_promotion import OrderPromotionSerializer
-from order.serializers.order_status import OrderStatusSerializer
+from portal.order.models import Order
+from portal.order.serializers.order_dish import OrderDishSerializer
+from portal.order.serializers.order_promotion import OrderPromotionSerializer
+from portal.order.serializers.order_status import OrderStatusSerializer
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
