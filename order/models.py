@@ -21,6 +21,7 @@ class Order(models.Model):
     dishes = models.ManyToManyField(Dish, through='OrderDish')
     promotions = models.ManyToManyField(Promotion, through='OrderPromotion')
     total_cost = models.FloatField()
+    address = models.TextField()
 
 
 class OrderDish(models.Model):
