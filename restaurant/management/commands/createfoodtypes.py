@@ -13,8 +13,7 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **kwargs):
         CommandHelpers.print_creating_message(self, 'FoodType', 3)
-        exists = FoodType.objects.filter(name='American')
-        if exists:
+        if FoodType.objects.filter(name='American').exists():
             CommandHelpers.print_error(self, 'Food types already exist.')
         else:
             food_types = [

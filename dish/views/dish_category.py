@@ -17,7 +17,7 @@ class DishCategoryAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
-        return DishCategory.objects.filter(restaurant__id=restaurant_id)
+        return DishCategory.objects.filter(restaurant_id=restaurant_id)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -35,4 +35,4 @@ class DishCategoryAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')
-        return DishCategory.objects.filter(restaurant__id=restaurant_id)
+        return DishCategory.objects.filter(restaurant_id=restaurant_id)

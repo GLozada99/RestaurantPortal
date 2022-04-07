@@ -26,7 +26,7 @@ class DishAPIView(
 
     def get_queryset(self):
         dish_category_id = self.kwargs.get('dish_category_id')
-        return Dish.objects.filter(category__id=dish_category_id)
+        return Dish.objects.filter(category_id=dish_category_id)
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()(data=request.data)
@@ -54,7 +54,7 @@ class DishAPIDetailView(
 
     def get_queryset(self):
         dish_category_id = self.kwargs.get('dish_category_id')
-        return Dish.objects.filter(category__id=dish_category_id)
+        return Dish.objects.filter(category_id=dish_category_id)
 
 
 class DishBranchAvailableAPIView(
