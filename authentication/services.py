@@ -86,6 +86,7 @@ class UserAPIService:
     def create_branch_manager(
         cls, serializer: UserSerializer, branch_id: int
     ) -> Response:
+        Validators.validate_create_new_branch_manager(branch_id)
         role_id = Role.objects.get(level=BRANCH_MANAGER_LEVEL).id
         user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
@@ -98,10 +99,10 @@ class UserAPIService:
     def create_restaurant_manager(
         cls, serializer: UserSerializer, restaurant_id: int
     ) -> Response:
+        Validators.validate_create_new_restaurant_manager(restaurant_id)
         role_id = Role.objects.get(
             level=RESTAURANT_MANAGER_LEVEL,
         ).id
-        Validators.validate_create_new_restaurant_manager(restaurant_id)
         user_data = cls.create(serializer, role_id).data
         user_id = user_data['id']
         profile = cls.create_profile(user_id, restaurant_id=restaurant_id)

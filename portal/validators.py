@@ -1,6 +1,7 @@
 from django.db.models import Model
 from rest_framework.serializers import ValidationError
 
+from branch.models import Branch
 from restaurant.models import Restaurant
 
 
@@ -77,6 +78,16 @@ class Validators:
         """
         active_managers = restaurant.employeeprofile_set.all().count()
         return active_managers > quantity
+
+    @staticmethod
+    def validate_create_new_branch_manager(branch_id):
+        """Validate if another branch manager can be created."""
+        branch = Branch.objects.get(id=branch_id)
+        if branch.employeeprofile_set.all().exists():
+            raise ValidationError({
+                'non_field_errors':
+                    ['This branch already has a branch manager.']
+            })
 
     @staticmethod
     def validate_create_new_branch(restaurant_id):
