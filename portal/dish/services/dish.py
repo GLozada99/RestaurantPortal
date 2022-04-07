@@ -72,20 +72,6 @@ class DishAPIService:
                     'ingredients': 'Invalid ingredients.'
                 })
 
-    @staticmethod
-    def is_dish_available(
-        branch: Branch, dish: Dish, dishes_quantity: int = 1
-    ):
-        dish_ingredients = dish.dishingredient_set.all()
-        for ingredient_data in dish_ingredients:
-            branch_inventory_ingredient = branch.inventory_set.get(
-                ingredient=ingredient_data.ingredient
-            )
-            if(branch_inventory_ingredient.stock <
-               (ingredient_data.quantity * dishes_quantity)):
-                return False
-        return True
-
     @classmethod
     def get_available_dishes_category_branch(
         cls, category_id: int, branch_id: int,
@@ -95,7 +81,9 @@ class DishAPIService:
 
         dishes = category.dish_set.all()
         available_dishes = [
-            dish for dish in dishes if cls.is_dish_available(branch, dish)
+            dish for dish in dishes if Validators.is_dish_available(
+                branch, dish
+            )
         ]
 
         serializer = BasicDishSerializer(data=available_dishes, many=True)

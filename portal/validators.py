@@ -2,6 +2,7 @@ from django.db.models import Model
 from rest_framework.serializers import ValidationError
 
 from portal.branch.models import Branch
+from portal.dish.models import Dish
 from portal.restaurant.models import Restaurant
 
 
@@ -110,3 +111,17 @@ class Validators:
         """
         active_branches = restaurant.branch_set.all().count()
         return active_branches > quantity
+
+    @staticmethod
+    def is_dish_available(
+        branch: Branch, dish: Dish, dishes_quantity: int = 1
+    ):
+        dish_ingredients = dish.dishingredient_set.all()
+        for ingredient_data in dish_ingredients:
+            branch_inventory_ingredient = branch.inventory_set.get(
+                ingredient=ingredient_data.ingredient
+            )
+            if(branch_inventory_ingredient.stock <
+               (ingredient_data.quantity * dishes_quantity)):
+                return False
+        return True
