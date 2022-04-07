@@ -25,7 +25,7 @@ class DishSerializer(serializers.ModelSerializer):
     picture = Base64ImageField(
         max_length=None, use_url=True, required=False
     )
-    
+
     class Meta:
         model = Dish
         fields = (
