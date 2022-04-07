@@ -27,15 +27,15 @@ class Command(BaseCommand):
             roles = [
                 Role(
                     name='Portal Manager',
-                    level=PORTAL_MANAGER_LEVEL
+                    level=PORTAL_MANAGER_LEVEL,
                 ),
                 Role(
                     name='Restaurant Manager',
-                    level=RESTAURANT_MANAGER_LEVEL
+                    level=RESTAURANT_MANAGER_LEVEL,
                 ),
                 Role(name='Branch Manager', level=BRANCH_MANAGER_LEVEL),
                 Role(name='Employee', level=EMPLOYEE_LEVEL),
-                Role(name='Client', level=CLIENT_LEVEL)
+                Role(name='Client', level=CLIENT_LEVEL),
             ]
             CommandHelpers.add_to_db(self, Role, roles)
             CommandHelpers.print_success(self)

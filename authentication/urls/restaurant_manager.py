@@ -10,6 +10,6 @@ urlpatterns = [
     path(
         '<int:pk>/',
         RestaurantManagerAPIDetailView.as_view(),
-        name='restaurant-manager-detail'
+        name='restaurant-manager-detail',
     ),
 ]

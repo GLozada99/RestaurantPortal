@@ -18,7 +18,7 @@ class PortalManagerAPITestCase(APITestCase):
             url,
             {'username': 'TestPortalManager', 'password': 'TestPassword'},
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 

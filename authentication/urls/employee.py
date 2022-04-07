@@ -10,6 +10,6 @@ urlpatterns = [
     path(
         '<int:pk>/',
         EmployeeAPIDetailView.as_view(),
-        name='employee-detail'
+        name='employee-detail',
     ),
 ]

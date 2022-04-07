@@ -26,14 +26,14 @@ class BranchManagerAPIView(
         branch_id = self.kwargs.get('branch_id')
         return EmployeeProfile.objects.filter(
             branch__id=branch_id,
-            user__role__level=BRANCH_MANAGER_LEVEL
+            user__role__level=BRANCH_MANAGER_LEVEL,
         )
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer_class()(data=request.data)
         serializer.is_valid(raise_exception=True)
         return UserAPIService.create_branch_manager(
-            serializer, self.kwargs.get('branch_id')
+            serializer, self.kwargs.get('branch_id'),
         )
 
 
@@ -48,5 +48,5 @@ class BranchManagerAPIDetailView(
         branch_id = self.kwargs.get('branch_id')
         return EmployeeProfile.objects.filter(
             branch__id=branch_id,
-            user__role__level=BRANCH_MANAGER_LEVEL
+            user__role__level=BRANCH_MANAGER_LEVEL,
         )

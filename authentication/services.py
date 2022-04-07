@@ -37,7 +37,7 @@ class UserAPIService:
             user = User.objects.create_user(**user_data)
             response_data = {
                 'data': UserSerializer(user).data,
-                'status': status.HTTP_201_CREATED
+                'status': status.HTTP_201_CREATED,
             }
         except ValueError as e:
             response_data = {
@@ -51,10 +51,10 @@ class UserAPIService:
         cls,
         user_id: int,
         restaurant_id: int = None,
-        branch_id: int = None
+        branch_id: int = None,
     ) -> EmployeeProfile:
         profile = EmployeeProfile(
-            user_id=user_id, restaurant_id=restaurant_id, branch_id=branch_id
+            user_id=user_id, restaurant_id=restaurant_id, branch_id=branch_id,
         )
         profile.save()
         return profile
@@ -99,7 +99,7 @@ class UserAPIService:
         cls, serializer: UserSerializer, restaurant_id: int
     ) -> Response:
         role_id = Role.objects.get(
-            level=RESTAURANT_MANAGER_LEVEL
+            level=RESTAURANT_MANAGER_LEVEL,
         ).id
         Validators.validate_create_new_restaurant_manager(restaurant_id)
         user_data = cls.create(serializer, role_id).data
