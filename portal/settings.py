@@ -49,10 +49,11 @@ INSTALLED_APPS = [
     'django_extensions',
 
     'portal.authentication',
-    'portal.restaurant',
-    'portal.dish',
     'portal.branch',
+    'portal.dish',
     'portal.order',
+    'portal.restaurant',
+    'portal.third_party_auth'
 ]
 
 MIDDLEWARE = [
