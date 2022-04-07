@@ -38,8 +38,9 @@ class Validators:
         if model.objects.filter(**kwargs).exists():
             parameters = ', '.join(list(kwargs.keys()))
             raise ValidationError({
-                'non_field_errors':
+                'non_field_errors': [
                     f'The fields {parameters} must make a unique set.'
+                ]
             })
 
     @staticmethod
@@ -49,11 +50,10 @@ class Validators:
         for instance in instances:
             if instance[model_field].id in ids:
                 raise ValidationError({
-                    'non_field_errors':
-                        [
-                            f'The fields {model_field}, {model_name} must make'
-                            ' a unique set.'
-                        ]
+                    'non_field_errors': [
+                        f'The fields {model_field}, {model_name} must make a '
+                        'unique set.'
+                    ]
                 })
             ids.append(instance[model_field].id)
 
@@ -64,11 +64,10 @@ class Validators:
         active_managers = restaurant.employeeprofile_set.all().count()
         if active_managers == restaurant.active_administrators:
             raise ValidationError({
-                'non_field_errors':
-                    [
-                        'This restaurant reached the maximum capacity of '
-                        'administrators.'
-                    ]
+                'non_field_errors': [
+                    'This restaurant reached the maximum capacity of '
+                    'administrators.'
+                ]
             })
 
     @staticmethod
@@ -97,11 +96,16 @@ class Validators:
         branches = restaurant.branch_set.all().count()
         if branches == restaurant.active_branches:
             raise ValidationError({
-                'non_field_errors':
-                    [
-                        'This restaurant reached the maximum capacity of '
-                        'branches.'
-                    ]
+                'non_field_errors': [
+                    'This restaurant reached the maximum capacity of branches.'
+                ]
+            })
+
+    @staticmethod
+    def validate_restaurant_in_model(instance, restaurant_id, model_name):
+        if instance.restaurant_id != restaurant_id:
+            raise ValidationError({
+                'non_field_errors': [f'{model_name} not available.']
             })
 
     @staticmethod
@@ -128,8 +132,7 @@ class Validators:
 
     @classmethod
     def is_promotion_available(
-            cls, branch: Branch, promotion: Promotion,
-            promotions_quantity: int = 1,
+        cls, branch: Branch, promotion: Promotion, promotions_quantity: int = 1
     ):
         combo_data = promotion.combo_set.all()
         for combo in combo_data:
