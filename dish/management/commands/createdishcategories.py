@@ -15,7 +15,7 @@ class Command(BaseCommand):
         CommandHelpers.print_creating_message(self, 'DishCategory', 3)
         if DishCategory.objects.all().exists():
             CommandHelpers.print_error(
-                self, 'Dish categories already exist.'
+                self, 'Dish categories already exist.',
             )
         else:
             dish_categories = [
