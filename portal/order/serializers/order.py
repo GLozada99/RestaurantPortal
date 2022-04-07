@@ -38,3 +38,11 @@ class DetailedOrderSerializer(serializers.ModelSerializer):
             'dishes',
             'promotions',
         )
+
+
+class StatusOrderSerializer(serializers.ModelSerializer):
+    """Serializer for Updating Dish Status."""
+
+    class Meta:
+        model = Order
+        fields = ('status',)
