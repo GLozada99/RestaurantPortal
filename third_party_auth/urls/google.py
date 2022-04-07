@@ -9,7 +9,7 @@ urlpatterns = [
     path(
         'login/',
         TemplateView.as_view(
-            template_name='third_party_auth/google.html'
+            template_name='third_party_auth/google.html',
         ),
     ),
 ]
