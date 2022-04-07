@@ -84,23 +84,15 @@ class DishAPIService:
 
     @classmethod
     def get_available_dishes_category_branch(
-            cls, category: DishCategory, branch: Branch,
+            cls, category_id: int, branch_id: int,
     ):
+        category = DishCategory.objects.get(pk=category_id)
+        branch = Branch.objects.get(pk=branch_id)
+
         dishes = category.dish_set.all()
         available_dishes = [dish for dish in dishes if
                             cls.is_dish_available(branch, dish)]
-        return available_dishes
 
-    @classmethod
-    def get_available_dishes_branch(cls, branch_id: int):
-        branch = Branch.objects.get(pk=branch_id)
-        restaurant = branch.restaurant
-        restaurant_categories = restaurant.dishcategory_set.all()
-        available_dishes = []
-        for category in restaurant_categories:
-            available_dishes.extend(
-                cls.get_available_dishes_category_branch(category, branch)
-            )
         serializer = BasicDishSerializer(data=available_dishes, many=True)
         serializer.is_valid()
         return Response(serializer.data)
