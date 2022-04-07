@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 from branch.models import Branch
-from dish.models import Dish, DishIngredient
+from dish.models import Dish, DishCategory, DishIngredient
 from dish.serializers.dish import (
     BasicDishSerializer,
     DetailedDishWithIngredientsSerializer,
@@ -73,27 +73,34 @@ class DishAPIService:
                 })
 
     @staticmethod
-    def is_dish_available(branch, dish):
-        available = True
+    def is_dish_available(branch: Branch, dish: Dish):
         dish_ingredients = dish.dishingredient_set.all()
         for ingredient_data in dish_ingredients:
             branch_inventory_ingredient = branch.inventory_set.get(
                 ingredient=ingredient_data.ingredient)
             if branch_inventory_ingredient.stock < ingredient_data.quantity:
-                available = False
-                break
-        return available
+                return False
+        return True
+
+    @classmethod
+    def get_available_dishes_category_branch(
+            cls, category: DishCategory, branch: Branch,
+    ):
+        dishes = category.dish_set.all()
+        available_dishes = [dish for dish in dishes if
+                            cls.is_dish_available(branch, dish)]
+        return available_dishes
 
     @classmethod
     def get_available_dishes_branch(cls, branch_id: int):
         branch = Branch.objects.get(pk=branch_id)
         restaurant = branch.restaurant
         restaurant_categories = restaurant.dishcategory_set.all()
-        restaurant_dishes = Dish.objects.filter(
-            category__in=restaurant_categories,
-        )
-        available_dishes = [dish for dish in restaurant_dishes if
-                            cls.is_dish_available(branch, dish)]
+        available_dishes = []
+        for category in restaurant_categories:
+            available_dishes.extend(
+                cls.get_available_dishes_category_branch(category, branch)
+            )
         serializer = BasicDishSerializer(data=available_dishes, many=True)
         serializer.is_valid()
         return Response(serializer.data)
