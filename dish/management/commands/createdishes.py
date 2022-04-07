@@ -13,8 +13,7 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, *args, **kwargs):
         CommandHelpers.print_creating_message(self, 'Dish', 2)
-        exists = Dish.objects.all().first()
-        if exists:
+        if Dish.objects.all().exists():
             CommandHelpers.print_error(self, 'Dish already exist.')
         else:
             dishes = [
@@ -56,5 +55,4 @@ class Command(BaseCommand):
                 ),
             ]
             CommandHelpers.add_to_db(self, DishIngredient, dish_ingredient)
-
             CommandHelpers.print_success(self)
