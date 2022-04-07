@@ -9,7 +9,7 @@ app_name = 'restaurant'
 urlpatterns = [
     path('', DeliveryTypeAPIView.as_view(), name='delivery-type-list'),
     path(
-        '<pk>/',
+        '<int:pk>/',
         DeliveryTypeAPIDetailView.as_view(),
         name='delivery-type-detail'
     ),

@@ -8,7 +8,7 @@ from restaurant.views.restaurant import (
 app_name = 'restaurant'
 urlpatterns = [
     path('', RestaurantAPIView.as_view(), name='restaurant-list'),
-    path('<pk>/', RestaurantAPIDetailView.as_view(), name='restaurant-detail'),
+    path('<int:pk>/', RestaurantAPIDetailView.as_view(), name='restaurant-detail'),
     path(
         '<restaurant_id>/managers/',
         include(

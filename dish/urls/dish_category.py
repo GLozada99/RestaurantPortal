@@ -9,7 +9,7 @@ app_name = 'dish-category'
 urlpatterns = [
     path('', DishCategoryAPIView.as_view(), name='dish-category-list'),
     path(
-        '<pk>/',
+        '<int:pk>/',
         DishCategoryAPIDetailView.as_view(),
         name='dish-category-detail'
     ),

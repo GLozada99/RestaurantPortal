@@ -7,7 +7,7 @@ app_name = 'portal_manager'
 urlpatterns = [
     path('', PortalManagerAPIView.as_view(), name='portal-manager-list'),
     path(
-        '<pk>/',
+        '<int:pk>/',
         PortalManagerAPIDetailView.as_view(),
         name='portal-manager-detail'
     ),

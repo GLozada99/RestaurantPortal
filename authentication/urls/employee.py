@@ -8,7 +8,7 @@ urlpatterns = [
     path('', EmployeeAPIView.as_view(),
          name='employee-list'),
     path(
-        '<pk>/',
+        '<int:pk>/',
         EmployeeAPIDetailView.as_view(),
         name='employee-detail'
     ),

@@ -9,7 +9,7 @@ app_name = 'ingredient'
 urlpatterns = [
     path('', IngredientAPIView.as_view(), name='ingredient-list'),
     path(
-        '<pk>/',
+        '<int:pk>/',
         IngredientAPIDetailView.as_view(),
         name='ingredient-detail'
     ),

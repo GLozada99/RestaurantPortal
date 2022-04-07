@@ -8,7 +8,7 @@ urlpatterns = [
     path('', RestaurantManagerAPIView.as_view(),
          name='restaurant-manager-list'),
     path(
-        '<pk>/',
+        '<int:pk>/',
         RestaurantManagerAPIDetailView.as_view(),
         name='restaurant-manager-detail'
     ),

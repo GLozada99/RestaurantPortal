@@ -8,7 +8,7 @@ urlpatterns = [
     path('', BranchManagerAPIView.as_view(),
          name='branch-manager-list'),
     path(
-        '<pk>/',
+        '<int:pk>/',
         BranchManagerAPIDetailView.as_view(),
         name='branch-manager-detail'
     ),

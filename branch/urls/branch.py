@@ -21,7 +21,7 @@ urlpatterns = [
         )
     ),
     path(
-        '<pk>/',
+        '<int:pk>/',
         BranchAPIDetailView.as_view(),
         name='branch-detail'
     ),

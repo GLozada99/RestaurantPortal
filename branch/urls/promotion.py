@@ -6,7 +6,7 @@ app_name = 'branch'
 urlpatterns = [
     path('', PromotionAPIView.as_view(), name='promotion-list'),
     path(
-        '<pk>/',
+        '<int:pk>/',
         PromotionAPIDetailView.as_view(),
         name='promotion-detail'
     ),

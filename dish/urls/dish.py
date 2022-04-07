@@ -8,5 +8,5 @@ from dish.views.dish import (
 app_name = 'dish'
 urlpatterns = [
     path('', DishAPIView.as_view(), name='dish-list'),
-    path('<pk>/', DishAPIDetailView.as_view(), name='dish-detail'),
+    path('<int:pk>/', DishAPIDetailView.as_view(), name='dish-detail'),
 ]
