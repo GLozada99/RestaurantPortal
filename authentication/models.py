@@ -23,7 +23,7 @@ class UserManager(BaseUserManager):
             raise ValueError('Users must have an username')
 
         norm_email = self.normalize_email(email)
-        if norm_email and User.objects.filter(email=norm_email).first():
+        if norm_email and User.objects.filter(email=norm_email).exist():
             raise ValueError('User with that email already exists')
 
         user = self.model(
@@ -44,7 +44,7 @@ class UserManager(BaseUserManager):
         Creates and saves a super user with the given data and the
         Administrator role.
         """
-        portal_manager = Role.objects.filter(level=0).first()
+        portal_manager = Role.objects.get(level=0)
         user = self.create_user(
             username,
             password,

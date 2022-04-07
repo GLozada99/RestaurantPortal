@@ -31,9 +31,9 @@ class Validators:
         return value
 
     @staticmethod
-    def validate_unique(Model: Model, **kwargs):
+    def validate_unique(model: Model, **kwargs):
         """Validates unique constraint of one or more fields"""
-        if Model.objects.filter(**kwargs).first():
+        if model.objects.filter(**kwargs).first():
             parameters = ', '.join(list(kwargs.keys()))
             raise ValidationError({
                 'non_field_errors':
