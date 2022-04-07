@@ -8,4 +8,7 @@ class FoodTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FoodType
-        fields = ('id', 'name')
+        fields = (
+            'id',
+            'name',
+        )

@@ -15,7 +15,7 @@ class RestaurantAPITestCase(APITransactionTestCase):
         'food_type': 1,
         'active_branches': 5,
         'active_administrators': 5,
-        'delivery_types': [1, 2]
+        'delivery_types': [1, 2],
     }
 
     restaurant_list_url = reverse('restaurants:restaurant-list')
@@ -33,7 +33,7 @@ class RestaurantAPITestCase(APITransactionTestCase):
             self.restaurant_list_url,
             self.restaurant_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -42,7 +42,7 @@ class RestaurantAPITestCase(APITransactionTestCase):
         response = self.client.post(
             self.restaurant_list_url,
             self.restaurant_data,
-            format='json'
+            format='json',
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -57,7 +57,7 @@ class RestaurantAPITestCase(APITransactionTestCase):
             self.restaurant_list_url,
             self.restaurant_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -72,7 +72,7 @@ class RestaurantAPITestCase(APITransactionTestCase):
             self.restaurant_list_url,
             self.restaurant_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -82,17 +82,17 @@ class RestaurantAPITestCase(APITransactionTestCase):
         call_command('createrestaurants')
         url = reverse(
             'restaurants:restaurant-managers:restaurant-manager-list',
-            kwargs={'restaurant_id': 1}
+            kwargs={'restaurant_id': 1},
         )
         manager_data = {
             'username': 'TestRestaurantManager',
-            'password': 'TestPassword'
+            'password': 'TestPassword',
         }
         response = self.client.post(
             url,
             manager_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -103,20 +103,20 @@ class RestaurantAPITestCase(APITransactionTestCase):
         response_get = self.client.get(
             self.restaurant_list_url,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         current_restaurants = len(response_get.data)
         url_delete = reverse(
-            'restaurants:restaurant-detail', kwargs={'pk': 1}
+            'restaurants:restaurant-detail', kwargs={'pk': 1},
         )
         self.client.delete(
             url_delete,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         response_get = self.client.get(
             self.restaurant_list_url,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(current_restaurants, len(response_get.data) + 1)

@@ -11,6 +11,6 @@ urlpatterns = [
     path(
         '<int:pk>/',
         FoodTypeAPIDetailView.as_view(),
-        name='food-type-detail'
+        name='food-type-detail',
     ),
 ]

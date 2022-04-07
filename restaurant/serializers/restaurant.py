@@ -18,17 +18,17 @@ class RestaurantSerializer(serializers.ModelSerializer):
             'food_type',
             'active_branches',
             'active_administrators',
-            'delivery_types'
+            'delivery_types',
         )
 
     def validate_active_branches(self, value):
         Validators.validate_greater_than_zero(value)
         instance = self.instance
         if instance and Validators.validate_active_branches(
-            instance, value
+            instance, value,
         ):
             raise ValidationError(
-                'This field cannot be less than the number of branches'
+                'This field cannot be less than the number of branches',
             )
         return value
 
@@ -36,11 +36,11 @@ class RestaurantSerializer(serializers.ModelSerializer):
         Validators.validate_greater_than_zero(value)
         instance = self.instance
         if instance and Validators.validate_active_restaurant_managers(
-            instance, value
+            instance, value,
         ):
             raise ValidationError(
                 'This field cannot be less than the number of '
-                'restaurant administrators.'
+                'restaurant administrators.',
             )
         return value
 
@@ -60,5 +60,5 @@ class DetailedRestaurantSerializer(serializers.ModelSerializer):
             'active_branches',
             'active_administrators',
             'is_active',
-            'delivery_types'
+            'delivery_types',
         )

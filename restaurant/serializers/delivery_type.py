@@ -8,4 +8,7 @@ class DeliveryTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DeliveryType
-        fields = ('id', 'name')
+        fields = (
+            'id',
+            'name',
+        )

@@ -11,6 +11,6 @@ urlpatterns = [
     path(
         '<int:pk>/',
         DeliveryTypeAPIDetailView.as_view(),
-        name='delivery-type-detail'
+        name='delivery-type-detail',
     ),
 ]

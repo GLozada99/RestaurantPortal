@@ -11,41 +11,41 @@ urlpatterns = [
     path(
         '<int:pk>/',
         RestaurantAPIDetailView.as_view(),
-        name='restaurant-detail'
+        name='restaurant-detail',
     ),
     path(
         '<int:restaurant_id>/managers/',
         include(
             'authentication.urls.restaurant_manager',
-            namespace='restaurant-managers'
-        )
+            namespace='restaurant-managers',
+        ),
     ),
     path(
         '<int:restaurant_id>/dish-categories/',
         include(
             'dish.urls.dish_category',
-            namespace='dish-categories'
-        )
+            namespace='dish-categories',
+        ),
     ),
     path(
         '<int:restaurant_id>/branches/',
         include(
             'branch.urls.branch',
-            namespace='branches'
-        )
+            namespace='branches',
+        ),
     ),
     path(
         '<int:restaurant_id>/ingredients/',
         include(
             'dish.urls.ingredient',
-            namespace='ingredients'
-        )
+            namespace='ingredients',
+        ),
     ),
     path(
         '<int:restaurant_id>/promotions/',
         include(
             'branch.urls.promotion',
-            namespace='promotions'
-        )
+            namespace='promotions',
+        ),
     ),
 ]
