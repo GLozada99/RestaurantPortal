@@ -76,9 +76,7 @@ class Validators:
         limit.
         """
         active_managers = restaurant.employeeprofile_set.all().count()
-        if active_managers > quantity:
-            return True
-        return False
+        return active_managers > quantity
 
     @staticmethod
     def validate_create_new_branch(restaurant_id):
@@ -100,6 +98,4 @@ class Validators:
         Validate that the active_branches field has not reached the limit.
         """
         active_branches = restaurant.branch_set.all().count()
-        if active_branches > quantity:
-            return True
-        return False
+        return active_branches > quantity
