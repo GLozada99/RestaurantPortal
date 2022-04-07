@@ -18,8 +18,8 @@ class PromotionAPITestCase(APITransactionTestCase):
             {
                 'dish': 1,
                 'quantity': 2
-            }
-        ]
+            },
+        ],
     }
 
     promotion_list_url = reverse(
@@ -43,7 +43,7 @@ class PromotionAPITestCase(APITransactionTestCase):
             self.promotion_list_url,
             self.promotion_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -55,13 +55,13 @@ class PromotionAPITestCase(APITransactionTestCase):
             self.promotion_list_url,
             self.promotion_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.promotion_data['price'] = 9.99
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data['price'][0],
-            'This field must be greater than zero.'
+            'This field must be greater than zero.',
         )
 
     @get_restaurant_manager_token
@@ -72,13 +72,13 @@ class PromotionAPITestCase(APITransactionTestCase):
             self.promotion_list_url,
             self.promotion_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.promotion_data['dishes'][0]['quantity'] = 2
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data['dishes'][0]['quantity'][0],
-            'This field must be greater than zero.'
+            'This field must be greater than zero.',
         )
 
     @get_restaurant_manager_token
@@ -89,10 +89,9 @@ class PromotionAPITestCase(APITransactionTestCase):
             self.promotion_list_url,
             self.promotion_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.promotion_data['dishes'][0]['dish'] = 1
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['dishes'], 'Invalid dishes.')
 
@@ -104,7 +103,7 @@ class PromotionAPITestCase(APITransactionTestCase):
             self.promotion_list_url,
             self.promotion_data,
             format='json',
-            **{'HTTP_AUTHORIZATION': f'Bearer {token}'}
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
         self.promotion_data['branches'] = [1]
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

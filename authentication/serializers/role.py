@@ -8,4 +8,8 @@ class RoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Role
-        fields = ('id', 'name', 'level')
+        fields = (
+            'id',
+            'name',
+            'level',
+        )

@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 from branch.models import Promotion
-from branch.serializers.combo import ComboSerializer, DetailedComboSerializer
 from branch.serializers.branch import ShortBranchSerializer
+from branch.serializers.combo import ComboSerializer, DetailedComboSerializer
 from portal.validators import Validators
 
 
@@ -18,7 +18,7 @@ class PromotionSerializer(serializers.ModelSerializer):
             'name',
             'price',
             'branches',
-            'dishes'
+            'dishes',
         )
 
     def validate_price(self, value):
@@ -38,5 +38,5 @@ class DetailedPromotionSerializer(serializers.ModelSerializer):
             'name',
             'price',
             'branches',
-            'dishes'
+            'dishes',
         )

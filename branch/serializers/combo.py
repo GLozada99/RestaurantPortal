@@ -12,7 +12,7 @@ class ComboSerializer(serializers.ModelSerializer):
         model = Combo
         fields = (
             'dish',
-            'quantity'
+            'quantity',
         )
 
     def validate_quantity(self, value):
@@ -28,5 +28,5 @@ class DetailedComboSerializer(serializers.ModelSerializer):
         model = Combo
         fields = (
             'dish',
-            'quantity'
+            'quantity',
         )

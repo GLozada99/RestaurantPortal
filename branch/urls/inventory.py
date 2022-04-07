@@ -8,6 +8,6 @@ urlpatterns = [
     path(
         '<int:pk>/',
         InventoryAPIDetailView.as_view(),
-        name='inventory-detail'
+        name='inventory-detail',
     ),
 ]

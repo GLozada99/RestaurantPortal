@@ -32,7 +32,7 @@ class InventoryAPIView(
         return InventoryAPIService.create(
             serializer,
             self.kwargs.get('restaurant_id'),
-            self.kwargs.get('branch_id')
+            self.kwargs.get('branch_id'),
         )
 
 

@@ -11,10 +11,10 @@ class InventoryAPIService:
 
     @classmethod
     def create(
-        cls, serializer: InventorySerializer, restaurant_id, branch_id
+        cls, serializer: InventorySerializer, restaurant_id, branch_id,
     ) -> Response:
         cls.validate_data(
-            restaurant_id, branch_id, serializer.validated_data['ingredient']
+            restaurant_id, branch_id, serializer.validated_data['ingredient'],
         )
         serializer.save(branch_id=branch_id)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -28,11 +28,11 @@ class InventoryAPIService:
     def validate_ingredient(restaurant_id, ingredient):
         if ingredient.restaurant_id != restaurant_id:
             raise ValidationError({
-                'ingredient': 'Invalid ingredient.'
+                'ingredient': 'Invalid ingredient.',
             })
 
     @staticmethod
     def validate_branch(branch_id, ingredient):
         Validators.validate_unique(
-            Inventory, branch=branch_id, ingredient=ingredient
+            Inventory, branch=branch_id, ingredient=ingredient,
         )
