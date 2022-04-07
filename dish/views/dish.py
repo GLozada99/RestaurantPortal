@@ -34,7 +34,7 @@ class DishAPIView(
         return DishAPIService.create(
             serializer,
             kwargs.get('dish_category_id'),
-            int(kwargs.get('restaurant_id'))
+            kwargs.get('restaurant_id')
         )
 
 
@@ -66,5 +66,5 @@ class DishBranchAvailableAPIView(
     permission_classes = [ReadOnly]
 
     def get(self, request, *args, **kwargs):
-        branch_id = int(self.kwargs.get('branch_id'))
+        branch_id = self.kwargs.get('branch_id')
         return DishAPIService.get_available_dishes_branch(branch_id)

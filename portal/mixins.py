@@ -15,8 +15,8 @@ class CheckRestaurantBranchAccordingMixin(object):
         return branch.restaurant_id == restaurant_id
 
     def dispatch(self, request, *args, **kwargs):
-        branch_id = int(self.kwargs.get('branch_id'))
-        restaurant_id = int(self.kwargs.get('restaurant_id'))
+        branch_id = self.kwargs.get('branch_id')
+        restaurant_id = self.kwargs.get('restaurant_id')
         according = self.are_restaurant_branch_according(
             restaurant_id, branch_id
         )
@@ -40,8 +40,8 @@ class CheckRestaurantDishCategoryAccordingMixin(object):
         return dish_category.restaurant_id == restaurant_id
 
     def dispatch(self, request, *args, **kwargs):
-        dish_category_id = int(self.kwargs.get('dish_category_id'))
-        restaurant_id = int(self.kwargs.get('restaurant_id'))
+        dish_category_id = self.kwargs.get('dish_category_id')
+        restaurant_id = self.kwargs.get('restaurant_id')
         according = self.are_restaurant_dish_category_according(
             restaurant_id, dish_category_id
         )

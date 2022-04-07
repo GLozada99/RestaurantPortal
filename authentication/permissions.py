@@ -66,7 +66,7 @@ class HasCurrentRestaurant(permissions.BasePermission):
     def has_permission(self, request, view):
         user = request.user
         user_restaurant_id = UserPermissionService.get_restaurant_id(user)
-        path_restaurant_id = int(view.kwargs.get('restaurant_id'))
+        path_restaurant_id = view.kwargs.get('restaurant_id')
         return (
             user.is_authenticated and user_restaurant_id == path_restaurant_id
         )
@@ -77,7 +77,7 @@ class HasCurrentBranch(permissions.BasePermission):
     def has_permission(self, request, view):
         user = request.user
         user_branch_id = UserPermissionService.get_branch_id(user)
-        path_branch_id = int(view.kwargs.get('branch_id'))
+        path_branch_id = view.kwargs.get('branch_id')
         return (
             user.is_authenticated and user_branch_id == path_branch_id
         )

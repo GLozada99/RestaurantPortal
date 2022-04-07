@@ -31,7 +31,7 @@ class InventoryAPIView(
         serializer.is_valid(raise_exception=True)
         return InventoryAPIService.create(
             serializer,
-            int(self.kwargs.get('restaurant_id')),
+            self.kwargs.get('restaurant_id'),
             self.kwargs.get('branch_id')
         )
 
