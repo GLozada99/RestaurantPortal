@@ -1,6 +1,7 @@
 from django.db.transaction import atomic
 from rest_framework.serializers import ValidationError
 
+from portal import settings
 from portal.authentication.models import User
 from portal.branch.models import Branch
 from portal.order.serializers.order import CreateOrderSerializer
@@ -16,20 +17,21 @@ class OrderAPIService:
         user: User,
     ):
         ValidateOrderAPIService.validate_data(
-            serializer.validated_data, branch_id, restaurant_id,
+            serializer.validated_data, branch_id, restaurant_id, user,
         )
 
 
 class ValidateOrderAPIService:
 
     @classmethod
-    def validate_data(cls, data, branch_id, restaurant_id):
+    def validate_data(cls, data, branch_id, restaurant_id, user):
         branch = Branch.objects.get(id=branch_id)
         cls.validate_dish_and_promotion(
             data.get('dishes'), data.get('promotions')
         )
         cls.validate_dishes(data.get('dishes'), branch, restaurant_id)
         cls.validate_promotions(data.get('promotions'), branch, restaurant_id)
+        cls.validate_user_client(user)
 
     @staticmethod
     def validate_dish_and_promotion(dishes, promotions):
@@ -91,5 +93,14 @@ class ValidateOrderAPIService:
                 'non_field_errors': [
                     f'At this moment the quantity {quantity} for promotion '
                     f'{promotion.name} is not available.'
+                ]
+            })
+
+    @staticmethod
+    def validate_user_client(user: User):
+        if user.role.level != settings.CLIENT_LEVEL:
+            raise ValidationError({
+                'non_field_errors': [
+                    'Only clients can make orders'
                 ]
             })
