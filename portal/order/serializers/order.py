@@ -17,7 +17,7 @@ class CreateOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = (
-            'delivery_type'
+            'delivery_type',
             'address',
             'dishes',
             'promotions',
@@ -35,7 +35,7 @@ class DetailedOrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = (
             'client',
-            'delivery_type'
+            'delivery_type',
             'status',
             'branch',
             'address'
