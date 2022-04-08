@@ -1,3 +1,5 @@
+import copy
+
 from django.core.management import call_command
 from django.db.models import Model
 from django.urls import reverse
@@ -41,6 +43,12 @@ class OrderAPITestCase(APITransactionTestCase):
                 'quantity': 2,
             }
         ],
+        'promotions': [
+            {
+                'promotion': 3,
+                'quantity': 1
+            }
+        ]
     }
 
     def setUp(self) -> None:
@@ -72,6 +80,8 @@ class OrderAPITestCase(APITransactionTestCase):
     @get_client_token
     def test_total_cost_correct(self, token):
         """Test the correct calculation of total_cost field on order."""
+        print(self.order_data.get('dishes', []), self.order_data)
+        print(self.order_data.get('promotions', []))
         total_cost = calculate_cost(
             Dish, self.order_data.get('dishes', []), 'dish'
         ) + calculate_cost(
@@ -88,12 +98,13 @@ class OrderAPITestCase(APITransactionTestCase):
     @get_client_token
     def test_dishes_promotions_none(self, token):
         """Test the error when creating order if not dishes ."""
-        self.order_data['dishes'] = None
-        self.order_data['promotions'] = None
+        order_data = copy.deepcopy(self.order_data)
+        order_data['dishes'] = None
+        order_data['promotions'] = None
 
         response = self.client.post(
             self.order_list_url,
-            self.order_data,
+            order_data,
             format='json',
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
