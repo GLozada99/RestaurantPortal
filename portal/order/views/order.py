@@ -12,7 +12,7 @@ from portal.order.serializers.order import (
     DetailedOrderSerializer,
     StatusOrderSerializer,
 )
-from portal.order.services import OrderAPIService
+from portal.order.services.order import OrderAPIService
 
 
 class OrderAPIView(generics.CreateAPIView):
