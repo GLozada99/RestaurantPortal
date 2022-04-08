@@ -42,6 +42,13 @@ urlpatterns = [
             namespace='restaurants',
         ),
     ),
+    path(
+        'order-status/',
+        include(
+            'portal.order.urls.order_status',
+            namespace='restaurants',
+        ),
+    ),
     re_path(
         r'^swagger(?P<format>\.json|\.yaml)$',
         schema_view.without_ui(cache_timeout=0),
