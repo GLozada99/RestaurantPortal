@@ -32,6 +32,7 @@ def get_client_token(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         serializer = UserSerializer(data=user_data)
+        serializer.is_valid()
         UserAPIService.create_client(serializer)
         self = args[0]
         token_url = reverse('auth:obtain-token')
