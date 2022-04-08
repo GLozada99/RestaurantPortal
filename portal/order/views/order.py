@@ -12,6 +12,7 @@ from portal.order.serializers.order import (
     DetailedOrderSerializer,
     StatusOrderSerializer,
 )
+from portal.order.services import OrderAPIService
 
 
 class OrderAPIView(generics.CreateAPIView):
@@ -28,8 +29,22 @@ class OrderAPIView(generics.CreateAPIView):
 
     def get_permissions(self):
         if self.request.method == 'POST':
-            return [IsClient]
-        return [(IsBranchManager | IsEmployee) & HasCurrentBranch]
+            self.permission_classes = [IsClient]
+        else:
+            self.permission_classes = [
+                (IsBranchManager | IsEmployee) & HasCurrentBranch
+            ]
+        return super().get_permissions()
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer_class()(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return OrderAPIService.create(
+            serializer,
+            kwargs.get('restaurant_id'),
+            kwargs.get('branch_id'),
+            request.user,
+        )
 
 
 class OrderAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
