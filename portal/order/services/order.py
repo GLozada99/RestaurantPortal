@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from portal import settings
 from portal.authentication.models import User
-from portal.order.models import OrderDish, OrderStatus
+from portal.order.models import OrderDish, OrderPromotion, OrderStatus
 from portal.order.serializers.order import (
     CreateOrderSerializer,
     DetailedOrderSerializer,
@@ -78,7 +78,7 @@ class OrderAPIService:
     @staticmethod
     def add_promotions_to_order(promotions_data: dict, order: dict):
         for promotion_data in promotions_data:
-            OrderDish.objects.create(
+            OrderPromotion.objects.create(
                 order_id=order['id'],
                 promotion_id=promotion_data['promotion'].id,
                 quantity=promotion_data['quantity'],
