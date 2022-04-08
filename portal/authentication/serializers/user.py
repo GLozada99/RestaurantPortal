@@ -15,3 +15,16 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'password',
         )
+
+
+class PasswordChangeSerializer(serializers.ModelSerializer):
+    """Serializer for changing password"""
+    previous_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = (
+            'previous_password',
+            'new_password',
+        )
