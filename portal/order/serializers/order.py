@@ -2,11 +2,11 @@ from rest_framework import serializers
 
 from portal.authentication.serializers.user import UserSerializer
 from portal.branch.serializers.branch import ShortBranchSerializer
+from portal.branch.serializers.promotion import ShortPromotionSerializer
+from portal.dish.serializers.dish import ShortDishSerializer
 from portal.order.models import Order
 from portal.order.serializers.order_dish import OrderDishSerializer
 from portal.order.serializers.order_promotion import OrderPromotionSerializer
-from portal.order.serializers.order_status import OrderStatusSerializer
-from portal.restaurant.serializers.delivery_type import DeliveryTypeSerializer
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
@@ -27,10 +27,17 @@ class CreateOrderSerializer(serializers.ModelSerializer):
 
 class DetailedOrderSerializer(serializers.ModelSerializer):
     """Detailed Serializer for Dish."""
+
     client = UserSerializer()
-    status = OrderStatusSerializer()
+    status = serializers.SlugRelatedField(
+        read_only=True, slug_field='name',
+    )
     branch = ShortBranchSerializer()
-    delivery_type = DeliveryTypeSerializer()
+    delivery_type = serializers.SlugRelatedField(
+        read_only=True, slug_field='name',
+    )
+    dishes = ShortDishSerializer(many=True)
+    promotions = ShortPromotionSerializer(many=True)
 
     class Meta:
         model = Order
