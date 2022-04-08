@@ -11,9 +11,11 @@ class OrderAPIService:
 
     @classmethod
     @atomic
-    def create(serializer: CreateOrderSerializer, branch_id: int, user: User):
+    def create(
+        serializer: CreateOrderSerializer, restaurant_id, branch_id, user: User
+    ):
         ValidateOrderAPIService.validate_data(
-            serializer.validated_data, branch_id
+            serializer.validated_data, branch_id, restaurant_id,
         )
 
 
