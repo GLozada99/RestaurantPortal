@@ -25,9 +25,11 @@ class ValidateOrderAPIService():
     @classmethod
     def validate_data(cls, data, branch_id, restaurant_id):
         branch = Branch.objects.get(id=branch_id)
-        cls.validate_dish_and_promotion(data['dishes'], data['promotions'])
-        cls.validate_dishes(data['dishes'], branch, restaurant_id)
-        cls.validate_promotions(data['promotions'], branch, restaurant_id)
+        cls.validate_dish_and_promotion(
+            data.get('dishes'), data.get('promotions')
+        )
+        cls.validate_dishes(data.get('dishes'), branch, restaurant_id)
+        cls.validate_promotions(data.get('promotions'), branch, restaurant_id)
 
     @staticmethod
     def validate_dish_and_promotion(dishes, promotions):
