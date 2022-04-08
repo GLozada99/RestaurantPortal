@@ -18,5 +18,6 @@ class Command(BaseCommand):
         call_command('createingredients')
         call_command('createdishes')
         call_command('createbranches')
+        call_command('createpromotions')
         call_command('createinventories')
         call_command('createorderstatus')
