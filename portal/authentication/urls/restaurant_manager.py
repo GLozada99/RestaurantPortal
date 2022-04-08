@@ -5,7 +5,7 @@ from portal.authentication.views.restaurant_manager import (
     RestaurantManagerAPIView,
 )
 
-app_name = 'restaurant_manager'
+app_name = 'authentication'
 urlpatterns = [
     path('', RestaurantManagerAPIView.as_view(),
          name='restaurant-manager-list'),

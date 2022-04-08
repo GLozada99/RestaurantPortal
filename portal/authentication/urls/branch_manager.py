@@ -5,7 +5,7 @@ from portal.authentication.views.branch_manager import (
     BranchManagerAPIView,
 )
 
-app_name = 'branch_manager'
+app_name = 'authentication'
 urlpatterns = [
     path('', BranchManagerAPIView.as_view(),
          name='branch-manager-list'),

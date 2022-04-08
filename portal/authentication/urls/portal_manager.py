@@ -5,7 +5,7 @@ from portal.authentication.views.portal_manager import (
     PortalManagerAPIView,
 )
 
-app_name = 'portal_manager'
+app_name = 'authentication'
 urlpatterns = [
     path('', PortalManagerAPIView.as_view(), name='portal-manager-list'),
     path(

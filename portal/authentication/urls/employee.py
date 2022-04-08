@@ -5,7 +5,7 @@ from portal.authentication.views.employee import (
     EmployeeAPIView,
 )
 
-app_name = 'employee'
+app_name = 'authentication'
 urlpatterns = [
     path('', EmployeeAPIView.as_view(),
          name='employee-list'),
