@@ -2,9 +2,22 @@ from rest_framework import serializers
 
 from portal.branch.models import Promotion
 from portal.branch.serializers.branch import ShortBranchSerializer
-from portal.branch.serializers.combo import (ComboSerializer,
-                                             DetailedComboSerializer, )
+from portal.branch.serializers.combo import (
+    ComboSerializer,
+    DetailedComboSerializer,
+)
 from portal.validators import Validators
+
+
+class ShortPromotionSerializer(serializers.ModelSerializer):
+    """Short Serializer for Promotion."""
+
+    class Meta:
+        model = Promotion
+        fields = (
+            'id',
+            'name',
+        )
 
 
 class PromotionSerializer(serializers.ModelSerializer):
