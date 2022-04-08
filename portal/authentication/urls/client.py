@@ -1,7 +1,9 @@
 from django.urls import path
 
-from portal.authentication.views.client import (ClientAPIDetailView,
-                                                ClientAPIView, )
+from portal.authentication.views.client import (
+    ClientAPIDetailView,
+    ClientAPIView,
+)
 
 app_name = 'authentication'
 urlpatterns = [
