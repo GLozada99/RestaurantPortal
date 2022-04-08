@@ -10,13 +10,13 @@ from portal.order.serializers.order_status import OrderStatusSerializer
 
 class CreateOrderSerializer(serializers.ModelSerializer):
     """Serializer for Dish."""
-    dishes = OrderDishSerializer(many=True)
-    promotions = OrderPromotionSerializer(many=True)
+    dishes = OrderDishSerializer(many=True, required=False)
+    promotions = OrderPromotionSerializer(many=True, required=False)
 
     class Meta:
         model = Order
         fields = (
-            'address'
+            'address',
             'dishes',
             'promotions',
         )
@@ -45,4 +45,4 @@ class StatusOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('status',)
+        fields = ('status')
