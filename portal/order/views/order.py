@@ -47,7 +47,7 @@ class OrderAPIView(generics.CreateAPIView):
         )
 
 
-class OrderAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
+class OrderAPIDetailView(generics.RetrieveUpdateAPIView):
     """View to create Order."""
 
     def get_serializer_class(self):
@@ -60,6 +60,10 @@ class OrderAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Order.objects.filter(branch_id=branch_id)
 
     def get_permissions(self):
-        if self.request.method == 'POST':
-            return [IsClient]
-        return [(IsBranchManager | IsEmployee) & HasCurrentBranch]
+        if self.request.method in {'PUT', 'PATCH'}:
+            self.permission_classes = [IsClient]
+        else:
+            self.permission_classes = [
+                (IsBranchManager | IsEmployee) & HasCurrentBranch
+            ]
+        return super().get_permissions()
