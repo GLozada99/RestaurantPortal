@@ -5,6 +5,7 @@ from portal import settings
 from portal.authentication.models import User
 from portal.branch.models import Branch, Promotion
 from portal.dish.models import Dish
+from portal.order.models import Order, OrderDish, OrderStatus
 from portal.order.serializers.order import CreateOrderSerializer
 from portal.validators import Validators
 
@@ -20,6 +21,36 @@ class OrderAPIService:
         ValidateOrderAPIService.validate_data(
             serializer.validated_data, branch_id, restaurant_id, user,
         )
+        order = Order(
+            client=user,
+            status=OrderStatus.objects.get(
+                position_order=settings.CREATED_POSITION_ORDER),
+            branch_id=branch_id,
+            address=serializer.validated_data['address']
+        )
+        order.save()
+        cls.add_dishes_to_order(serializer.validated_data['dishes'], order)
+        cls.add_promotions_to_order(
+            serializer.validated_data['promotions'], order,
+        )
+
+    @staticmethod
+    def add_dishes_to_order(dishes_data: dict, order: Order):
+        for dish_data in dishes_data:
+            OrderDish.objects.create(
+                order=order,
+                dish_id=dish_data['dish'],
+                quantity=dish_data['quantity'],
+            )
+
+    @staticmethod
+    def add_promotions_to_order(promotions_data: dict, order: Order):
+        for promotion_data in promotions_data:
+            OrderDish.objects.create(
+                order=order,
+                promotion_id=promotion_data['promotion'],
+                quantity=promotion_data['quantity'],
+            )
 
 
 class ValidateOrderAPIService:
