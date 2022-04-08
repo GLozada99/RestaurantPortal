@@ -6,6 +6,7 @@ from portal.order.models import Order
 from portal.order.serializers.order_dish import OrderDishSerializer
 from portal.order.serializers.order_promotion import OrderPromotionSerializer
 from portal.order.serializers.order_status import OrderStatusSerializer
+from portal.restaurant.serializers.delivery_type import DeliveryTypeSerializer
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
@@ -16,6 +17,7 @@ class CreateOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = (
+            'delivery_type'
             'address',
             'dishes',
             'promotions',
@@ -27,11 +29,13 @@ class DetailedOrderSerializer(serializers.ModelSerializer):
     client = UserSerializer()
     status = OrderStatusSerializer()
     branch = ShortBranchSerializer()
+    delivery_type = DeliveryTypeSerializer()
 
     class Meta:
         model = Order
         fields = (
             'client',
+            'delivery_type'
             'status',
             'branch',
             'address'
@@ -45,4 +49,4 @@ class StatusOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('status')
+        fields = ('status',)
