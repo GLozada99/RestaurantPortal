@@ -10,7 +10,6 @@ class OrderPromotionSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderPromotion
         fields = (
-            'order',
             'promotion',
             'unit',
         )

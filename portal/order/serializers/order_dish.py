@@ -10,7 +10,6 @@ class OrderDishSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderDish
         fields = (
-            'order',
             'dish',
             'quantity',
         )
