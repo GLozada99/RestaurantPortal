@@ -3,6 +3,7 @@ from django.db import models
 
 from portal.branch.models import Branch, Promotion
 from portal.dish.models import Dish
+from portal.restaurant.models import DeliveryType
 
 User = get_user_model()
 
@@ -16,14 +17,15 @@ class OrderStatus(models.Model):
 
 
 class Order(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    address = models.TextField(blank=True, null=True)
+    total_cost = models.FloatField()
     client = models.ForeignKey(User, on_delete=models.PROTECT)
     status = models.ForeignKey(OrderStatus, on_delete=models.PROTECT)
+    delivery_type = models.ForeignKey(DeliveryType, on_delete=models.PROTECT)
     branch = models.ForeignKey(Branch, on_delete=models.PROTECT)
     dishes = models.ManyToManyField(Dish, through='OrderDish')
     promotions = models.ManyToManyField(Promotion, through='OrderPromotion')
-    total_cost = models.FloatField()
-    address = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class OrderDish(models.Model):
