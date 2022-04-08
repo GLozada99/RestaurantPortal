@@ -1,12 +1,17 @@
 from rest_framework import generics
 
 from portal.authentication.permissions import (
-    HasCurrentBranch, IsBranchManager, IsClient, IsEmployee,
+    HasCurrentBranch,
+    IsBranchManager,
+    IsClient,
+    IsEmployee,
 )
 from portal.order.models import Order
-from portal.order.serializers.order import (CreateOrderSerializer,
-                                            DetailedOrderSerializer,
-                                            StatusOrderSerializer, )
+from portal.order.serializers.order import (
+    CreateOrderSerializer,
+    DetailedOrderSerializer,
+    StatusOrderSerializer,
+)
 
 
 class OrderAPIView(generics.CreateAPIView):
