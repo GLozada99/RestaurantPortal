@@ -23,6 +23,7 @@ class OrderAPIService:
         )
         order = Order(
             client=user,
+            delivery_type_id=serializer.validated_data['delivery_type'],
             status=OrderStatus.objects.get(
                 position_order=settings.CREATED_POSITION_ORDER),
             branch_id=branch_id,
@@ -71,7 +72,6 @@ class OrderAPIService:
                  promotions_data, promotions_prices)
             )
         )
-
 
     @staticmethod
     def add_dishes_to_order(dishes_data: dict, order: Order):
