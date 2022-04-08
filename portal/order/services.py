@@ -25,13 +25,14 @@ class OrderAPIService:
             client=user,
             delivery_type_id=serializer.validated_data['delivery_type'],
             status=OrderStatus.objects.get(
-                position_order=settings.CREATED_POSITION_ORDER),
+                position_order=settings.CREATED_POSITION_ORDER,
+            ),
             branch_id=branch_id,
             address=serializer.validated_data['address'],
             price=cls.calculate_total_price(
                 serializer.validated_data.get('dishes', []),
                 serializer.validated_data.get('promotions', []),
-            )
+            ),
         )
         order.save()
         cls.add_dishes_to_order(
