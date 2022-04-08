@@ -34,4 +34,8 @@ urlpatterns = [
         DishBranchCategoryAvailableAPIView.as_view(),
         name='available-dishes',
     ),
+    path(
+        '<int:branch_id>/orders/',
+        include('portal.order.urls.order', namespace='orders'),
+    ),
 ]
