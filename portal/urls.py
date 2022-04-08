@@ -46,7 +46,7 @@ urlpatterns = [
         'order-status/',
         include(
             'portal.order.urls.order_status',
-            namespace='restaurants',
+            namespace='order-status',
         ),
     ),
     re_path(
