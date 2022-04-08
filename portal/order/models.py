@@ -22,6 +22,7 @@ class Order(models.Model):
     promotions = models.ManyToManyField(Promotion, through='OrderPromotion')
     total_cost = models.FloatField()
     address = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class OrderDish(models.Model):
