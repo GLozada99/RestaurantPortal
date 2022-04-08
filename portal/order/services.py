@@ -1,12 +1,17 @@
 from django.db.transaction import atomic
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 from portal import settings
 from portal.authentication.models import User
 from portal.branch.models import Branch, Promotion
 from portal.dish.models import Dish
-from portal.order.models import Order, OrderDish, OrderStatus
-from portal.order.serializers.order import CreateOrderSerializer
+from portal.order.models import OrderDish, OrderStatus
+from portal.order.serializers.order import (
+    CreateOrderSerializer,
+    DetailedOrderSerializer,
+)
 from portal.validators import Validators
 
 
@@ -21,25 +26,22 @@ class OrderAPIService:
         ValidateOrderAPIService.validate_data(
             serializer.validated_data, branch_id, restaurant_id, user,
         )
-        order = Order(
+        dishes = serializer.validated_data.pop('dishes', [])
+        promotions = serializer.validated_data.pop('promotions', [])
+        serializer.save(
             client=user,
-            delivery_type_id=serializer.validated_data['delivery_type'],
             status=OrderStatus.objects.get(
                 position_order=settings.CREATED_POSITION_ORDER,
             ),
             branch_id=branch_id,
-            address=serializer.validated_data['address'],
-            price=cls.calculate_total_price(
-                serializer.validated_data.get('dishes', []),
-                serializer.validated_data.get('promotions', []),
-            ),
+            total_cost=cls.calculate_total_price(dishes, promotions),
         )
-        order.save()
-        cls.add_dishes_to_order(
-            serializer.validated_data.get('dishes', []), order,
-        )
-        cls.add_promotions_to_order(
-            serializer.validated_data.get('promotions', []), order,
+        cls.add_dishes_to_order(dishes, serializer.data)
+        cls.add_promotions_to_order(promotions, serializer.data)
+        cls.update_response_data(serializer, dishes, promotions)
+        return Response(
+            DetailedOrderSerializer(serializer.instance).data,
+            status=status.HTTP_201_CREATED,
         )
 
     @classmethod
@@ -47,52 +49,51 @@ class OrderAPIService:
         return (cls.calculate_dishes_price(dishes_data) +
                 cls.calculate_promotions_price(promotions_data))
 
-    @staticmethod
-    def calculate_dishes_price(dishes_data: list):
-        dishes_ids = [dish_data['dish'] for dish_data in dishes_data]
-        dishes_prices = Dish.objects.filter(
-            pk__in=dishes_ids,
-        ).values_list('price')
-        return sum(
-            (
-                (dish_price * dish_data['quantity'])
-                for dish_data, dish_price in zip(
-                 dishes_data, dishes_prices)
-            )
-        )
+    @classmethod
+    def calculate_dishes_price(cls, dishes_data: list):
+        dishes_prices = [dish_data['dish'].price for dish_data in dishes_data]
+        return cls.calculate_price(dishes_data, dishes_prices)
+
+    @classmethod
+    def calculate_promotions_price(cls, promotions_data: list):
+        promotions_prices = [
+            promotion_data['promotion'].price
+            for promotion_data in promotions_data
+        ]
+        return cls.calculate_price(promotions_data, promotions_prices)
 
     @staticmethod
-    def calculate_promotions_price(promotions_data: list):
-        promotions_ids = [promotion_data['promotion'] for promotion_data in
-                          promotions_data]
-        promotions_prices = Promotion.objects.filter(
-            pk__in=promotions_ids,
-        ).values_list('price')
-        return sum(
-            (
-                (promotion_price * promotion_data['quantity'])
-                for promotion_data, promotion_price in zip(
-                 promotions_data, promotions_prices)
-            )
-        )
+    def calculate_price(data: dict, prices):
+        return sum((
+            price * instance['quantity']
+            for instance, price in zip(data, prices)
+        ))
 
     @staticmethod
-    def add_dishes_to_order(dishes_data: dict, order: Order):
+    def add_dishes_to_order(dishes_data: dict, order: dict):
         for dish_data in dishes_data:
             OrderDish.objects.create(
-                order=order,
-                dish_id=dish_data['dish'],
+                order_id=order['id'],
+                dish_id=dish_data['dish'].id,
                 quantity=dish_data['quantity'],
             )
 
     @staticmethod
-    def add_promotions_to_order(promotions_data: dict, order: Order):
+    def add_promotions_to_order(promotions_data: dict, order: dict):
         for promotion_data in promotions_data:
             OrderDish.objects.create(
-                order=order,
-                promotion_id=promotion_data['promotion'],
+                order_id=order['id'],
+                promotion_id=promotion_data['promotion'].id,
                 quantity=promotion_data['quantity'],
             )
+
+    @staticmethod
+    def update_response_data(
+        serializer: CreateOrderSerializer, dishes: dict, promotions: dict
+    ):
+        serializer.validated_data['dishes'] = dishes
+        serializer.validated_data['promotions'] = promotions
+        serializer.validated_data['id'] = serializer.data['id']
 
 
 class ValidateOrderAPIService:
