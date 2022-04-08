@@ -29,8 +29,8 @@ class OrderAPIService:
             branch_id=branch_id,
             address=serializer.validated_data['address'],
             price=cls.calculate_total_price(
-                serializer.validated_data['dishes'],
-                serializer.validated_data['promotions'],
+                serializer.validated_data.get('dishes', []),
+                serializer.validated_data.get('promotions', []),
             )
         )
         order.save()
