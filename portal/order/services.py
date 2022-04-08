@@ -3,7 +3,8 @@ from rest_framework.serializers import ValidationError
 
 from portal import settings
 from portal.authentication.models import User
-from portal.branch.models import Branch
+from portal.branch.models import Branch, Promotion
+from portal.dish.models import Dish
 from portal.order.serializers.order import CreateOrderSerializer
 from portal.validators import Validators
 
@@ -13,8 +14,8 @@ class OrderAPIService:
     @classmethod
     @atomic
     def create(
-        cls, serializer: CreateOrderSerializer, restaurant_id, branch_id,
-        user: User,
+        cls, serializer: CreateOrderSerializer,
+        restaurant_id: int, branch_id: int, user: User
     ):
         ValidateOrderAPIService.validate_data(
             serializer.validated_data, branch_id, restaurant_id, user,
@@ -24,7 +25,10 @@ class OrderAPIService:
 class ValidateOrderAPIService:
 
     @classmethod
-    def validate_data(cls, data, branch_id, restaurant_id, user):
+    def validate_data(
+            cls, data: dict, branch_id: int,
+            restaurant_id: int, user: User
+    ):
         branch = Branch.objects.get(id=branch_id)
         cls.validate_dish_and_promotion(
             data.get('dishes'), data.get('promotions')
@@ -34,16 +38,18 @@ class ValidateOrderAPIService:
         cls.validate_user_client(user)
 
     @staticmethod
-    def validate_dish_and_promotion(dishes, promotions):
+    def validate_dish_and_promotion(dishes: list, promotions: list):
         if not (dishes or promotions):
             raise ValidationError({
                 'non_field_errors': [
-                    'There must be a dish or a promotion selected.'
+                    'There must be at least a dish or promotion selected.'
                 ]
             })
 
     @classmethod
-    def validate_dishes(cls, order_dishes, branch: Branch, restaurant_id):
+    def validate_dishes(
+            cls, order_dishes: list, branch: Branch, restaurant_id: int
+    ):
         if not order_dishes:
             return
         for order_dish in order_dishes:
@@ -56,7 +62,7 @@ class ValidateOrderAPIService:
 
     @classmethod
     def validate_promotions(
-        cls, order_promotions, branch: Branch, restaurant_id
+        cls, order_promotions: list, branch: Branch, restaurant_id: int
     ):
         if not order_promotions:
             return
@@ -69,7 +75,10 @@ class ValidateOrderAPIService:
             )
 
     @staticmethod
-    def validate_dish(dish, quantity, branch: Branch, restaurant_id):
+    def validate_dish(
+            dish: Dish, quantity: int,
+            branch: Branch, restaurant_id: int
+    ):
         Validators.validate_restaurant_in_model(
             dish.category, restaurant_id, 'dish'
         )
@@ -82,7 +91,9 @@ class ValidateOrderAPIService:
             })
 
     @staticmethod
-    def validate_promotion(promotion, quantity, branch: Branch, restaurant_id):
+    def validate_promotion(
+            promotion: Promotion, quantity: int,
+            branch: Branch, restaurant_id: int):
         Validators.validate_restaurant_in_model(
             promotion, restaurant_id, 'promotion'
         )
