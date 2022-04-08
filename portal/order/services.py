@@ -26,13 +26,52 @@ class OrderAPIService:
             status=OrderStatus.objects.get(
                 position_order=settings.CREATED_POSITION_ORDER),
             branch_id=branch_id,
-            address=serializer.validated_data['address']
+            address=serializer.validated_data['address'],
+            price=cls.calculate_total_price(
+                serializer.validated_data['dishes'],
+                serializer.validated_data['promotions'],
+            )
         )
         order.save()
         cls.add_dishes_to_order(serializer.validated_data['dishes'], order)
         cls.add_promotions_to_order(
             serializer.validated_data['promotions'], order,
         )
+
+    @classmethod
+    def calculate_total_price(cls, dishes_data: list, promotions_data: list):
+        return (cls.calculate_dishes_price(dishes_data) +
+                cls.calculate_promotions_price(promotions_data))
+
+    @staticmethod
+    def calculate_dishes_price(dishes_data: list):
+        dishes_ids = [dish_data['dish'] for dish_data in dishes_data]
+        dishes_prices = Dish.objects.filter(
+            pk__in=dishes_ids,
+        ).values_list('price')
+        return sum(
+            (
+                (dish_price * dish_data['quantity'])
+                for dish_data, dish_price in zip(
+                 dishes_data, dishes_prices)
+            )
+        )
+
+    @staticmethod
+    def calculate_promotions_price(promotions_data: list):
+        promotions_ids = [promotion_data['promotion'] for promotion_data in
+                          promotions_data]
+        promotions_prices = Promotion.objects.filter(
+            pk__in=promotions_ids,
+        ).values_list('price')
+        return sum(
+            (
+                (promotion_price * promotion_data['quantity'])
+                for promotion_data, promotion_price in zip(
+                 promotions_data, promotions_prices)
+            )
+        )
+
 
     @staticmethod
     def add_dishes_to_order(dishes_data: dict, order: Order):
