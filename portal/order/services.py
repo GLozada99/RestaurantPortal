@@ -20,7 +20,7 @@ class OrderAPIService:
         )
 
 
-class ValidateOrderAPIService():
+class ValidateOrderAPIService:
 
     @classmethod
     def validate_data(cls, data, branch_id, restaurant_id):
@@ -74,7 +74,8 @@ class ValidateOrderAPIService():
         if not Validators.is_dish_available(branch, dish, quantity):
             raise ValidationError({
                 'non_field_errors': [
-                    f'At this moment the dish {dish.name} is not available.'
+                    f'At this moment the quantity {quantity} for dish'
+                    f' {dish.name} is not available.'
                 ]
             })
 
@@ -88,7 +89,7 @@ class ValidateOrderAPIService():
         ):
             raise ValidationError({
                 'non_field_errors': [
-                    f'At this moment the promotion {promotion.name} is '
-                    'not available.'
+                    f'At this moment the quantity {quantity} for promotion '
+                    f'{promotion.name} is not available.'
                 ]
             })
