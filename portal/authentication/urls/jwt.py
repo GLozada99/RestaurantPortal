@@ -1,8 +1,10 @@
 from django.urls import include, path
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
-    TokenRefreshView
+    TokenRefreshView,
 )
+
+from portal.authentication.views.password import PasswordAPIView
 
 app_name = 'authentication'
 urlpatterns = [
@@ -14,5 +16,10 @@ urlpatterns = [
             'portal.third_party_auth.urls.google',
             namespace='google',
         ),
+    ),
+    path(
+        'change-password/',
+        PasswordAPIView.as_view(),
+        name='change-password',
     ),
 ]
