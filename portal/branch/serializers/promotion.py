@@ -9,6 +9,17 @@ from portal.branch.serializers.combo import (
 from portal.validators import Validators
 
 
+class ShortPromotionSerializer(serializers.ModelSerializer):
+    """Short Serializer for Promotion."""
+
+    class Meta:
+        model = Promotion
+        fields = (
+            'id',
+            'name',
+        )
+
+
 class PromotionSerializer(serializers.ModelSerializer):
     """Serializer for Promotion."""
 
