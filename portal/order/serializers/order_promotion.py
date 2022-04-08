@@ -11,7 +11,7 @@ class OrderPromotionSerializer(serializers.ModelSerializer):
         model = OrderPromotion
         fields = (
             'promotion',
-            'unit',
+            'quantity',
         )
 
     def validate_quantity(self, value):
