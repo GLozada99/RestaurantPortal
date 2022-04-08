@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from portal.order.models import OrderStatus
 from portal.command_helpers import CommandHelpers
+from portal.order.models import OrderStatus
 
 
 class Command(BaseCommand):
@@ -16,11 +16,14 @@ class Command(BaseCommand):
         if OrderStatus.objects.all().exists():
             CommandHelpers.print_error(self, 'OrderStatus already exists.')
         else:
+            # Awaiting is for take-out or eat in, and delivering for delivery
             order_status = [
-                OrderStatus(name='Cooking'),
-                OrderStatus(name='Sending'),
-                OrderStatus(name='Giving out'),
-                OrderStatus(name='Done'),
+                OrderStatus(name='Created'),
+                OrderStatus(name='Accepted'),
+                OrderStatus(name='Finished'),
+                OrderStatus(name='Awaiting'),
+                OrderStatus(name='Delivering'),
+                OrderStatus(name='Received'),
             ]
             CommandHelpers.add_to_db(self, OrderStatus, order_status)
             CommandHelpers.print_success(self)
