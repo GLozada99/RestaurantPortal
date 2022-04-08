@@ -9,9 +9,10 @@ User = get_user_model()
 
 class OrderStatus(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    position_order = models.IntegerField(unique=True)
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.name}, position order: {self.position_order}'
 
 
 class Order(models.Model):
