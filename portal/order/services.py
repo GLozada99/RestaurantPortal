@@ -34,9 +34,11 @@ class OrderAPIService:
             )
         )
         order.save()
-        cls.add_dishes_to_order(serializer.validated_data['dishes'], order)
+        cls.add_dishes_to_order(
+            serializer.validated_data.get('dishes', []), order,
+        )
         cls.add_promotions_to_order(
-            serializer.validated_data['promotions'], order,
+            serializer.validated_data.get('promotions', []), order,
         )
 
     @classmethod
