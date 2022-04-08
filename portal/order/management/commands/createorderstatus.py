@@ -13,7 +13,7 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **kwargs):
-        CommandHelpers.print_creating_message(self, 'OrderStatus', 6)
+        CommandHelpers.print_creating_message(self, 'OrderStatus', 7)
         if OrderStatus.objects.all().exists():
             CommandHelpers.print_error(self, 'OrderStatus already exists.')
         else:
@@ -26,6 +26,10 @@ class Command(BaseCommand):
                 OrderStatus(
                     name='Accepted',
                     position_order=settings.ACCEPTED_POSITION_ORDER,
+                ),
+                OrderStatus(
+                    name='Rejected',
+                    position_order=settings.REJECTED_POSITION_ORDER,
                 ),
                 OrderStatus(
                     name='Finished',
