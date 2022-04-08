@@ -103,8 +103,10 @@ class ValidateOrderAPIService:
         cls.validate_dish_and_promotion(
             data.get('dishes'), data.get('promotions')
         )
-        cls.validate_dishes(data.get('dishes'), branch, restaurant_id)
-        cls.validate_promotions(data.get('promotions'), branch, restaurant_id)
+        cls.validate_dishes(data.get('dishes', []), branch, restaurant_id)
+        cls.validate_promotions(
+            data.get('promotions', []), branch, restaurant_id
+        )
         cls.validate_user_client(user)
 
     @staticmethod
@@ -120,8 +122,6 @@ class ValidateOrderAPIService:
     def validate_dishes(
             cls, order_dishes: list, branch: Branch, restaurant_id: int
     ):
-        if not order_dishes:
-            return
         for order_dish in order_dishes:
             cls.validate_dish(
                 order_dish['dish'],
@@ -134,8 +134,6 @@ class ValidateOrderAPIService:
     def validate_promotions(
         cls, order_promotions: list, branch: Branch, restaurant_id: int
     ):
-        if not order_promotions:
-            return
         for order_promotion in order_promotions:
             cls.validate_promotion(
                 order_promotion['promotion'],
