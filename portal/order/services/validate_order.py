@@ -4,6 +4,7 @@ from portal import settings
 from portal.authentication.models import User
 from portal.branch.models import Branch, Promotion
 from portal.dish.models import Dish
+from portal.restaurant.models import Restaurant
 from portal.validators import Validators
 
 
@@ -11,10 +12,10 @@ class ValidateOrderAPIService:
 
     @classmethod
     def validate_data(
-            cls, data: dict, branch_id: int,
-            restaurant_id: int, user: User
+        cls, data: dict, branch_id: int, restaurant_id: int, user: User
     ):
         branch = Branch.objects.get(id=branch_id)
+        cls.validate_delivery_type(restaurant_id, data['delivery_type'])
         cls.validate_dish_and_promotion(
             data.get('dishes'), data.get('promotions')
         )
@@ -23,6 +24,12 @@ class ValidateOrderAPIService:
             data.get('promotions', []), branch, restaurant_id
         )
         cls.validate_user_client(user)
+
+    @staticmethod
+    def validate_delivery_type(restaurant_id, delivery_type_id):
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+        if delivery_type_id not in restaurant.delivery_types.all():
+            raise ValidationError({'delivery_type': 'Invalid delivery type.'})
 
     @staticmethod
     def validate_dish_and_promotion(dishes: list, promotions: list):
