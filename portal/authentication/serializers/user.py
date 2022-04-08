@@ -25,6 +25,7 @@ class PasswordChangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
+            'email'
             'previous_password',
             'new_password',
         )
