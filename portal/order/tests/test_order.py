@@ -80,8 +80,6 @@ class OrderAPITestCase(APITransactionTestCase):
     @get_client_token
     def test_total_cost_correct(self, token):
         """Test the correct calculation of total_cost field on order."""
-        print(self.order_data.get('dishes', []), self.order_data)
-        print(self.order_data.get('promotions', []))
         total_cost = calculate_cost(
             Dish, self.order_data.get('dishes', []), 'dish'
         ) + calculate_cost(
@@ -113,20 +111,47 @@ class OrderAPITestCase(APITransactionTestCase):
     @get_client_token
     def test_dishes_another_restaurant(self, token):
         """
-        Test the error when creating order with dishes from another
-        restaurant.
+        Test the error when creating order with dishes from another restaurant.
         """
-        self.order_list_url = reverse(
+        order_data = copy.deepcopy(self.order_data)
+        order_data['promotions'] = None
+
+        order_list_url = reverse(
             'restaurants:branches:order:order-list',
             kwargs={
-                'restaurant_id': 3,
-                'branch_id': 3,
+                'restaurant_id': 2,
+                'branch_id': 2,
             },
         )
 
         response = self.client.post(
-            self.order_list_url,
+            order_list_url,
             self.order_data,
+            format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @get_client_token
+    def test_promotion_another_restaurant(self, token):
+        """
+        Test the error when creating order with promotions from another
+        restaurant.
+        """
+        order_data = copy.deepcopy(self.order_data)
+        order_data['dishes'] = None
+
+        order_list_url = reverse(
+            'restaurants:branches:order:order-list',
+            kwargs={
+                'restaurant_id': 2,
+                'branch_id': 2,
+            },
+        )
+
+        response = self.client.post(
+            order_list_url,
+            order_data,
             format='json',
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
