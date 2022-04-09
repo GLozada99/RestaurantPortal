@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from portal.branch.models import Branch
@@ -61,6 +62,10 @@ class User(AbstractUser):
     objects = UserManager()
     role = models.ForeignKey(Role, on_delete=models.PROTECT)
     authentication_provider = models.TextField(default='portal')
+    email = models.EmailField(_('email address'), blank=True)
+    change_password_token = models.CharField(
+        _('change_password_token'), max_length=128, blank=True, null=True,
+    )
 
     def get_tokens(self):
         refresh = RefreshToken.for_user(self)
