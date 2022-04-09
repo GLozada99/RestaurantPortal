@@ -19,6 +19,12 @@ class EnvHandler:
     GOOGLE_ID = config('GOOGLE_ID')
     THIRD_PARTY_SECRET = config('THIRD_PARTY_SECRET')
 
+    EMAIL_HOST = config('EMAIL_HOST')
+    EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+    EMAIL_PORT = config('EMAIL_PORT', cast=int)
+    EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
     def __init__(self):
         try:
             db_name = config('DB_NAME')

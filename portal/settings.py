@@ -230,3 +230,12 @@ AWS_QUERYSTRING_AUTH = env_handler.AWS_QUERYSTRING_AUTH
 
 GOOGLE_ID = env_handler.GOOGLE_ID
 THIRD_PARTY_SECRET = env_handler.THIRD_PARTY_SECRET
+
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env_handler.EMAIL_HOST
+EMAIL_USE_TLS = env_handler.EMAIL_USE_TLS
+EMAIL_PORT = env_handler.EMAIL_PORT
+EMAIL_HOST_USER = env_handler.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = env_handler.EMAIL_HOST_PASSWORD
