@@ -1,13 +1,7 @@
 from django.db.transaction import atomic
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
-from portal.branch.models import Combo
-from portal.branch.serializers.promotion import (
-    DetailedPromotionSerializer,
-    PromotionSerializer,
-)
+from portal.branch.models import Promotion, Combo
 from portal.validators import Validators
 
 
@@ -15,39 +9,45 @@ class PromotionAPIService:
 
     @classmethod
     @atomic
-    def create(
-        cls, serializer: PromotionSerializer, restaurant_id
-    ) -> Response:
-        combos_data = serializer.validated_data.pop('dishes')
-        cls.validate_data(
-            restaurant_id, serializer.validated_data['branches'], combos_data,
+    def create(cls, data: dict, restaurant_id):
+        combos_data = data.pop('dishes')
+        branches_data = data.pop('branches')
+        ValidatePromotionAPIService.validate_data(
+            restaurant_id, branches_data, combos_data,
         )
-        serializer.save(restaurant_id=restaurant_id)
-        cls.create_combos(serializer, combos_data)
-        cls.update_response_data(serializer, combos_data)
-        return Response(
-            DetailedPromotionSerializer(serializer.validated_data).data,
-            status=status.HTTP_201_CREATED,
+        promotion = cls.get_instance(data, restaurant_id)
+        cls.add_branches(promotion, branches_data)
+        cls.create_combos(promotion, combos_data)
+        return promotion
+
+    @classmethod
+    def get_instance(cls, data: dict, restaurant_id):
+        promotion = Promotion(
+            name=data['name'],
+            price=data['price'],
+            restaurant_id=restaurant_id,
         )
+        promotion.save()
+        return promotion
 
     @staticmethod
-    def create_combos(serializer: PromotionSerializer, combos_data):
+    def add_branches(promotion: Promotion, branches):
+        promotion.branches.set(branches)
+        promotion.save()
+
+    @staticmethod
+    def create_combos(promotion: Promotion, combos_data):
         combos = [
             Combo(
-                promotion_id=serializer.data['id'],
+                promotion_id=promotion.id,
                 dish_id=combo['dish'].id,
                 quantity=combo['quantity'],
             ) for combo in combos_data
         ]
         Combo.objects.bulk_create(combos)
 
-    @staticmethod
-    def update_response_data(serializer: PromotionSerializer, combos_data):
-        serializer.validated_data['id'] = serializer.data['id']
-        serializer.validated_data['branches'] = list(
-            set(serializer.validated_data['branches']),
-        )
-        serializer.validated_data['combo_set'] = combos_data
+
+class ValidatePromotionAPIService:
 
     @classmethod
     def validate_data(cls, restaurant_id, branches, combos):
