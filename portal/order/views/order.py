@@ -10,7 +10,6 @@ from portal.authentication.permissions import (
 from portal.order.handlers import OrderAPIHandler
 from portal.order.models import Order
 from portal.order.serializers.order import (
-    CreateOrderSerializer,
     DetailedOrderSerializer,
     StatusOrderSerializer,
 )
@@ -19,10 +18,7 @@ from portal.order.serializers.order import (
 class OrderAPIView(generics.ListCreateAPIView):
     """View to create Order."""
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST':
-            return CreateOrderSerializer
-        return DetailedOrderSerializer
+    serializer_class = DetailedOrderSerializer
 
     def get_queryset(self):
         branch_id = self.kwargs.get('branch_id')
