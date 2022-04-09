@@ -117,19 +117,27 @@ class UserAPIService:
 
     @classmethod
     def change_password(cls, serializer):
-        token = serializer.validated_data['change_password_token']
-        email = serializer.validated_data['email']
-        user = cls.get_user(email, token)
-
-        new_password = serializer.validated_data['new_password']
-        user.set_password(new_password)
-        user.change_password_token = None
-        user.save()
+        user = cls.validate_user(serializer)
+        cls.set_new_password(user, serializer)
         return Response(
             data={
                 'message': 'Password changed successfully.'
             }, status=status.HTTP_202_ACCEPTED,
         )
+
+    @classmethod
+    def set_new_password(cls, user, serializer):
+        new_password = serializer.validated_data['new_password']
+        user.set_password(new_password)
+        user.change_password_token = None
+        user.save()
+
+    @classmethod
+    def validate_user(cls, serializer):
+        token = serializer.validated_data['change_password_token']
+        email = serializer.validated_data['email']
+        user = cls.get_user(email, token)
+        return user
 
     @staticmethod
     def get_user(email, token):
