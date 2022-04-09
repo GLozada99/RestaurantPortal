@@ -9,6 +9,9 @@ from portal.order.serializers.order import (
     CreateOrderSerializer,
     DetailedOrderSerializer,
 )
+from portal.order.services.subtract_inventory import (
+    SubtractInventoryAPIService
+)
 from portal.order.services.validate_order import ValidateOrderAPIService
 
 
@@ -36,6 +39,7 @@ class OrderAPIService:
         cls.add_dishes_to_order(dishes, serializer.data)
         cls.add_promotions_to_order(promotions, serializer.data)
         cls.update_response_data(serializer, dishes, promotions)
+        SubtractInventoryAPIService.subtract(serializer.instance)
         return Response(
             DetailedOrderSerializer(serializer.instance).data,
             status=status.HTTP_201_CREATED,
