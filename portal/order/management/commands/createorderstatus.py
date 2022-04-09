@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from portal import settings
 from portal.command_helpers import CommandHelpers
 from portal.order.models import OrderStatus
 
@@ -21,31 +20,27 @@ class Command(BaseCommand):
             order_status = [
                 OrderStatus(
                     name='Created',
-                    position_order=settings.CREATED_POSITION_ORDER,
-                ),
-                OrderStatus(
-                    name='Accepted',
-                    position_order=settings.ACCEPTED_POSITION_ORDER,
-                ),
-                OrderStatus(
-                    name='Rejected',
-                    position_order=settings.REJECTED_POSITION_ORDER,
+                    previous_status_id=None,
                 ),
                 OrderStatus(
                     name='Finished',
-                    position_order=settings.FINISHED_POSITION_ORDER,
+                    previous_status_id=1,
                 ),
                 OrderStatus(
                     name='Awaiting',
-                    position_order=settings.AWAITING_POSITION_ORDER,
+                    previous_status_id=2,
                 ),
                 OrderStatus(
                     name='Delivering',
-                    position_order=settings.DELIVERING_POSITION_ORDER,
+                    previous_status_id=2,
                 ),
                 OrderStatus(
-                    name='Received',
-                    position_order=settings.RECEIVED_POSITION_ORDER,
+                    name='Taken',
+                    previous_status_id=3,
+                ),
+                OrderStatus(
+                    name='Delivered',
+                    previous_status_id=4,
                 ),
             ]
             CommandHelpers.add_to_db(self, OrderStatus, order_status)
