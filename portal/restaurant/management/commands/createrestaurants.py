@@ -16,7 +16,7 @@ class Command(BaseCommand):
         if Restaurant.objects.all().exists():
             CommandHelpers.print_error(self, 'Restaurant already exist.')
         else:
-            restaurant = [
+            restaurants = [
                 Restaurant(
                     name='McDonalds', food_type_id=1, active_branches=3,
                     active_administrators=2,
@@ -30,5 +30,10 @@ class Command(BaseCommand):
                     active_administrators=2,
                 ),
             ]
-            CommandHelpers.add_to_db(self, Restaurant, restaurant)
+            CommandHelpers.add_to_db(self, Restaurant, restaurants)
+
+            for restaurant in restaurants:
+                restaurant.delivery_types.set([1, 2, 3])
+                restaurant.save()
+
             CommandHelpers.print_success(self)
