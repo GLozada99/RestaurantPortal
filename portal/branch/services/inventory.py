@@ -1,9 +1,7 @@
-from rest_framework import status
-from rest_framework.response import Response
+from django.db.models import Model
 from rest_framework.serializers import ValidationError
 
 from portal.branch.models import Inventory
-from portal.branch.serializers.inventory import InventorySerializer
 from portal.validators import Validators
 
 
@@ -11,13 +9,24 @@ class InventoryAPIService:
 
     @classmethod
     def create(
-        cls, serializer: InventorySerializer, restaurant_id, branch_id,
-    ) -> Response:
+        cls, data: dict, restaurant_id: int, branch_id: int,
+    ) -> Model:
         cls.validate_data(
-            restaurant_id, branch_id, serializer.validated_data['ingredient'],
+            restaurant_id, branch_id, data['ingredient'],
         )
-        serializer.save(branch_id=branch_id)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        inventory = cls.get_instance(data, branch_id)
+        return inventory
+
+    @classmethod
+    def get_instance(cls, data: dict, branch_id: int) -> Inventory:
+        inventory = Inventory(
+            branch_id=branch_id,
+            ingredient=data['ingredient'],
+            stock=data['stock'],
+            unit=data['unit'],
+        )
+        inventory.save()
+        return inventory
 
     @classmethod
     def validate_data(cls, restaurant_id, branch_id, ingredient):
