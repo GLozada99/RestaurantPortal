@@ -1,10 +1,10 @@
 from secrets import token_hex
 from typing import Optional
 
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import get_user_model
 from django.db.transaction import atomic
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
 from portal import settings
@@ -117,25 +117,28 @@ class UserAPIService:
 
     @classmethod
     def change_password(cls, serializer):
-        new_password = serializer.validated_data['new_password']
-        previous_password = serializer.validated_data['previous_password']
+        token = serializer.validated_data['change_password_token']
         email = serializer.validated_data['email']
-        user = cls.get_user(email, previous_password)
+        user = cls.get_user(email, token)
+
+        new_password = serializer.validated_data['new_password']
         user.set_password(new_password)
+        user.change_password_token = None
+        user.save()
         return Response(
             data={
-                'message': 'password changed successfully.'
+                'message': 'Password changed successfully.'
             }, status=status.HTTP_202_ACCEPTED,
         )
 
     @staticmethod
-    def get_user(email, password):
+    def get_user(email, token):
         try:
-            return authenticate(email=email, previous_password=password)
-        except PermissionDenied as e:
+            return User.objects.get(email=email, change_password_token=token)
+        except User.DoesNotExist as e:
             raise ValidationError({
                 'non_field_errors': [
-                    'Email or password may be incorrect'
+                    'Could not validate email or token'
                 ]
             }) from e
 

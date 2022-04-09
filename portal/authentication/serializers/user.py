@@ -17,13 +17,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PasswordChangeSerializer(serializers.ModelSerializer):
     """Serializer for changing password"""
-    previous_password = serializers.CharField(write_only=True)
+    change_password_token = serializers.CharField(write_only=True)
     new_password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
         fields = (
             'email',
-            'previous_password',
+            'change_password_token',
             'new_password',
         )
