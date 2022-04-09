@@ -2,7 +2,6 @@ from django.db.transaction import atomic
 from rest_framework import status
 from rest_framework.response import Response
 
-from portal import settings
 from portal.authentication.models import User
 from portal.order.models import OrderDish, OrderPromotion, OrderStatus
 from portal.order.serializers.order import (
@@ -30,9 +29,7 @@ class OrderAPIService:
         promotions = serializer.validated_data.pop('promotions', [])
         serializer.save(
             client=user,
-            status=OrderStatus.objects.get(
-                position_order=settings.CREATED_POSITION_ORDER,
-            ),
+            status=OrderStatus.objects.get(previous_status=None),
             branch_id=branch_id,
             total_cost=cls.calculate_total_price(dishes, promotions),
         )
