@@ -16,21 +16,28 @@ class Role(models.Model):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, password, role, email=None, provider=None):
+    def create_user(
+            self, username,
+            password, role,
+            email, change_password_token=None,
+            provider=None,
+    ):
         """
         Creates and saves a User with the given email and password.
         """
         if not username:
-            raise ValueError('Users must have an username')
+            raise ValueError('Username is required')
+        if not email:
+            raise ValueError('Email is required')
 
         norm_email = self.normalize_email(email)
-        if norm_email and User.objects.filter(email=norm_email).exist():
+        if User.objects.filter(email=norm_email).exists():
             raise ValueError('User with that email already exists')
-
         user = self.model(
             username=username,
             email=norm_email,
             role=role,
+            change_password_token=change_password_token,
         )
 
         if provider:
