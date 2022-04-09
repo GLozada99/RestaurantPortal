@@ -27,3 +27,13 @@ class PasswordChangeSerializer(serializers.ModelSerializer):
             'change_password_token',
             'new_password',
         )
+
+
+class UserEmailSerializer(serializers.ModelSerializer):
+    """Serializer for User Email"""
+
+    class Meta:
+        model = User
+        fields = (
+            'email',
+        )
