@@ -162,7 +162,23 @@ class UserAPIService:
         return user
 
     @classmethod
-    def send_password_change_email(cls, user: User):
+    def set_password_change_token(cls, serializer):
+        try:
+            user = User.objects.get(email=serializer.validated_data['email'])
+        except User.DoesNotExist as e:
+            raise ValidationError({
+                'non_field_errors': [
+                    'User with this email does not exists'
+                ]
+            }) from e
+
+        user.change_password_token = token_hex()
+        user.save()
+        cls.send_password_change_email(user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @staticmethod
+    def send_password_change_email(user: User):
         subject = 'Password reset'
         message = ('This is your token to reset your password: '
                    f'{user.change_password_token}\n'
