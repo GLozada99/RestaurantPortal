@@ -1,12 +1,13 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 
 from portal.authentication.permissions import HasCurrentBranch, IsBranchManager
+from portal.branch.handlers.inventory import InventoryAPIHandler
 from portal.branch.models import Inventory
 from portal.branch.serializers.inventory import (
     DetailedInventorySerializer,
     InventorySerializer,
 )
-from portal.branch.services.inventory import InventoryAPIService
 from portal.mixins import CheckRestaurantBranchAccordingMixin
 
 
@@ -27,13 +28,10 @@ class InventoryAPIView(
         return Inventory.objects.filter(branch_id=branch_id)
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        return InventoryAPIService.create(
-            serializer,
-            self.kwargs.get('restaurant_id'),
-            self.kwargs.get('branch_id'),
+        data = InventoryAPIHandler.handle(
+            request, kwargs.get('restaurant_id'), kwargs.get('branch_id'),
         )
+        return Response(data, status=status.HTTP_201_CREATED)
 
 
 class InventoryAPIDetailView(
