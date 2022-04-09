@@ -10,15 +10,20 @@ from portal.authentication.permissions import (
 from portal.order.handlers import OrderAPIHandler
 from portal.order.models import Order
 from portal.order.serializers.order import (
-    DetailedOrderSerializer,
+    CreateOrderSerializer, DetailedOrderSerializer,
     StatusOrderSerializer,
 )
 
 
 class OrderAPIView(generics.ListCreateAPIView):
-    """View to create Order."""
+    """View to list and create Order."""
 
     serializer_class = DetailedOrderSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CreateOrderSerializer
+        return DetailedOrderSerializer
 
     def get_queryset(self):
         branch_id = self.kwargs.get('branch_id')
@@ -42,6 +47,7 @@ class OrderAPIView(generics.ListCreateAPIView):
 
 class OrderAPIDetailView(generics.RetrieveUpdateAPIView):
     """View to create Order."""
+    permission_classes = [(IsBranchManager | IsEmployee) & HasCurrentBranch]
 
     def get_serializer_class(self):
         if self.request.method in {'PUT', 'PATCH'}:
@@ -51,12 +57,3 @@ class OrderAPIDetailView(generics.RetrieveUpdateAPIView):
     def get_queryset(self):
         branch_id = self.kwargs.get('branch_id')
         return Order.objects.filter(branch_id=branch_id)
-
-    def get_permissions(self):
-        if self.request.method in {'PUT', 'PATCH'}:
-            self.permission_classes = [IsClient]
-        else:
-            self.permission_classes = [
-                (IsBranchManager | IsEmployee) & HasCurrentBranch
-            ]
-        return super().get_permissions()
