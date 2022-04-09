@@ -24,6 +24,7 @@ class EnvHandler:
     EMAIL_PORT = config('EMAIL_PORT', cast=int)
     EMAIL_HOST_USER = config('EMAIL_HOST_USER')
     EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+    EMAIL_PASSWORD_CHANGE_LINK = config('EMAIL_PASSWORD_CHANGE_LINK')
 
     def __init__(self):
         try:
