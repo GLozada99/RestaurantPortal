@@ -5,7 +5,9 @@ from portal.authentication.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for User"""
+
     email = serializers.EmailField(required=True)
+
     class Meta:
         model = User
         fields = (
