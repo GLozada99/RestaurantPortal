@@ -5,7 +5,6 @@ from portal.authentication.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for User"""
-    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
@@ -13,7 +12,6 @@ class UserSerializer(serializers.ModelSerializer):
             'id',
             'username',
             'email',
-            'password',
         )
 
 
