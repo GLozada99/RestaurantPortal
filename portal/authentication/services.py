@@ -1,11 +1,13 @@
+from secrets import token_hex
 from typing import Optional
 
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import get_user_model
 from django.db.transaction import atomic
 from rest_framework import status
-from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
+from portal import settings
 from portal.authentication.models import EmployeeProfile, Role
 from portal.authentication.serializers.user import UserSerializer
 from portal.settings import (
@@ -22,26 +24,32 @@ User = get_user_model()
 
 class UserAPIService:
 
-    @staticmethod
-    def create(serializer: UserSerializer, role_id: int) -> Response:
-        user_data = {
-            'username': serializer.validated_data['username'],
-            'password': serializer.validated_data['password'],
-            'email': serializer.validated_data.get('email'),
-            'role': Role.objects.get(pk=role_id),
-        }
-
+    @classmethod
+    @atomic
+    def create(cls, serializer: UserSerializer, role_id: int) -> Response:
+        user = None
+        error = ''
         try:
-            user = User.objects.create_user(**user_data)
+            user = cls.make_user(
+                serializer.validated_data['username'],
+                serializer.validated_data['email'],
+                role_id,
+            )
+        except ValueError as e:
+            error = str(e)
+
+        if user:
             response_data = {
                 'data': UserSerializer(user).data,
                 'status': status.HTTP_201_CREATED,
             }
-        except ValueError as e:
+            cls.send_password_change_email(user)
+        else:
             response_data = {
-                'data': {'message': str(e)},
+                'data': {'message': error},
                 'status': status.HTTP_400_BAD_REQUEST,
             }
+
         return Response(**response_data)
 
     @classmethod
@@ -109,27 +117,75 @@ class UserAPIService:
 
     @classmethod
     def change_password(cls, serializer):
-        new_password = serializer.validated_data['new_password']
-        previous_password = serializer.validated_data['previous_password']
-        email = serializer.validated_data['email']
-        user = cls.get_user(email, previous_password)
-        user.set_password(new_password)
+        user = cls.validate_user(serializer)
+        cls.set_new_password(user, serializer)
         return Response(
             data={
-                'message': 'password changed successfully.'
+                'message': 'Password changed successfully.'
             }, status=status.HTTP_202_ACCEPTED,
         )
 
+    @classmethod
+    def set_new_password(cls, user, serializer):
+        new_password = serializer.validated_data['new_password']
+        user.set_password(new_password)
+        user.change_password_token = None
+        user.save()
+
+    @classmethod
+    def validate_user(cls, serializer):
+        token = serializer.validated_data['change_password_token']
+        email = serializer.validated_data['email']
+        user = cls.get_user(email, token)
+        return user
+
     @staticmethod
-    def get_user(email, password):
+    def get_user(email, token):
         try:
-            return authenticate(email=email, previous_password=password)
-        except PermissionDenied as e:
+            return User.objects.get(email=email, change_password_token=token)
+        except User.DoesNotExist as e:
             raise ValidationError({
                 'non_field_errors': [
-                    'Email or password may be incorrect'
+                    'Could not validate email or token'
                 ]
             }) from e
+
+    @staticmethod
+    def make_user(username: str, email: str, role_id: int):
+        user = User.objects.create_user(
+            username=username,
+            password=token_hex(),
+            email=email,
+            role=Role.objects.get(pk=role_id),
+            change_password_token=token_hex()
+        )
+        return user
+
+    @classmethod
+    def set_password_change_token(cls, serializer):
+        try:
+            user = User.objects.get(email=serializer.validated_data['email'])
+        except User.DoesNotExist as e:
+            raise ValidationError({
+                'non_field_errors': [
+                    'User with this email does not exists'
+                ]
+            }) from e
+
+        user.change_password_token = token_hex()
+        user.save()
+        cls.send_password_change_email(user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @staticmethod
+    def send_password_change_email(user: User):
+        subject = 'Password reset'
+        message = ('This is your token to reset your password: '
+                   f'{user.change_password_token}\n'
+                   f'Please access {settings.EMAIL_PASSWORD_CHANGE_LINK} to '
+                   f'change your password')
+
+        user.email_user(subject, message)
 
 
 class UserPermissionService:
@@ -143,3 +199,7 @@ class UserPermissionService:
     def get_branch_id(cls, user: User) -> Optional[int]:
         profile = EmployeeProfile.objects.get(user=user)
         return profile.branch.id if profile else None
+
+
+class UserEmailService:
+    pass

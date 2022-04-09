@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from portal.branch.models import Branch
@@ -15,21 +16,28 @@ class Role(models.Model):
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, password, role, email=None, provider=None):
+    def create_user(
+            self, username,
+            password, role,
+            email, change_password_token=None,
+            provider=None,
+    ):
         """
         Creates and saves a User with the given email and password.
         """
         if not username:
-            raise ValueError('Users must have an username')
+            raise ValueError('Username is required')
+        if not email:
+            raise ValueError('Email is required')
 
         norm_email = self.normalize_email(email)
-        if norm_email and User.objects.filter(email=norm_email).exist():
+        if User.objects.filter(email=norm_email).exists():
             raise ValueError('User with that email already exists')
-
         user = self.model(
             username=username,
             email=norm_email,
             role=role,
+            change_password_token=change_password_token,
         )
 
         if provider:
@@ -61,6 +69,10 @@ class User(AbstractUser):
     objects = UserManager()
     role = models.ForeignKey(Role, on_delete=models.PROTECT)
     authentication_provider = models.TextField(default='portal')
+    email = models.EmailField(_('email address'), blank=True)
+    change_password_token = models.CharField(
+        _('change_password_token'), max_length=128, blank=True, null=True,
+    )
 
     def get_tokens(self):
         refresh = RefreshToken.for_user(self)
