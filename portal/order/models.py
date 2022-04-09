@@ -10,10 +10,10 @@ User = get_user_model()
 
 class OrderStatus(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    position_order = models.IntegerField(unique=True)
+    previous_status = models.ForeignKey('self', on_delete=models.PROTECT)
 
     def __str__(self):
-        return f'{self.name}, position order: {self.position_order}'
+        return f'{self.name}, previous: {self.previous_status}'
 
 
 class Order(models.Model):
