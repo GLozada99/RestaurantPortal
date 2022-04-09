@@ -15,7 +15,7 @@ from portal.order.serializers.order import (
 from portal.order.services.order import OrderAPIService
 
 
-class OrderAPIView(generics.CreateAPIView):
+class OrderAPIView(generics.ListCreateAPIView):
     """View to create Order."""
 
     def get_serializer_class(self):

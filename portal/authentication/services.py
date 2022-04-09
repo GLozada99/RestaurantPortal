@@ -132,7 +132,6 @@ class UserAPIService:
             }) from e
 
 
-
 class UserPermissionService:
 
     @classmethod
