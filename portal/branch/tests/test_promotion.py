@@ -45,6 +45,8 @@ class PromotionAPITestCase(APITransactionTestCase):
             format='json',
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
+        self.assertEqual(response.data['branches'][0]['id'], 1)
+        self.assertEqual(response.data['dishes'][0]['dish']['id'], 1)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     @get_restaurant_manager_token
