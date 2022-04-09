@@ -16,10 +16,11 @@ class PortalManagerAPITestCase(APITestCase):
         url = reverse('portal_managers:portal-manager-list')
         response = self.client.post(
             url,
-            {'username': 'TestPortalManager', 'password': 'TestPassword'},
+            {'username': 'TestPortalManager', 'email': 'test@email.com'},
             format='json',
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_portal_manager_without_auth(self):
@@ -27,7 +28,7 @@ class PortalManagerAPITestCase(APITestCase):
         url = reverse('portal_managers:portal-manager-list')
         response = self.client.post(
             url,
-            {'username': 'TestPortalManager', 'password': 'TestPassword'},
+            {'username': 'TestPortalManager', 'email': 'test@email.com'},
             format='json',
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
@@ -42,7 +43,7 @@ class ClientAPITestCase(APITestCase):
         url = reverse('clients:client-list')
         response = self.client.post(
             url,
-            {'username': 'TestClient', 'password': 'TestPassword'},
+            {'username': 'TestClient', 'email': 'test@email.com'},
             format='json',
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

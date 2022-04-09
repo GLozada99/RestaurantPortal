@@ -15,7 +15,7 @@ class BranchAPITestCase(APITransactionTestCase):
 
     manager_data = {
         'username': 'TestManager',
-        'password': 'TestPassword',
+        'email': 'test@email.com'
     }
 
     branch_list_url = reverse(

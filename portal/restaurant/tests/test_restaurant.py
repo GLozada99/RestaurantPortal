@@ -86,7 +86,7 @@ class RestaurantAPITestCase(APITransactionTestCase):
         )
         manager_data = {
             'username': 'TestRestaurantManager',
-            'password': 'TestPassword',
+            'email': 'test@email.com'
         }
         response = self.client.post(
             url,
