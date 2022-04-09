@@ -1,13 +1,7 @@
 from django.db.transaction import atomic
-from rest_framework import status
-from rest_framework.response import Response
 
 from portal.authentication.models import User
-from portal.order.models import OrderDish, OrderPromotion, OrderStatus
-from portal.order.serializers.order import (
-    CreateOrderSerializer,
-    DetailedOrderSerializer,
-)
+from portal.order.models import Order, OrderDish, OrderPromotion, OrderStatus
 from portal.order.services.subtract_inventory import (
     SubtractInventoryAPIService
 )
@@ -19,28 +13,33 @@ class OrderAPIService:
     @classmethod
     @atomic
     def create(
-        cls, serializer: CreateOrderSerializer,
-        restaurant_id: int, branch_id: int, user: User
+        cls, data: dict, restaurant_id: int, branch_id: int, user: User
     ):
         ValidateOrderAPIService.validate_data(
-            serializer.validated_data, branch_id, restaurant_id, user,
+            data, branch_id, restaurant_id, user,
         )
-        dishes = serializer.validated_data.pop('dishes', [])
-        promotions = serializer.validated_data.pop('promotions', [])
-        serializer.save(
-            client=user,
-            status=OrderStatus.objects.get(previous_status=None),
-            branch_id=branch_id,
+        dishes = data.pop('dishes', [])
+        promotions = data.pop('promotions', [])
+        order = cls.get_instance(data, branch_id, user, dishes, promotions)
+        cls.add_dishes_to_order(dishes, order)
+        cls.add_promotions_to_order(promotions, order)
+        SubtractInventoryAPIService.subtract(order)
+        return order
+
+    @classmethod
+    def get_instance(
+        cls, data: dict, branch_id: int, client: User, dishes, promotions
+    ):
+        order = Order(
+            address=data.get('address'),
             total_cost=cls.calculate_total_price(dishes, promotions),
+            client=client,
+            status=OrderStatus.objects.get(previous_status=None),
+            delivery_type=data.get('delivery_type'),
+            branch_id=branch_id,
         )
-        cls.add_dishes_to_order(dishes, serializer.data)
-        cls.add_promotions_to_order(promotions, serializer.data)
-        cls.update_response_data(serializer, dishes, promotions)
-        SubtractInventoryAPIService.subtract(serializer.instance)
-        return Response(
-            DetailedOrderSerializer(serializer.instance).data,
-            status=status.HTTP_201_CREATED,
-        )
+        order.save()
+        return order
 
     @classmethod
     def calculate_total_price(cls, dishes_data: list, promotions_data: list):
@@ -68,27 +67,19 @@ class OrderAPIService:
         ))
 
     @staticmethod
-    def add_dishes_to_order(dishes_data: dict, order: dict):
+    def add_dishes_to_order(dishes_data: dict, order: Order):
         for dish_data in dishes_data:
             OrderDish.objects.create(
-                order_id=order['id'],
+                order_id=order.id,
                 dish_id=dish_data['dish'].id,
                 quantity=dish_data['quantity'],
             )
 
     @staticmethod
-    def add_promotions_to_order(promotions_data: dict, order: dict):
+    def add_promotions_to_order(promotions_data: dict, order: Order):
         for promotion_data in promotions_data:
             OrderPromotion.objects.create(
-                order_id=order['id'],
+                order_id=order.id,
                 promotion_id=promotion_data['promotion'].id,
                 quantity=promotion_data['quantity'],
             )
-
-    @staticmethod
-    def update_response_data(
-        serializer: CreateOrderSerializer, dishes: dict, promotions: dict
-    ):
-        serializer.validated_data['dishes'] = dishes
-        serializer.validated_data['promotions'] = promotions
-        serializer.validated_data['id'] = serializer.data['id']

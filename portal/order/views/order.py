@@ -1,4 +1,5 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 
 from portal.authentication.permissions import (
     HasCurrentBranch,
@@ -6,13 +7,13 @@ from portal.authentication.permissions import (
     IsClient,
     IsEmployee,
 )
+from portal.order.handlers import OrderAPIHandler
 from portal.order.models import Order
 from portal.order.serializers.order import (
     CreateOrderSerializer,
     DetailedOrderSerializer,
     StatusOrderSerializer,
 )
-from portal.order.services.order import OrderAPIService
 
 
 class OrderAPIView(generics.ListCreateAPIView):
@@ -37,14 +38,10 @@ class OrderAPIView(generics.ListCreateAPIView):
         return super().get_permissions()
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        return OrderAPIService.create(
-            serializer,
-            kwargs.get('restaurant_id'),
-            kwargs.get('branch_id'),
-            request.user,
+        data = OrderAPIHandler.handle(
+            request, kwargs.get('restaurant_id'), kwargs.get('branch_id'),
         )
+        return Response(data, status=status.HTTP_201_CREATED)
 
 
 class OrderAPIDetailView(generics.RetrieveUpdateAPIView):
