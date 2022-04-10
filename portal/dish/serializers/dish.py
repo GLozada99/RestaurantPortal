@@ -3,7 +3,9 @@ from rest_framework import serializers
 
 from portal.dish.models import Dish
 from portal.dish.serializers.dish_ingredient import (
-    CreateDishIngredientSerializer, ReadDishIngredientSerializer, )
+    CreateDishIngredientSerializer,
+    ReadDishIngredientSerializer,
+)
 from portal.validators import Validators
 
 
