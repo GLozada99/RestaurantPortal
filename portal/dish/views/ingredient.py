@@ -32,6 +32,7 @@ class IngredientAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     serializer_class = IngredientSerializer
     permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
+    http_method_names = ['get', 'put', 'delete', 'head', 'options', 'trace']
 
     def get_queryset(self):
         restaurant_id = self.kwargs.get('restaurant_id')

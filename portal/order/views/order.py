@@ -47,7 +47,6 @@ class OrderAPIDetailView(generics.RetrieveUpdateAPIView):
     """View to retrieve, update and delete Order."""
 
     permission_classes = [(IsBranchManager | IsEmployee) & HasCurrentBranch]
-
     http_method_names = ['get', 'put', 'delete', 'head', 'options', 'trace']
 
     def get_serializer_class(self):
