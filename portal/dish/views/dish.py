@@ -1,14 +1,17 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 
 from portal.authentication.permissions import (
     HasCurrentRestaurant,
     IsRestaurantManager,
     ReadOnly,
 )
+from portal.dish.handlers.dish import DishAPIHandler
 from portal.dish.models import Dish
-from portal.dish.serializers.dish import (CreateDishSerializer,
-                                          ReadDishSerializer, )
-from portal.dish.services.dish import DishAPIService
+from portal.dish.serializers.dish import (
+    CreateDishSerializer,
+    ReadDishSerializer,
+)
 from portal.mixins import (
     CheckRestaurantBranchAccordingMixin,
     CheckRestaurantDishCategoryAccordingMixin,
@@ -20,7 +23,6 @@ class DishAPIView(
 ):
     """View to list and create Dish."""
 
-    serializer_class = CreateDishSerializer
     permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
 
     def get_serializer_class(self):
@@ -33,13 +35,12 @@ class DishAPIView(
         return Dish.objects.filter(category_id=dish_category_id)
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer_class()(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        return DishAPIService.create(
-            serializer,
-            kwargs.get('dish_category_id'),
+        data = DishAPIHandler.handle(
+            request,
             kwargs.get('restaurant_id'),
+            kwargs.get('dish_category_id'),
         )
+        return Response(data, status=status.HTTP_201_CREATED)
 
 
 class DishAPIDetailView(
@@ -74,6 +75,6 @@ class DishBranchCategoryAvailableAPIView(
     def get(self, request, *args, **kwargs):
         branch_id = self.kwargs.get('branch_id')
         dish_category_id = self.kwargs.get('dish_category_id')
-        return DishAPIService.get_available_dishes_category_branch(
+        return DishAPIHandler.get_available_dishes_category_branch(
             dish_category_id, branch_id,
         )

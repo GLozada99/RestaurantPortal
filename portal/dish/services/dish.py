@@ -1,15 +1,8 @@
 from django.db.transaction import atomic
-from rest_framework import status
-from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 from portal.branch.models import Branch
 from portal.dish.models import Dish, DishCategory, DishIngredient
-from portal.dish.serializers.dish import (
-    CreateDishSerializer,
-    IngredientsDishSerializer,
-    ReadDishSerializer,
-)
 from portal.validators import Validators
 
 
@@ -17,34 +10,32 @@ class DishAPIService:
 
     @classmethod
     @atomic
-    def create(
-        cls, serializer: CreateDishSerializer, category_id: int,
-        restaurant_id: int
-    ) -> Response:
-        ingredients_data = serializer.validated_data.pop('ingredients')
-        cls.validate_data(
-            serializer.validated_data['name'],
-            category_id,
-            restaurant_id,
-            ingredients_data,
+    def create(cls, data: dict, restaurant_id: int, category_id: int):
+        ingredients_data = data.pop('ingredients')
+        ValidateDishAPIService.validate_data(
+            data['name'], category_id, restaurant_id, ingredients_data,
         )
-        serializer.save(category_id=category_id)
-        cls.create_dish_ingredients(serializer, ingredients_data)
-        cls.update_response_data(serializer, ingredients_data)
-        return Response(
-            IngredientsDishSerializer(
-                serializer.validated_data,
-            ).data,
-            status=status.HTTP_201_CREATED,
-        )
+        dish = cls.get_instance(data, category_id)
+        cls.create_dish_ingredients(dish, ingredients_data)
+        return dish
 
     @staticmethod
-    def create_dish_ingredients(
-        serializer: CreateDishSerializer, ingredients_data
-    ):
+    def get_instance(data, category_id):
+        dish = Dish(
+            name=data['name'],
+            price=data['price'],
+            description=data.get('description'),
+            category_id=category_id,
+            picture=data.get('picture'),
+        )
+        dish.save()
+        return dish
+
+    @staticmethod
+    def create_dish_ingredients(dish: Dish, ingredients_data):
         dish_ingredients = [
             DishIngredient(
-                dish_id=serializer.data['id'],
+                dish_id=dish.id,
                 ingredient_id=dish_ingredient['ingredient'].id,
                 quantity=dish_ingredient['quantity'],
                 unit=dish_ingredient['unit'],
@@ -52,12 +43,8 @@ class DishAPIService:
         ]
         DishIngredient.objects.bulk_create(dish_ingredients)
 
-    @staticmethod
-    def update_response_data(
-        serializer: CreateDishSerializer, ingredients_data
-    ):
-        serializer.validated_data['ingredients'] = ingredients_data
-        serializer.validated_data['id'] = serializer.data['id']
+
+class ValidateDishAPIService:
 
     @classmethod
     def validate_data(cls, name, category_id, restaurant_id, dish_ingredients):
@@ -77,20 +64,16 @@ class DishAPIService:
                     'ingredients': 'Invalid ingredients.'
                 })
 
-    @classmethod
-    def get_available_dishes_category_branch(
-        cls, category_id: int, branch_id: int,
-    ):
+
+class AvailableDishesAPIService:
+
+    @staticmethod
+    def get_available_dishes(category_id: int, branch_id: int):
         category = DishCategory.objects.get(pk=category_id)
         branch = Branch.objects.get(pk=branch_id)
-
         dishes = category.dish_set.all()
-        available_dishes = [
+        return [
             dish for dish in dishes if Validators.is_dish_available(
-                branch, dish
+                branch, dish,
             )
         ]
-
-        serializer = ReadDishSerializer(data=available_dishes, many=True)
-        serializer.is_valid()
-        return Response(serializer.data)
