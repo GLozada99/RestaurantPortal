@@ -48,8 +48,10 @@ class OrderAPIDetailView(generics.RetrieveUpdateAPIView):
 
     permission_classes = [(IsBranchManager | IsEmployee) & HasCurrentBranch]
 
+    http_method_names = ['get', 'put', 'delete', 'head', 'options', 'trace']
+
     def get_serializer_class(self):
-        if self.request.method in {'PUT', 'PATCH'}:
+        if self.request.method == 'PUT':
             return StatusOrderSerializer
         return ReadOrderSerializer
 
