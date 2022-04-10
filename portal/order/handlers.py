@@ -1,6 +1,6 @@
 from portal.order.serializers.order import (
     CreateOrderSerializer,
-    ReadOrderSerializer,
+    ReadOrderSerializer, StatusOrderSerializer,
 )
 from portal.order.services.order import OrderAPIService
 
@@ -16,4 +16,15 @@ class OrderAPIHandler:
             restaurant_id,
             branch_id,
             request.user,
+        )).data
+
+    @classmethod
+    def update_status(
+        cls, request, order_id: int
+    ):
+        serializer = StatusOrderSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return StatusOrderSerializer(OrderAPIService.set_status(
+            serializer.validated_data,
+            order_id,
         )).data
