@@ -2,9 +2,9 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 
 from portal.authentication.permissions import IsRestaurantManager, ReadOnly
+from portal.branch.handlers.promotion import PromotionAPIHandler
 from portal.branch.models import Promotion
 from portal.branch.serializers.promotion import DetailedPromotionSerializer
-from portal.branch.handlers.promotion import PromotionAPIHandler
 
 
 class PromotionAPIView(generics.ListCreateAPIView):
