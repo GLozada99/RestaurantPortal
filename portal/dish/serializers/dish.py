@@ -3,9 +3,7 @@ from rest_framework import serializers
 
 from portal.dish.models import Dish
 from portal.dish.serializers.dish_ingredient import (
-    DetailedDishIngredientSerializer,
-    DishIngredientSerializer,
-)
+    CreateDishIngredientSerializer, ReadDishIngredientSerializer, )
 from portal.validators import Validators
 
 
@@ -20,10 +18,10 @@ class ShortDishSerializer(serializers.ModelSerializer):
         )
 
 
-class DishSerializer(serializers.ModelSerializer):
+class CreateDishSerializer(serializers.ModelSerializer):
     """Serializer for Dish."""
 
-    ingredients = DishIngredientSerializer(many=True)
+    ingredients = CreateDishIngredientSerializer(many=True)
     picture = Base64ImageField(
         max_length=None, use_url=True, required=False
     )
@@ -46,7 +44,7 @@ class DishSerializer(serializers.ModelSerializer):
         return Validators.validate_list(value)
 
 
-class BasicDishSerializer(serializers.ModelSerializer):
+class ReadDishSerializer(serializers.ModelSerializer):
     """Serializer for Dish."""
 
     class Meta:
@@ -60,10 +58,10 @@ class BasicDishSerializer(serializers.ModelSerializer):
         )
 
 
-class DetailedDishWithIngredientsSerializer(serializers.ModelSerializer):
+class IngredientsDishSerializer(serializers.ModelSerializer):
     """Detailed Serializer for Dish with ingredients."""
 
-    ingredients = DetailedDishIngredientSerializer(many=True)
+    ingredients = ReadDishIngredientSerializer(many=True)
 
     class Meta:
         model = Dish

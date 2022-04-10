@@ -3,9 +3,7 @@ from rest_framework import generics
 from portal.authentication.permissions import IsPortalManager
 from portal.restaurant.models import Restaurant
 from portal.restaurant.serializers.restaurant import (
-    DetailedRestaurantSerializer,
-    RestaurantSerializer,
-)
+    CreateRestaurantSerializer, ReadRestaurantSerializer, )
 
 
 class RestaurantAPIView(generics.ListCreateAPIView):
@@ -16,8 +14,8 @@ class RestaurantAPIView(generics.ListCreateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return RestaurantSerializer
-        return DetailedRestaurantSerializer
+            return CreateRestaurantSerializer
+        return ReadRestaurantSerializer
 
 
 class RestaurantAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -28,5 +26,5 @@ class RestaurantAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_serializer_class(self):
         if self.request.method in {'PUT', 'PATCH'}:
-            return RestaurantSerializer
-        return DetailedRestaurantSerializer
+            return CreateRestaurantSerializer
+        return ReadRestaurantSerializer

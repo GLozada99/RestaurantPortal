@@ -5,7 +5,7 @@ from portal.dish.serializers.dish import ShortDishSerializer
 from portal.validators import Validators
 
 
-class ComboSerializer(serializers.ModelSerializer):
+class CreateComboSerializer(serializers.ModelSerializer):
     """Serializer for Combo."""
 
     class Meta:
@@ -19,7 +19,7 @@ class ComboSerializer(serializers.ModelSerializer):
         return Validators.validate_greater_than_zero(value)
 
 
-class DetailedComboSerializer(serializers.ModelSerializer):
+class ReadComboSerializer(serializers.ModelSerializer):
     """Detailed Serializer for Combo."""
 
     dish = ShortDishSerializer()

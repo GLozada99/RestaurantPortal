@@ -4,10 +4,8 @@ from rest_framework.response import Response
 from portal.authentication.permissions import HasCurrentBranch, IsBranchManager
 from portal.branch.handlers.inventory import InventoryAPIHandler
 from portal.branch.models import Inventory
-from portal.branch.serializers.inventory import (
-    DetailedInventorySerializer,
-    InventorySerializer,
-)
+from portal.branch.serializers.inventory import (CreateInventorySerializer,
+                                                 ReadInventorySerializer, )
 from portal.mixins import CheckRestaurantBranchAccordingMixin
 
 
@@ -20,8 +18,8 @@ class InventoryAPIView(
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return InventorySerializer
-        return DetailedInventorySerializer
+            return CreateInventorySerializer
+        return ReadInventorySerializer
 
     def get_queryset(self):
         branch_id = self.kwargs.get('branch_id')
@@ -45,8 +43,8 @@ class InventoryAPIDetailView(
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':
-            return InventorySerializer
-        return DetailedInventorySerializer
+            return CreateInventorySerializer
+        return ReadInventorySerializer
 
     def get_queryset(self):
         branch_id = self.kwargs.get('branch_id')

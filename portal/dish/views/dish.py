@@ -6,7 +6,8 @@ from portal.authentication.permissions import (
     ReadOnly,
 )
 from portal.dish.models import Dish
-from portal.dish.serializers.dish import BasicDishSerializer, DishSerializer
+from portal.dish.serializers.dish import (CreateDishSerializer,
+                                          ReadDishSerializer, )
 from portal.dish.services.dish import DishAPIService
 from portal.mixins import (
     CheckRestaurantBranchAccordingMixin,
@@ -19,13 +20,13 @@ class DishAPIView(
 ):
     """View to list and create Dish."""
 
-    serializer_class = DishSerializer
+    serializer_class = CreateDishSerializer
     permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return DishSerializer
-        return BasicDishSerializer
+            return CreateDishSerializer
+        return ReadDishSerializer
 
     def get_queryset(self):
         dish_category_id = self.kwargs.get('dish_category_id')
@@ -47,13 +48,13 @@ class DishAPIDetailView(
 ):
     """View to retrieve, update and delete Dish."""
 
-    serializer_class = DishSerializer
+    serializer_class = CreateDishSerializer
     permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
 
     def get_serializer_class(self):
         if self.request.method in {'PUT', 'PATCH'}:
-            return DishSerializer
-        return BasicDishSerializer
+            return CreateDishSerializer
+        return ReadDishSerializer
 
     def get_queryset(self):
         dish_category_id = self.kwargs.get('dish_category_id')
@@ -67,7 +68,7 @@ class DishBranchCategoryAvailableAPIView(
 ):
     """View to get Dishes available in specific Branch and Dish Category."""
 
-    serializer_class = BasicDishSerializer
+    serializer_class = ReadDishSerializer
     permission_classes = [ReadOnly]
 
     def get(self, request, *args, **kwargs):
