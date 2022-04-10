@@ -5,9 +5,11 @@ from rest_framework.serializers import ValidationError
 
 from portal.branch.models import Branch
 from portal.dish.models import Dish, DishCategory, DishIngredient
-from portal.dish.serializers.dish import (CreateDishSerializer,
-                                          IngredientsDishSerializer,
-                                          ReadDishSerializer, )
+from portal.dish.serializers.dish import (
+    CreateDishSerializer,
+    IngredientsDishSerializer,
+    ReadDishSerializer,
+)
 from portal.validators import Validators
 
 
@@ -16,7 +18,8 @@ class DishAPIService:
     @classmethod
     @atomic
     def create(
-        cls, serializer: CreateDishSerializer, category_id: int, restaurant_id: int
+        cls, serializer: CreateDishSerializer, category_id: int,
+        restaurant_id: int
     ) -> Response:
         ingredients_data = serializer.validated_data.pop('ingredients')
         cls.validate_data(
@@ -36,7 +39,9 @@ class DishAPIService:
         )
 
     @staticmethod
-    def create_dish_ingredients(serializer: CreateDishSerializer, ingredients_data):
+    def create_dish_ingredients(
+        serializer: CreateDishSerializer, ingredients_data
+    ):
         dish_ingredients = [
             DishIngredient(
                 dish_id=serializer.data['id'],
@@ -48,7 +53,9 @@ class DishAPIService:
         DishIngredient.objects.bulk_create(dish_ingredients)
 
     @staticmethod
-    def update_response_data(serializer: CreateDishSerializer, ingredients_data):
+    def update_response_data(
+        serializer: CreateDishSerializer, ingredients_data
+    ):
         serializer.validated_data['ingredients'] = ingredients_data
         serializer.validated_data['id'] = serializer.data['id']
 
