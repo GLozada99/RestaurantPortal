@@ -42,6 +42,7 @@ class ReadOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = (
+            'id',
             'client',
             'status',
             'total_cost',
@@ -55,8 +56,11 @@ class ReadOrderSerializer(serializers.ModelSerializer):
 
 
 class StatusOrderSerializer(serializers.ModelSerializer):
-    """Serializer for Updating Dish Status."""
+    """Serializer for Updating Order Status."""
 
     class Meta:
         model = Order
-        fields = ('status',)
+        fields = (
+            'id',
+            'status',
+        )
