@@ -7,7 +7,7 @@ from portal.restaurant.serializers.food_type import FoodTypeSerializer
 from portal.validators import Validators
 
 
-class RestaurantSerializer(serializers.ModelSerializer):
+class CreateRestaurantSerializer(serializers.ModelSerializer):
     """Serializer for Restaurant."""
 
     class Meta:
@@ -45,7 +45,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
         return value
 
 
-class DetailedRestaurantSerializer(serializers.ModelSerializer):
+class ReadRestaurantSerializer(serializers.ModelSerializer):
     """Detailed Serializer for Restaurant."""
 
     food_type = FoodTypeSerializer()

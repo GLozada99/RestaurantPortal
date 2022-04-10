@@ -7,13 +7,13 @@ from portal.authentication.permissions import (
 )
 from portal.branch.handlers.branch import BranchAPIHandler
 from portal.branch.models import Branch
-from portal.branch.serializers.branch import BranchSerializer
+from portal.branch.serializers.branch import CreateBranchSerializer
 
 
 class BranchAPIView(generics.ListCreateAPIView):
     """View to list and create Branch."""
 
-    serializer_class = BranchSerializer
+    serializer_class = CreateBranchSerializer
     permission_classes = [IsRestaurantManager & HasCurrentRestaurant]
 
     def get_queryset(self):
@@ -35,7 +35,7 @@ class BranchAPIView(generics.ListCreateAPIView):
 class BranchAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
     """View to retrieve, update and delete Branch."""
 
-    serializer_class = BranchSerializer
+    serializer_class = CreateBranchSerializer
     permission_classes = [IsRestaurantManager & HasCurrentRestaurant]
 
     def get_queryset(self):

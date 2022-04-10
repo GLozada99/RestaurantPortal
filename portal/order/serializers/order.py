@@ -25,7 +25,7 @@ class CreateOrderSerializer(serializers.ModelSerializer):
         )
 
 
-class DetailedOrderSerializer(serializers.ModelSerializer):
+class ReadOrderSerializer(serializers.ModelSerializer):
     """Detailed Serializer for Dish."""
 
     client = UserSerializer()

@@ -3,8 +3,8 @@ from rest_framework import serializers
 from portal.branch.models import Promotion
 from portal.branch.serializers.branch import ShortBranchSerializer
 from portal.branch.serializers.combo import (
-    ComboSerializer,
-    DetailedComboSerializer,
+    CreateComboSerializer,
+    ReadComboSerializer,
 )
 from portal.validators import Validators
 
@@ -23,7 +23,7 @@ class ShortPromotionSerializer(serializers.ModelSerializer):
 class PromotionSerializer(serializers.ModelSerializer):
     """Serializer for Promotion."""
 
-    dishes = ComboSerializer(many=True)
+    dishes = CreateComboSerializer(many=True)
 
     class Meta:
         model = Promotion
@@ -43,7 +43,7 @@ class DetailedPromotionSerializer(serializers.ModelSerializer):
     """Detailed Serializer for Promotion."""
 
     branches = ShortBranchSerializer(many=True)
-    dishes = DetailedComboSerializer(many=True, source='combo_set')
+    dishes = ReadComboSerializer(many=True, source='combo_set')
 
     class Meta:
         model = Promotion

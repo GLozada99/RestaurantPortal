@@ -12,7 +12,7 @@ class ShortBranchSerializer(serializers.ModelSerializer):
         fields = ('id', 'address')
 
 
-class BranchSerializer(serializers.ModelSerializer):
+class CreateBranchSerializer(serializers.ModelSerializer):
     """Serializer for Branch."""
 
     front_picture = Base64ImageField(

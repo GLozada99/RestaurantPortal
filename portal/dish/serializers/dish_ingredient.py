@@ -5,7 +5,7 @@ from portal.dish.serializers.ingredient import IngredientSerializer
 from portal.validators import Validators
 
 
-class DishIngredientSerializer(serializers.ModelSerializer):
+class CreateDishIngredientSerializer(serializers.ModelSerializer):
     """Serializer for DishIngredient."""
 
     class Meta:
@@ -20,7 +20,7 @@ class DishIngredientSerializer(serializers.ModelSerializer):
         return Validators.validate_greater_than_zero(value)
 
 
-class DetailedDishIngredientSerializer(serializers.ModelSerializer):
+class ReadDishIngredientSerializer(serializers.ModelSerializer):
     """Detailed Serializer for DishIngredient."""
 
     ingredient = IngredientSerializer()

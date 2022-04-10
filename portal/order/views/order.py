@@ -10,7 +10,7 @@ from portal.authentication.permissions import (
 from portal.order.handlers import OrderAPIHandler
 from portal.order.models import Order
 from portal.order.serializers.order import (
-    CreateOrderSerializer, DetailedOrderSerializer,
+    CreateOrderSerializer, ReadOrderSerializer,
     StatusOrderSerializer,
 )
 
@@ -18,12 +18,12 @@ from portal.order.serializers.order import (
 class OrderAPIView(generics.ListCreateAPIView):
     """View to list and create Order."""
 
-    serializer_class = DetailedOrderSerializer
+    serializer_class = ReadOrderSerializer
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return CreateOrderSerializer
-        return DetailedOrderSerializer
+        return ReadOrderSerializer
 
     def get_queryset(self):
         branch_id = self.kwargs.get('branch_id')
@@ -52,7 +52,7 @@ class OrderAPIDetailView(generics.RetrieveUpdateAPIView):
     def get_serializer_class(self):
         if self.request.method in {'PUT', 'PATCH'}:
             return StatusOrderSerializer
-        return DetailedOrderSerializer
+        return ReadOrderSerializer
 
     def get_queryset(self):
         branch_id = self.kwargs.get('branch_id')
