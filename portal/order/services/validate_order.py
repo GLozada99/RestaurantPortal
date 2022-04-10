@@ -3,6 +3,7 @@ from rest_framework.serializers import ValidationError
 from portal.authentication.models import User
 from portal.branch.models import Branch, Promotion
 from portal.dish.models import Dish
+from portal.order.models import Order, OrderStatus
 from portal.restaurant.models import Restaurant
 from portal.validators import Validators
 
@@ -92,5 +93,15 @@ class ValidateOrderAPIService:
                 'non_field_errors': [
                     f'At this moment the quantity {quantity} for promotion '
                     f'{promotion.name} is not available.'
+                ]
+            })
+
+    @staticmethod
+    def validate_next_status(order: Order, status: OrderStatus):
+        if order.status != status.previous_status:
+            raise ValidationError({
+                'status': [
+                    f'Order with status {order.status.name} cannot pass '
+                    f'to status {status.name}'
                 ]
             })
