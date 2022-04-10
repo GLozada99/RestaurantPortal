@@ -49,13 +49,8 @@ class DishAPIDetailView(
 ):
     """View to retrieve, update and delete Dish."""
 
-    serializer_class = CreateDishSerializer
+    serializer_class = ReadDishSerializer
     permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
-
-    def get_serializer_class(self):
-        if self.request.method in {'PUT', 'PATCH'}:
-            return CreateDishSerializer
-        return ReadDishSerializer
 
     def get_queryset(self):
         dish_category_id = self.kwargs.get('dish_category_id')
