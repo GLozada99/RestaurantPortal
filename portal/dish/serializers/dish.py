@@ -63,7 +63,9 @@ class ReadDishSerializer(serializers.ModelSerializer):
 class IngredientsDishSerializer(serializers.ModelSerializer):
     """Detailed Serializer for Dish with ingredients."""
 
-    ingredients = ReadDishIngredientSerializer(many=True)
+    ingredients = ReadDishIngredientSerializer(
+        many=True, source='dishingredient_set'
+    )
 
     class Meta:
         model = Dish
