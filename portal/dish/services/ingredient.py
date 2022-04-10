@@ -1,22 +1,22 @@
-from rest_framework import status
-from rest_framework.response import Response
-
 from portal.dish.models import Ingredient
-from portal.dish.serializers.ingredient import IngredientSerializer
 from portal.validators import Validators
 
 
 class IngredientAPIService:
 
     @classmethod
-    def create(
-        cls, serializer: IngredientSerializer, restaurant_id
-    ) -> Response:
-        cls.validate_restaurant(
-            serializer.validated_data['name'], restaurant_id,
+    def create(cls, data: dict, restaurant_id):
+        cls.validate_restaurant(data['name'], restaurant_id)
+        return cls.get_instance(data, restaurant_id)
+
+    @staticmethod
+    def get_instance(data, restaurant_id):
+        ingredient = Ingredient(
+            name=data['name'],
+            restaurant_id=restaurant_id,
         )
-        serializer.save(restaurant_id=restaurant_id)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        ingredient.save()
+        return ingredient
 
     @staticmethod
     def validate_restaurant(name, restaurant_id):

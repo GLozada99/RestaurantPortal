@@ -1,12 +1,13 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
 
 from portal.authentication.permissions import (
     HasCurrentRestaurant,
     IsRestaurantManager,
 )
+from portal.dish.handlers.ingredient import IngredientAPIHandler
 from portal.dish.models import Ingredient
 from portal.dish.serializers.ingredient import IngredientSerializer
-from portal.dish.services.ingredient import IngredientAPIService
 
 
 class IngredientAPIView(generics.ListCreateAPIView):
@@ -20,11 +21,10 @@ class IngredientAPIView(generics.ListCreateAPIView):
         return Ingredient.objects.filter(restaurant_id=restaurant_id)
 
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        return IngredientAPIService.create(
-            serializer, self.kwargs.get('restaurant_id'),
+        data = IngredientAPIHandler.handle(
+            request, kwargs.get('restaurant_id'),
         )
+        return Response(data, status=status.HTTP_201_CREATED)
 
 
 class IngredientAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
