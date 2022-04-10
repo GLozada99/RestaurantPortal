@@ -18,8 +18,6 @@ from portal.order.serializers.order import (
 class OrderAPIView(generics.ListCreateAPIView):
     """View to list and create Order."""
 
-    serializer_class = ReadOrderSerializer
-
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return CreateOrderSerializer
@@ -47,6 +45,7 @@ class OrderAPIView(generics.ListCreateAPIView):
 
 class OrderAPIDetailView(generics.RetrieveUpdateAPIView):
     """View to create Order."""
+
     permission_classes = [(IsBranchManager | IsEmployee) & HasCurrentBranch]
 
     def get_serializer_class(self):
