@@ -44,7 +44,7 @@ class OrderAPIView(generics.ListCreateAPIView):
 
 
 class OrderAPIDetailView(generics.RetrieveUpdateAPIView):
-    """View to create Order."""
+    """View to retrieve, update and delete Order."""
 
     permission_classes = [(IsBranchManager | IsEmployee) & HasCurrentBranch]
 
