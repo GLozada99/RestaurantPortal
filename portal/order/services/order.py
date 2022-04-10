@@ -83,3 +83,12 @@ class OrderAPIService:
                 promotion_id=promotion_data['promotion'].id,
                 quantity=promotion_data['quantity'],
             )
+
+    @staticmethod
+    def set_status(data: dict, order_id: int):
+        order = Order.objects.get(pk=order_id)
+        status = data['status']
+        ValidateOrderAPIService.validate_next_status(order, status)
+        order.status = status
+        order.save()
+        return order
