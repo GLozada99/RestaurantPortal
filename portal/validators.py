@@ -156,6 +156,11 @@ class Validators:
         combo_data = promotion.combo_set.all()
         for combo in combo_data:
             if not cls.is_dish_available(
-                    branch, combo.dish, combo.quantity * promotions_quantity):
-                return False
-        return True
+                branch, combo.dish, combo.quantity * promotions_quantity
+            ):
+                raise ValidationError({
+                    'non_field_errors': [
+                        f'At this moment the quantity {promotions_quantity} '
+                        f'for promotion {promotion.name} is not available.'
+                    ]
+                })
