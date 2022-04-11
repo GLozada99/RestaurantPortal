@@ -234,7 +234,6 @@ AWS_QUERYSTRING_AUTH = env_handler.AWS_QUERYSTRING_AUTH
 # Google auth settings
 
 GOOGLE_ID = env_handler.GOOGLE_ID
-THIRD_PARTY_SECRET = env_handler.THIRD_PARTY_SECRET
 
 
 # Email settings

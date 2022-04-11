@@ -1,6 +1,7 @@
 import random
+from secrets import token_hex
 
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import get_user_model
 from django.db import transaction
 from google.auth.exceptions import GoogleAuthError
 from google.auth.transport import requests
@@ -52,9 +53,7 @@ class GeneralUserServices:
 
     @staticmethod
     def get_user_data(email: str):
-        authenticated_user = authenticate(
-            email=email, password=settings.THIRD_PARTY_SECRET
-        )
+        authenticated_user = User.objects.get(email=email)
         return {
             'username': authenticated_user.username,
             'email': authenticated_user.email,
@@ -75,7 +74,7 @@ class GeneralUserServices:
                 username=cls.generate_username(name),
                 email=email,
                 role=role,
-                password=settings.THIRD_PARTY_SECRET,
+                password=token_hex(),
                 provider=auth_provider,
             )
             user.save()
