@@ -23,6 +23,22 @@ class GoogleUserServices:
         except GoogleAuthError:
             raise ValueError
 
+    @staticmethod
+    def get_user_data(data: dict):
+        email = data['email']
+        name = data['name']
+        auth_provider = 'google'
+        return {
+            'email': email,
+            'name': name,
+            'auth_provider': auth_provider,
+        }
+
+    @staticmethod
+    def validate_google_id(google_id: str):
+        if google_id != settings.GOOGLE_ID:
+            raise AuthenticationFailed('The token used is not from this app.')
+
 
 class GeneralUserServices:
     @classmethod
@@ -47,11 +63,11 @@ class GeneralUserServices:
 
     @classmethod
     @transaction.atomic
-    def register_get_user(cls, email: str, name: str, provider: str):
+    def register_get_user(cls, email: str, name: str, auth_provider: str):
         if user := User.objects.filter(email=email).first():
-            if provider != user.authentication_provider:
+            if auth_provider != user.authentication_provider:
                 raise AuthenticationFailed(
-                    'Email already in use with another provider. Please '
+                    'Email already in use with another auth_provider. Please '
                     f'login with {user.authentication_provider}')
         else:
             role = Role.objects.get(level=settings.CLIENT_LEVEL)
@@ -60,7 +76,7 @@ class GeneralUserServices:
                 email=email,
                 role=role,
                 password=settings.THIRD_PARTY_SECRET,
-                provider=provider,
+                provider=auth_provider,
             )
             user.save()
         return cls.get_user_data(email)
