@@ -46,7 +46,6 @@ class PromotionSerializer(serializers.ModelSerializer):
         return Validators.validate_date(value)
 
     def validate_finish_date(self, value):
-        print(self.initial_data)
         start_date = self.initial_data.get('start_date')
         start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
         if value < start_date:
