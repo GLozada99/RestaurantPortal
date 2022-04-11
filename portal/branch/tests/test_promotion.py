@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.core.management import call_command
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -20,6 +22,7 @@ class PromotionAPITestCase(APITransactionTestCase):
                 'quantity': 2
             },
         ],
+        'start_date': date.today(),
     }
 
     promotion_list_url = reverse(
