@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 import copy
 
 from django.core.management import call_command
@@ -68,6 +68,40 @@ class PromotionAPITestCase(APITransactionTestCase):
         self.assertEqual(
             response.data['price'][0],
             'This field must be greater than zero.',
+        )
+
+    @get_restaurant_manager_token
+    def test_create_promotion_with_wrong_start_date(self, token):
+        """Test the creation of a promotion with wrong start date."""
+        promotion_data = copy.deepcopy(self.promotion_data)
+        promotion_data['start_date'] = date.today() - timedelta(days=10)
+        response = self.client.post(
+            self.promotion_list_url,
+            promotion_data,
+            format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data['start_date'][0],
+            'Invalid date, cannot be less than now.',
+        )
+
+    @get_restaurant_manager_token
+    def test_create_promotion_with_wrong_finish_date(self, token):
+        """Test the creation of a promotion with wrong finish date."""
+        promotion_data = copy.deepcopy(self.promotion_data)
+        promotion_data['finish_date'] = '2020-01-01'
+        response = self.client.post(
+            self.promotion_list_url,
+            promotion_data,
+            format='json',
+            **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.data['finish_date'][0],
+            'Invalid date, cannot be less than the start date.',
         )
 
     @get_restaurant_manager_token

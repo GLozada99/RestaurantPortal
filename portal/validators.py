@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.db.models import Model
 from rest_framework.serializers import ValidationError
 
@@ -22,6 +24,14 @@ class Validators:
         if value < 0:
             raise ValidationError(
                 'This field must be greater than or equal to zero.'
+            )
+        return value
+
+    @staticmethod
+    def validate_date(value):
+        if(value < date.today()):
+            raise ValidationError(
+                'Invalid date, cannot be less than now.'
             )
         return value
 
@@ -130,6 +140,15 @@ class Validators:
                 return False
         return True
 
+    @staticmethod
+    def validate_promotion_date(promotion: Promotion):
+        if promotion.finish_date < date.today():
+            raise ValidationError({
+                'non_field_errors': [
+                    f'the promotion {promotion.name} is no longer available.'
+                ]
+            })
+
     @classmethod
     def is_promotion_available(
         cls, branch: Branch, promotion: Promotion, promotions_quantity: int = 1
@@ -137,6 +156,11 @@ class Validators:
         combo_data = promotion.combo_set.all()
         for combo in combo_data:
             if not cls.is_dish_available(
-                    branch, combo.dish, combo.quantity * promotions_quantity):
-                return False
-        return True
+                branch, combo.dish, combo.quantity * promotions_quantity
+            ):
+                raise ValidationError({
+                    'non_field_errors': [
+                        f'At this moment the quantity {promotions_quantity} '
+                        f'for promotion {promotion.name} is not available.'
+                    ]
+                })

@@ -41,7 +41,7 @@ class ValidateOrderAPIService:
 
     @classmethod
     def validate_dishes(
-            cls, order_dishes: list, branch: Branch, restaurant_id: int
+        cls, order_dishes: list, branch: Branch, restaurant_id: int
     ):
         for order_dish in order_dishes:
             cls.validate_dish(
@@ -65,8 +65,7 @@ class ValidateOrderAPIService:
 
     @staticmethod
     def validate_dish(
-            dish: Dish, quantity: int,
-            branch: Branch, restaurant_id: int
+        dish: Dish, quantity: int, branch: Branch, restaurant_id: int
     ):
         Validators.validate_restaurant_in_model(
             dish.category, restaurant_id, 'dish'
@@ -81,20 +80,14 @@ class ValidateOrderAPIService:
 
     @staticmethod
     def validate_promotion(
-            promotion: Promotion, quantity: int,
-            branch: Branch, restaurant_id: int):
+        promotion: Promotion, quantity: int, branch: Branch, restaurant_id: int
+    ):
         Validators.validate_restaurant_in_model(
-            promotion, restaurant_id, 'promotion'
+            promotion, restaurant_id, 'promotion',
         )
-        if not Validators.is_promotion_available(
-            branch, promotion, quantity,
-        ):
-            raise ValidationError({
-                'non_field_errors': [
-                    f'At this moment the quantity {quantity} for promotion '
-                    f'{promotion.name} is not available.'
-                ]
-            })
+        if promotion.finish_date:
+            Validators.validate_promotion_date(promotion)
+        Validators.is_promotion_available(branch, promotion, quantity)
 
     @staticmethod
     def validate_next_status(order: Order, status: OrderStatus):
