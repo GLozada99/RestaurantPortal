@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AnonymousUser
 from rest_framework.serializers import ValidationError
 
 from portal.authentication.models import User
@@ -97,4 +98,12 @@ class ValidateOrderAPIService:
                     f'Order with status {order.status.name} cannot pass '
                     f'to status {status.name}'
                 ]
+            })
+
+    @staticmethod
+    def validate_client(user: User):
+        print(type(user))
+        if type(user) is AnonymousUser:
+            raise ValidationError({
+                "detail": "Authentication credentials were not provided."
             })
