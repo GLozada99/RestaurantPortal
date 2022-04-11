@@ -140,6 +140,15 @@ class Validators:
                 return False
         return True
 
+    @staticmethod
+    def validate_promotion_date(promotion: Promotion):
+        if promotion.finish_date < date.today():
+            raise ValidationError({
+                'non_field_errors': [
+                    f'the promotion {promotion.name} is no longer available.'
+                ]
+            })
+
     @classmethod
     def is_promotion_available(
         cls, branch: Branch, promotion: Promotion, promotions_quantity: int = 1
