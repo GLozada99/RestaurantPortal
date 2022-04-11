@@ -17,7 +17,6 @@ class EnvHandler:
     AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
     AWS_QUERYSTRING_AUTH = config('AWS_QUERYSTRING_AUTH', cast=bool)
     GOOGLE_ID = config('GOOGLE_ID')
-    THIRD_PARTY_SECRET = config('THIRD_PARTY_SECRET')
 
     EMAIL_HOST = config('EMAIL_HOST')
     EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)

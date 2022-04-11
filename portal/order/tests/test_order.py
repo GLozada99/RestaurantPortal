@@ -6,7 +6,6 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITransactionTestCase
 
-from portal.branch.models import Promotion
 from portal.dish.models import Dish
 from portal.test_helpers import get_client_token, get_employee_token
 
@@ -38,17 +37,7 @@ class OrderAPITestCase(APITransactionTestCase):
                 'dish': 1,
                 'quantity': 1,
             },
-            {
-                'dish': 2,
-                'quantity': 2,
-            }
         ],
-        'promotions': [
-            {
-                'promotion': 3,
-                'quantity': 1
-            }
-        ]
     }
 
     def setUp(self) -> None:
@@ -82,8 +71,6 @@ class OrderAPITestCase(APITransactionTestCase):
         """Test the correct calculation of total_cost field on order."""
         total_cost = calculate_cost(
             Dish, self.order_data.get('dishes', []), 'dish'
-        ) + calculate_cost(
-            Promotion, self.order_data.get('promotions', []), 'promotion'
         )
         response = self.client.post(
             self.order_list_url,
@@ -98,7 +85,6 @@ class OrderAPITestCase(APITransactionTestCase):
         """Test the error when creating order if not dishes ."""
         order_data = copy.deepcopy(self.order_data)
         order_data['dishes'] = None
-        order_data['promotions'] = None
 
         response = self.client.post(
             self.order_list_url,
@@ -113,9 +99,6 @@ class OrderAPITestCase(APITransactionTestCase):
         """
         Test the error when creating order with dishes from another restaurant.
         """
-        order_data = copy.deepcopy(self.order_data)
-        order_data['promotions'] = None
-
         order_list_url = reverse(
             'restaurants:branches:order:order-list',
             kwargs={

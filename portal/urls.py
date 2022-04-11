@@ -1,8 +1,13 @@
 from django.urls import include, path, re_path
 
 from portal.documentation import schema_view
+from portal.order.views.order import ClientOrdersAPIView
 
 urlpatterns = [
+    path(
+        'sign-up',
+        include('portal.authentication.urls.signup', namespace='sign-up'),
+    ),
     path('auth/', include('portal.authentication.urls.jwt', namespace='auth')),
     path(
         'roles/',
@@ -48,6 +53,11 @@ urlpatterns = [
             'portal.order.urls.order_status',
             namespace='order-status',
         ),
+    ),
+    path(
+        'orders/',
+        ClientOrdersAPIView.as_view(),
+        name='client-orders',
     ),
     re_path(
         r'^swagger(?P<format>\.json|\.yaml)$',

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AnonymousUser
 from rest_framework.serializers import ValidationError
 
 from portal.authentication.models import User
@@ -96,5 +97,21 @@ class ValidateOrderAPIService:
                 'status': [
                     f'Order with status {order.status.name} cannot pass '
                     f'to status {status.name}'
+                ]
+            })
+
+    @staticmethod
+    def validate_client(user: User):
+        if type(user) is AnonymousUser:
+            raise ValidationError({
+                "detail": "Authentication credentials were not provided."
+            })
+
+    @staticmethod
+    def validate_stock(stock):
+        if stock < 0:
+            raise ValidationError({
+                'non_field_errors': [
+                    'There was a problem with the dishes availability.'
                 ]
             })

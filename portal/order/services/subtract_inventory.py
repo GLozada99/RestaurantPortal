@@ -1,5 +1,6 @@
 from portal.branch.models import Inventory
 from portal.order.models import Order
+from portal.order.services.validate_order import ValidateOrderAPIService
 
 
 class SubtractInventoryAPIService:
@@ -42,4 +43,5 @@ class SubtractInventoryAPIService:
         inventory: Inventory, ingredient_quantity, order_quantity
     ):
         inventory.stock -= ingredient_quantity * order_quantity
+        ValidateOrderAPIService.validate_stock(inventory.stock)
         inventory.save()

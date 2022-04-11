@@ -3,6 +3,7 @@ from portal.order.serializers.order import (
     ReadOrderSerializer, StatusOrderSerializer,
 )
 from portal.order.services.order import OrderAPIService
+from portal.order.services.validate_order import ValidateOrderAPIService
 
 
 class OrderAPIHandler:
@@ -28,3 +29,7 @@ class OrderAPIHandler:
             serializer.validated_data,
             order_id,
         )).data
+
+    @classmethod
+    def validate_client(cls, client):
+        ValidateOrderAPIService.validate_client(client)
