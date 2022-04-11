@@ -10,7 +10,7 @@ from portal.order.serializers.order_promotion import OrderPromotionSerializer
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
-    """Serializer for Dish."""
+    """Serializer for Order."""
     dishes = OrderDishSerializer(many=True, required=False)
     promotions = OrderPromotionSerializer(many=True, required=False)
 
@@ -26,7 +26,7 @@ class CreateOrderSerializer(serializers.ModelSerializer):
 
 
 class ReadOrderSerializer(serializers.ModelSerializer):
-    """Detailed Serializer for Dish."""
+    """Detailed Serializer for Order."""
 
     client = UserSerializer()
     status = serializers.SlugRelatedField(
@@ -63,4 +63,32 @@ class StatusOrderSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'status',
+        )
+
+
+class ClientOrderSerializer(serializers.ModelSerializer):
+    """Serializer for Orders of Client."""
+
+    status = serializers.SlugRelatedField(
+        read_only=True, slug_field='name',
+    )
+    branch = ShortBranchSerializer()
+    delivery_type = serializers.SlugRelatedField(
+        read_only=True, slug_field='name',
+    )
+    dishes = ShortDishSerializer(many=True)
+    promotions = ShortPromotionSerializer(many=True)
+
+    class Meta:
+        model = Order
+        fields = (
+            'id',
+            'status',
+            'total_cost',
+            'branch',
+            'address',
+            'delivery_type',
+            'dishes',
+            'promotions',
+            'created_at',
         )
