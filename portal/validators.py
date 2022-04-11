@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.db.models import Model
 from rest_framework.serializers import ValidationError
 
@@ -22,6 +24,14 @@ class Validators:
         if value < 0:
             raise ValidationError(
                 'This field must be greater than or equal to zero.'
+            )
+        return value
+
+    @staticmethod
+    def validate_date(value):
+        if(value < date.today()):
+            raise ValidationError(
+                'Invalid date, cannot be less than now.'
             )
         return value
 
