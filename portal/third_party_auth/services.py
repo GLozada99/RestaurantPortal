@@ -1,4 +1,3 @@
-import random
 from secrets import token_hex
 
 from django.contrib.auth import get_user_model
@@ -48,7 +47,7 @@ class GeneralUserServices:
         if not User.objects.filter(username=username).exists():
             return username
         else:
-            random_username = username + str(random.randint(0, 10000))
+            random_username = username + str(token_hex(5))
             return cls.generate_username(random_username)
 
     @staticmethod
