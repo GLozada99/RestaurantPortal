@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
@@ -36,6 +36,7 @@ class Command(BaseCommand):
                     price=77,
                     restaurant_id=1,
                     start_date=date.today(),
+                    finish_date=date.today() + timedelta(days=10),
                 ),
             ]
             CommandHelpers.add_to_db(self, Promotion, promotion)
