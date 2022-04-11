@@ -102,7 +102,6 @@ class ValidateOrderAPIService:
 
     @staticmethod
     def validate_client(user: User):
-        print(type(user))
         if type(user) is AnonymousUser:
             raise ValidationError({
                 "detail": "Authentication credentials were not provided."
