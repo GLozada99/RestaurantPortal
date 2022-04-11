@@ -36,8 +36,8 @@ class Inventory(models.Model):
 
 
 class Promotion(models.Model):
-    created_at = models.DateField(auto_now_add=True)
-    finish_at = models.DateField(blank=True, null=True)
+    start_date = models.DateField()
+    finish_date = models.DateField(blank=True, null=True)
     name = models.CharField(max_length=80)
     price = models.DecimalField(max_digits=5, decimal_places=2)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
