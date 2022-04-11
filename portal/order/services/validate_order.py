@@ -107,3 +107,12 @@ class ValidateOrderAPIService:
             raise ValidationError({
                 "detail": "Authentication credentials were not provided."
             })
+
+    @staticmethod
+    def validate_stock(stock):
+        if stock < 0:
+            raise ValidationError({
+                'non_field_errors': [
+                    'There was a problem with the dishes availability.'
+                ]
+            })
