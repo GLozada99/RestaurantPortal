@@ -39,7 +39,7 @@ class ClientAPITestCase(APITestCase):
 
     def test_create_client(self):
         """Test the creation of a client."""
-        url = reverse('clients:client-list')
+        url = reverse('sign-up:sign-up')
         response = self.client.post(
             url,
             {'username': 'TestClient', 'email': 'test@email.com'},
