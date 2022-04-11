@@ -7,7 +7,7 @@ from portal.authentication.permissions import (HasCurrentBranch,
 from portal.order.handlers import OrderAPIHandler
 from portal.order.models import Order
 from portal.order.serializers.order import (
-    CreateOrderSerializer, ReadOrderSerializer,
+    ClientOrderSerializer, CreateOrderSerializer, ReadOrderSerializer,
     StatusOrderSerializer,
 )
 
@@ -60,3 +60,15 @@ class OrderAPIDetailView(generics.RetrieveUpdateAPIView):
             request, kwargs.get('pk'),
         )
         return Response(data, status=status.HTTP_201_CREATED)
+
+
+class ClientOrdersAPIView(generics.ListAPIView):
+    """
+    Returns orders of client logged in
+    """
+    serializer_class = ClientOrderSerializer
+
+    def get_queryset(self):
+        client = self.request.user
+        OrderAPIHandler.validate_client(client)
+        return Order.objects.filter(client_id=client.id)
