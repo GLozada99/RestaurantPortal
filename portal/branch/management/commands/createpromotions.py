@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
@@ -17,9 +19,24 @@ class Command(BaseCommand):
             CommandHelpers.print_error(self, 'Promotion already exist.')
         else:
             promotion = [
-                Promotion(name='Super Combo Ham', price=55, restaurant_id=1),
-                Promotion(name='Super Combo Ham 2', price=56, restaurant_id=2),
-                Promotion(name='Super Combo Ham 7', price=77, restaurant_id=1),
+                Promotion(
+                    name='Super Combo Ham',
+                    price=55,
+                    restaurant_id=1,
+                    start_date=date.today(),
+                ),
+                Promotion(
+                    name='Super Combo Ham 2',
+                    price=56,
+                    restaurant_id=2,
+                    start_date=date.today(),
+                ),
+                Promotion(
+                    name='Super Combo Ham 7',
+                    price=77,
+                    restaurant_id=1,
+                    start_date=date.today(),
+                ),
             ]
             CommandHelpers.add_to_db(self, Promotion, promotion)
             combo = [

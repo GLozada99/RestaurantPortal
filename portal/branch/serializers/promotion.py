@@ -33,7 +33,8 @@ class PromotionSerializer(serializers.ModelSerializer):
             'price',
             'branches',
             'dishes',
-            'finish_at',
+            'start_date',
+            'finish_date',
         )
 
     def validate_price(self, value):
@@ -54,5 +55,6 @@ class DetailedPromotionSerializer(serializers.ModelSerializer):
             'price',
             'branches',
             'dishes',
-            'finish_at',
+            'start_date',
+            'finish_date',
         )
