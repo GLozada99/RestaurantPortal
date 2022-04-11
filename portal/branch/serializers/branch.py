@@ -16,7 +16,7 @@ class BranchSerializer(serializers.ModelSerializer):
     """Serializer for Branch."""
 
     front_picture = Base64ImageField(
-        max_length=None, use_url=True, required=True,
+        max_length=None, use_url=True, required=False,
     )
 
     class Meta:

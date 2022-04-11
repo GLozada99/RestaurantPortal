@@ -43,6 +43,7 @@ class BranchAPITestCase(APITransactionTestCase):
             format='json',
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     @get_restaurant_manager_token

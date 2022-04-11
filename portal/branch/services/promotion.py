@@ -1,7 +1,7 @@
 from django.db.transaction import atomic
 from rest_framework.serializers import ValidationError
 
-from portal.branch.models import Promotion, Combo
+from portal.branch.models import Combo, Promotion
 from portal.validators import Validators
 
 
@@ -26,6 +26,7 @@ class PromotionAPIService:
             name=data['name'],
             price=data['price'],
             restaurant_id=restaurant_id,
+            finish_at=data.get('finish_at')
         )
         promotion.save()
         return promotion
