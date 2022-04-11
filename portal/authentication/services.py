@@ -167,10 +167,9 @@ class UserAPIService:
             user = User.objects.get(email=serializer.validated_data['email'])
         except User.DoesNotExist as e:
             raise ValidationError({
-                'non_field_errors': [
-                    'User with this email does not exists'
-                ]
+                'email': 'User with this email does not exists',
             }) from e
+        cls.validate_user_provider(user)
 
         user.change_password_token = token_hex()
         user.save()
@@ -184,8 +183,17 @@ class UserAPIService:
                    f'{user.change_password_token}\n'
                    f'Please access {settings.EMAIL_PASSWORD_CHANGE_LINK} to '
                    f'change your password')
-
         user.email_user(subject, message)
+
+    @staticmethod
+    def validate_user_provider(user: User):
+        if user.authentication_provider != 'portal':
+            raise ValidationError({
+                'non_field_errors': [
+                    f'User with {user.authentication_provider} provider is '
+                    f'not allowed to change its password'
+                ]
+            })
 
 
 class UserPermissionService:
