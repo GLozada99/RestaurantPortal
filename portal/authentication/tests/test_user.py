@@ -20,7 +20,6 @@ class PortalManagerAPITestCase(APITestCase):
             format='json',
             **{'HTTP_AUTHORIZATION': f'Bearer {token}'},
         )
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_create_portal_manager_without_auth(self):
