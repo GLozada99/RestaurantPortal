@@ -26,7 +26,8 @@ class PromotionAPIService:
             name=data['name'],
             price=data['price'],
             restaurant_id=restaurant_id,
-            finish_at=data.get('finish_at')
+            start_date=data['start_date'],
+            finish_date=data.get('finish_date'),
         )
         promotion.save()
         return promotion
