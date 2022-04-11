@@ -3,6 +3,10 @@ from django.urls import include, path, re_path
 from portal.documentation import schema_view
 
 urlpatterns = [
+    path(
+        'sign-up',
+        include('portal.authentication.urls.signup', namespace='sign-up'),
+    ),
     path('auth/', include('portal.authentication.urls.jwt', namespace='auth')),
     path(
         'roles/',
