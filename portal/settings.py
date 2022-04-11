@@ -48,14 +48,17 @@ INSTALLED_APPS = [
     'storages',
     'django_extensions',
 
-    'authentication',
-    'restaurant',
-    'dish',
-    'branch',
+    'portal.authentication',
+    'portal.branch',
+    'portal.dish',
+    'portal.order',
+    'portal.restaurant',
+    'portal.third_party_auth'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -115,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'authentication.auth_backends.EmailBackend'
+    'portal.authentication.auth_backends.EmailBackend'
 ]
 
 
@@ -212,6 +215,10 @@ SWAGGER_SETTINGS = {
    }
 }
 
+# Static files settings
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Amazon S3 settings
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
@@ -228,3 +235,14 @@ AWS_QUERYSTRING_AUTH = env_handler.AWS_QUERYSTRING_AUTH
 
 GOOGLE_ID = env_handler.GOOGLE_ID
 THIRD_PARTY_SECRET = env_handler.THIRD_PARTY_SECRET
+
+
+# Email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env_handler.EMAIL_HOST
+EMAIL_USE_TLS = env_handler.EMAIL_USE_TLS
+EMAIL_PORT = env_handler.EMAIL_PORT
+EMAIL_HOST_USER = env_handler.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = env_handler.EMAIL_HOST_PASSWORD
+DEFAULT_FROM_EMAIL = env_handler.EMAIL_HOST_USER
+EMAIL_PASSWORD_CHANGE_LINK = env_handler.EMAIL_PASSWORD_CHANGE_LINK

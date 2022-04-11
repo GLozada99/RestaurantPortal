@@ -1,8 +1,11 @@
+from datetime import date
+
 from django.db.models import Model
 from rest_framework.serializers import ValidationError
 
-from branch.models import Branch
-from restaurant.models import Restaurant
+from portal.branch.models import Branch, Promotion
+from portal.dish.models import Dish
+from portal.restaurant.models import Restaurant
 
 
 class Validators:
@@ -25,6 +28,14 @@ class Validators:
         return value
 
     @staticmethod
+    def validate_date(value):
+        if(value < date.today()):
+            raise ValidationError(
+                'Invalid date, cannot be less than now.'
+            )
+        return value
+
+    @staticmethod
     def validate_list(value):
         """Validate that the entered list isn't empty."""
         if not value:
@@ -37,8 +48,9 @@ class Validators:
         if model.objects.filter(**kwargs).exists():
             parameters = ', '.join(list(kwargs.keys()))
             raise ValidationError({
-                'non_field_errors':
+                'non_field_errors': [
                     f'The fields {parameters} must make a unique set.'
+                ]
             })
 
     @staticmethod
@@ -48,11 +60,10 @@ class Validators:
         for instance in instances:
             if instance[model_field].id in ids:
                 raise ValidationError({
-                    'non_field_errors':
-                        [
-                            f'The fields {model_field}, {model_name} must make'
-                            ' a unique set.'
-                        ]
+                    'non_field_errors': [
+                        f'The fields {model_field}, {model_name} must make a '
+                        'unique set.'
+                    ]
                 })
             ids.append(instance[model_field].id)
 
@@ -63,11 +74,10 @@ class Validators:
         active_managers = restaurant.employeeprofile_set.all().count()
         if active_managers == restaurant.active_administrators:
             raise ValidationError({
-                'non_field_errors':
-                    [
-                        'This restaurant reached the maximum capacity of '
-                        'administrators.'
-                    ]
+                'non_field_errors': [
+                    'This restaurant reached the maximum capacity of '
+                    'administrators.'
+                ]
             })
 
     @staticmethod
@@ -96,11 +106,16 @@ class Validators:
         branches = restaurant.branch_set.all().count()
         if branches == restaurant.active_branches:
             raise ValidationError({
-                'non_field_errors':
-                    [
-                        'This restaurant reached the maximum capacity of '
-                        'branches.'
-                    ]
+                'non_field_errors': [
+                    'This restaurant reached the maximum capacity of branches.'
+                ]
+            })
+
+    @staticmethod
+    def validate_restaurant_in_model(instance, restaurant_id, model_name):
+        if instance.restaurant_id != restaurant_id:
+            raise ValidationError({
+                'non_field_errors': [f'{model_name} not available.']
             })
 
     @staticmethod
@@ -110,3 +125,42 @@ class Validators:
         """
         active_branches = restaurant.branch_set.all().count()
         return active_branches > quantity
+
+    @staticmethod
+    def is_dish_available(
+        branch: Branch, dish: Dish, dishes_quantity: int = 1
+    ):
+        dish_ingredients = dish.dishingredient_set.all()
+        for ingredient_data in dish_ingredients:
+            branch_inventory_ingredient = branch.inventory_set.get(
+                ingredient=ingredient_data.ingredient
+            )
+            if(branch_inventory_ingredient.stock <
+               (ingredient_data.quantity * dishes_quantity)):
+                return False
+        return True
+
+    @staticmethod
+    def validate_promotion_date(promotion: Promotion):
+        if promotion.finish_date < date.today():
+            raise ValidationError({
+                'non_field_errors': [
+                    f'the promotion {promotion.name} is no longer available.'
+                ]
+            })
+
+    @classmethod
+    def is_promotion_available(
+        cls, branch: Branch, promotion: Promotion, promotions_quantity: int = 1
+    ):
+        combo_data = promotion.combo_set.all()
+        for combo in combo_data:
+            if not cls.is_dish_available(
+                branch, combo.dish, combo.quantity * promotions_quantity
+            ):
+                raise ValidationError({
+                    'non_field_errors': [
+                        f'At this moment the quantity {promotions_quantity} '
+                        f'for promotion {promotion.name} is not available.'
+                    ]
+                })
