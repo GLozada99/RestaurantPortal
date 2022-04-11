@@ -10,6 +10,7 @@ from portal.dish.handlers.dish import DishAPIHandler
 from portal.dish.models import Dish
 from portal.dish.serializers.dish import (
     CreateDishSerializer,
+    IngredientsDishSerializer,
     ReadDishSerializer,
 )
 from portal.mixins import (
@@ -28,7 +29,7 @@ class DishAPIView(
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return CreateDishSerializer
-        return ReadDishSerializer
+        return IngredientsDishSerializer
 
     def get_queryset(self):
         dish_category_id = self.kwargs.get('dish_category_id')
@@ -49,7 +50,7 @@ class DishAPIDetailView(
 ):
     """View to retrieve, update and delete Dish."""
 
-    serializer_class = ReadDishSerializer
+    serializer_class = IngredientsDishSerializer
     permission_classes = [(IsRestaurantManager & HasCurrentRestaurant)]
 
     def get_queryset(self):
